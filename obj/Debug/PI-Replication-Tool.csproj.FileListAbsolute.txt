@@ -1,0 +1,16 @@
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\bin\Debug\PI-Replication-Tool.exe.config
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\bin\Debug\PI-Replication-Tool.exe
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\bin\Debug\PI-Replication-Tool.pdb
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.csproj.AssemblyReference.cache
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.csproj.SuggestedBindingRedirects.cache
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\MainWindow.g.cs
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\App.g.cs
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool_MarkupCompile.cache
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool_MarkupCompile.lref
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\MainWindow.baml
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.g.resources
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI_Replication_Tool.Properties.Resources.resources
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.csproj.GenerateResource.cache
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.csproj.CoreCompileInputs.cache
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.exe
+D:\Romain_dev\Applications\NetFramework\PI-Replication-Tool\obj\Debug\PI-Replication-Tool.pdb
