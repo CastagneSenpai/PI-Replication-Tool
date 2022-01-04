@@ -9,8 +9,18 @@
         Height="450" 
         Width="800"
         WindowStartupLocation="CenterScreen">
+    
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="145*"/>
+            <RowDefinition Height="28*"/>
+        </Grid.RowDefinitions>
     </Grid>
-   
+
 </Window>
