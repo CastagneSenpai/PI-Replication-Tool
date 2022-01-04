@@ -15,6 +15,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>
@@ -22,8 +23,6 @@
             <RowDefinition Height="50*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Test">
-        </TextBlock>
     </Grid>
 
 </Window>
