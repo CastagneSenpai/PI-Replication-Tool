@@ -17,10 +17,13 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*"/>
-            <RowDefinition Height="145*"/>
-            <RowDefinition Height="28*"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="175*"/>
+            <RowDefinition Height="50*"/>
         </Grid.RowDefinitions>
+
+        <TextBlock Text="Test">
+        </TextBlock>
     </Grid>
 
 </Window>
