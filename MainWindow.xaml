@@ -9,7 +9,7 @@
         Height="450" 
         Width="800"
         WindowStartupLocation="CenterScreen">
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -18,11 +18,21 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100*"/>
-            <RowDefinition Height="175*"/>
-            <RowDefinition Height="175*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="185*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        
+
+        <Image Grid.Column="3" Grid.Row="0" Margin="60 10 0 30">
+            <Image.Source>
+                <BitmapImage  UriSource="/Resources/TotalEnergies.png" />
+            </Image.Source>
+        </Image>
+
+        <TextBlock Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" TextAlignment="Center" VerticalAlignment="Center" FontSize="14">PI Replication Tool</TextBlock>
+
+        <Button Grid.Column="3" Grid.Row="2" Margin="40 0 40 0">Continue</Button>
 
     </Grid>
 
