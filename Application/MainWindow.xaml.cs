@@ -23,6 +23,16 @@ namespace PI_Replication_Tool
         public MainWindow()
         {
             InitializeComponent();
+
+            // Chargement de la liste des serveurs sources
+
+            // Chargement de la liste des serveurs cibles
+
+        }
+
+        private void Button_Continue_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hello World");
         }
     }
 }
