@@ -3,49 +3,116 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:PI_Replication_Tool.MVVM.ViewModels"
         xmlns:local="clr-namespace:PI_Replication_Tool"
         mc:Ignorable="d"
-        Height="450" 
-        Width="800"
-        WindowStartupLocation="CenterScreen">
+        Height="650" Width="1200"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None">
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel/>
+    </Window.DataContext>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="150*"/>
-            <RowDefinition Height="26*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="68*" />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <!-- Navigation Bar -->
-        <Image Grid.Column="0" Grid.Row="0" Margin="-35,10,55,15" Source="/Assets/CGI.png" />
-        <Image Grid.Column="3" Grid.Row="0" Margin="60 0 0 0" Source="/Assets/TotalEnergies.png" />
-        <TextBlock Grid.Column="1" Grid.ColumnSpan="2" TextAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Height="18" FontFamily="Arial">PI Replication Tool</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="600"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Source Server -->
-        <TextBlock Grid.Column="0" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="18" Grid.ColumnSpan="2" Margin="118,35,82,0" FontFamily="Arial">Source Server</TextBlock>
-        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" Height="131" Margin="95,0,60,0">
+        <Border Grid.ColumnSpan="2"
+                Background="#252525"
+                MouseDown="Border_MouseDown" >
+
+
+            <Grid HorizontalAlignment="Stretch">
+                <Label HorizontalAlignment="Left"
+                       Content="PI Replication Tool"
+                       Foreground="Gray" />
+
+                <StackPanel HorizontalAlignment="Right"
+                            Orientation="Horizontal" Grid.ColumnSpan="2">
+
+
+                    <Button Width="20" Height="20" 
+                            Content="🗕"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="Gray"
+                            FontWeight="Bold"
+                            Margin="0 0 0 3"
+                            Click="Button_MinimizeClick"/>
+
+                    <Button Width="20" Height="20" 
+                            Content="▢"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="Gray"
+                            FontWeight="Bold"
+                            Click="WindowsStateButton_Click"/>
+
+                    <Button Width="20" Height="20" 
+                            Content="✕"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="Gray"
+                            FontWeight="Bold"
+                            Click="CloseButton_Click"/>
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
+        <Grid Grid.Row="1"
+              Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Height="27" FontFamily="Arial">PI Replication Tool</TextBlock>
+            <Image Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="274,0,0,-20" />
+
+        </Grid>
+
+        <Grid Grid.Row="3" Grid.Column="0">
             <ListView x:Name="listSourceServer" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
 
-        <!-- Target Server -->
-        <TextBlock Grid.Column="2" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="18" Grid.ColumnSpan="2" Margin="82,35,118,0" FontFamily="Arial">Target Server</TextBlock>
-        <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Center" Height="131" Margin="95,0,60,0">
+        <Grid Grid.Row="3" Grid.Column="1">
             <ListView x:Name="listTargetServer" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
 
-        <!-- Button Side -->
-        <Button Grid.Column="3" Grid.Row="3" Margin="50,5,50,5" Click="Button_Continue_Click">Continue</Button>
+        <Grid Grid.Row="4" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450"/>
+                <ColumnDefinition Width="150" />
+            </Grid.ColumnDefinitions>
 
-        <!-- Log Side TO DO -->
+            <Button Grid.Column="3" Grid.Row="3" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Click="Button_Continue_Click">Continue</Button>
+        </Grid>
+
+
 
     </Grid>
+
+
 
 </Window>
