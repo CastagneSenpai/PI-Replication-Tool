@@ -25,35 +25,27 @@
         </Grid.RowDefinitions>
 
         <!-- Navigation Bar -->
-        <Image Grid.Column="0" Grid.Row="0" Margin="-35,10,55,15" >
-            <Image.Source>
-                <BitmapImage  UriSource="/Assets/CGI.png" />
-            </Image.Source>
-        </Image>
-        <Image Grid.Column="3" Grid.Row="0" Margin="60 0 0 0" >
-            <Image.Source>
-                <BitmapImage  UriSource="/Assets/TotalEnergies.png" />
-            </Image.Source>
-        </Image>
+        <Image Grid.Column="0" Grid.Row="0" Margin="-35,10,55,15" Source="/Assets/CGI.png" />
+        <Image Grid.Column="3" Grid.Row="0" Margin="60 0 0 0" Source="/Assets/TotalEnergies.png" />
         <TextBlock Grid.Column="1" Grid.ColumnSpan="2" TextAlignment="Center" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Height="18" FontFamily="Arial">PI Replication Tool</TextBlock>
 
         <!-- Source Server -->
         <TextBlock Grid.Column="0" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="18" Grid.ColumnSpan="2" Margin="118,35,82,0" FontFamily="Arial">Source Server</TextBlock>
         <Grid Background="Gray" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" Height="131" Margin="95,0,60,0">
-            <ListView x:Name="listAffiliateSource" HorizontalAlignment="Center" Height="131" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5">
+            <ListView x:Name="listSourceServer" Foreground="white" HorizontalAlignment="Center" Height="131" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding id}"/>
-                        <GridViewColumn Header="data" Width="200" DisplayMemberBinding="{Binding data}"/>
+                        <!-- <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding id}"/> -->
+                        <!-- <GridViewColumn Header="data" Width="200" DisplayMemberBinding="{Binding data}"/> -->
                     </GridView>
                 </ListView.View>
             </ListView>
         </Grid>
 
-        <!-- Source Server -->
-        <TextBlock Grid.Column="2" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="18" Grid.ColumnSpan="2" Margin="82,35,118,0" FontFamily="Arial">Source Server</TextBlock>
+        <!-- Target Server -->
+        <TextBlock Grid.Column="2" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="18" Grid.ColumnSpan="2" Margin="82,35,118,0" FontFamily="Arial">Target Server</TextBlock>
         <Grid Background="Gray" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Center" Height="131" Margin="60,0,95,0">
-            <ListView x:Name="listServerSource" HorizontalAlignment="Center" Height="197" VerticalAlignment="Top" Width="245" RenderTransformOrigin="0.5,0.5">
+            <ListView x:Name="listTargetServer" HorizontalAlignment="Center" Height="197" VerticalAlignment="Top" Width="245" RenderTransformOrigin="0.5,0.5">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding id}"/>

@@ -26,10 +26,17 @@ namespace PI_Replication_Tool
         {
             InitializeComponent();
 
+            List<string> PIServerNames = new List<string>();
+            foreach (var server in PIServers.GetPIServers())
+            {
+                PIServerNames.Add(server.Name);
+            }
+
             // Chargement de la liste des serveurs sources
+            listSourceServer.ItemsSource = PIServerNames;
 
             // Chargement de la liste des serveurs cibles
-
+            listTargetServer.ItemsSource = PIServerNames;
         }
 
         private void Button_Continue_Click(object sender, RoutedEventArgs e)
