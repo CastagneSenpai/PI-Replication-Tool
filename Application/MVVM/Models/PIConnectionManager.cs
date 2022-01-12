@@ -10,42 +10,92 @@ namespace PI_Replication_Tool.MVVM.Models
 {
     internal class PIConnectionManager
     {
-        private PIServers _piServers = PIServers.GetPIServers();        
+        // -------------------
+        // PROPERTIES OF CLASS
+        // -------------------
+        private PIServers _localPIServerList = PIServers.GetPIServers();
 
-        public PIServers PIServers
+        public PIServers LocalPIServersList
         {
-            get { return PIServers.GetPIServers(); }
-            set { _piServers = value; }
+            get { return _localPIServerList; }
+            set { _localPIServerList = value; }
         }
 
+        private PIServers _connectedPIServersList = new PIServers();
+
+        public PIServers ConnectedPIServersList
+        {
+            get { return _connectedPIServersList; }
+            set { _connectedPIServersList = value; }
+        }
+
+        // -------------------
+        // CONSTRUCTORS
+        // -------------------
         public PIConnectionManager()
         {
-            //_piServers = new PIServers();
-            //_piServers.GetPI
+
         }
 
-        public PIServer ConnectToServer(string servername)
+        // -------------------
+        // FUNCTIONS
+        // -------------------
+        public PIServer ConnectToPIServer(string p_PIServerName)
         {
-            PIServer server = null;
+            PIServer PIServer = null;
             try
             {
-                server = PIServer.FindPIServer(servername);
-                server.Connect();
+                PIServer = PIServer.FindPIServer(p_PIServerName);
+                PIServer.Connect();
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                // Write log error
+
+
+                throw e;
             }
-            return server;
+            _connectedPIServersList.Add(PIServer.Name);
+            return PIServer;
         }
 
-        //public AFValue GetPIPointValue(PIServer server, string tag)
-        //{
-        //    var point = PIPoint.FindPIPoint(server, tag);
-        //    var value = point.CurrentValue();
+        public void ConnectToPIServer(PIServer p_PIServer)
+        {
+            try
+            {
+                p_PIServer.Connect();
+            }
+            catch (Exception e)
+            {
+                // Write log error
 
-        //    return value;
-        //}
+
+                throw e;
+            }
+            _connectedPIServersList.Add(p_PIServer.Name);
+        }
+
+        public void RefreshAllConnections()
+        {
+            foreach(var PIServ in _connectedPIServersList)
+            {
+                if(!PIServ.ConnectionInfo.IsConnected)
+                {
+                    try
+                    {
+                        PIServ.Connect();
+                    }
+                    catch (Exception e)
+                    {
+                        // Log the reconnection error and inform server has been removed
+
+                        // Remove server from connectedServerList and go next server
+                        _connectedPIServersList.Remove(PIServ.Name);
+                        continue;
+                    }
+                }
+            }
+        }
     }
 }
