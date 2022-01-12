@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
+    <Compile Include="MVVM\Models\PIReplicationManager.cs" />
     <Compile Include="MVVM\ViewModels\MainViewModel.cs" />
     <Compile Include="MVVM\Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

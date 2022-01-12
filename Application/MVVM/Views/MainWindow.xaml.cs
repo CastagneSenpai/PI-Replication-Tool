@@ -49,27 +49,15 @@ namespace PI_Replication_Tool
 
         private void Button_Continue_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Hello World");
-            PIConnectionManager pIConnection = new PIConnectionManager();
-            //var s = "";
-            //foreach (var server in PIServers.GetPIServers())
-            //{
-            //    s += " " + server; 
-            //}
-            //MessageBox.Show($"un test: {s}");
-            var c = pIConnection.ConnectToServer("PI-CENTER-HQ");
-            var v = pIConnection.GetPIPointValue(c, "sinusoid");
-            MessageBox.Show(v.ToString());
+            string sourceServer = listSourceServer.SelectedItem.ToString();
+            string targetServer = listTargetServer.SelectedItem.ToString();
 
-            //if (c)
-            //{
-            //    MessageBox.Show("C'est good");
-            //}
-            //else {
-            //    MessageBox.Show("Ca pues");
-            //}
+            PIConnectionManager PIConnection = new PIConnectionManager();
             
         }
+        //var c = pIConnection.ConnectToServer("PI-CENTER-HQ");
+        //var v = pIConnection.GetPIPointValue(c, "sinusoid");
+        //MessageBox.Show(v.ToString());
     
     }
 }

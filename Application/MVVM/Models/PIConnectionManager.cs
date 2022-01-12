@@ -10,7 +10,7 @@ namespace PI_Replication_Tool.MVVM.Models
 {
     internal class PIConnectionManager
     {
-        private PIServers _piServers;        
+        private PIServers _piServers = PIServers.GetPIServers();        
 
         public PIServers PIServers
         {
@@ -40,12 +40,12 @@ namespace PI_Replication_Tool.MVVM.Models
             return server;
         }
 
-        public AFValue GetPIPointValue(PIServer server, string tag)
-        {
-            var point = PIPoint.FindPIPoint(server, tag);
-            var value = point.CurrentValue();
+        //public AFValue GetPIPointValue(PIServer server, string tag)
+        //{
+        //    var point = PIPoint.FindPIPoint(server, tag);
+        //    var value = point.CurrentValue();
 
-            return value;
-        }
+        //    return value;
+        //}
     }
 }
