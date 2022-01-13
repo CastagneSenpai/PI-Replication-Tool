@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using OSIsoft.AF.PI;
 
-namespace PI_Replication_Tool.MVVM.ViewModels
+namespace ViewModels
 {
     internal class MainViewModel
     {
@@ -16,6 +16,7 @@ namespace PI_Replication_Tool.MVVM.ViewModels
 
         public ObservableCollection<PIServer> ListSourceServer;
         public ObservableCollection<PIServer> ListTargetServer;
+        public 
 
         public MainViewModel()
         {

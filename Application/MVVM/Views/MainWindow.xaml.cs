@@ -1,6 +1,6 @@
 ﻿using OSIsoft.AF.PI;
 using PI_Replication_Tool.MVVM.Models;
-using PI_Replication_Tool.MVVM.ViewModels;
+using ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PI_Replication_Tool
+namespace Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,17 +27,7 @@ namespace PI_Replication_Tool
         public MainWindow()
         {
             InitializeComponent();
-
-            //var PILocalServers = PIServers.GetPIServers();
-
-            //// Chargement de la liste des serveurs sources
-            //listSourceServer.ItemsSource = PILocalServers;
-
-            //// Chargement de la liste des serveurs cibles
-            //listTargetServer.ItemsSource = PILocalServers;
         }
-
-
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
