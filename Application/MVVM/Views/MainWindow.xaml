@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodel="clr-namespace:PI_Replication_Tool.MVVM.ViewModels"
         xmlns:local="clr-namespace:PI_Replication_Tool"
         mc:Ignorable="d"
         Height="650" Width="1200"
+        Background="#36393F"
         ResizeMode="CanResizeWithGrip"
         WindowStyle="None">
 
@@ -68,9 +68,7 @@
                             FontWeight="Bold"
                             Click="CloseButton_Click"/>
                 </StackPanel>
-
             </Grid>
-
         </Border>
 
         <Grid Grid.Row="1"
@@ -84,13 +82,12 @@
                 </ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Height="27" FontFamily="Arial">PI Replication Tool</TextBlock>
             <Image Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="274,0,0,-20" />
 
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0">
-            <ListView x:Name="listSourceServer" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
+            <ListView x:Name="listSourceServer" ItemsSource="{Binding listSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="1">
@@ -108,11 +105,5 @@
                     VerticalAlignment="Center" 
                     Click="Button_Continue_Click">Continue</Button>
         </Grid>
-
-
-
     </Grid>
-
-
-
 </Window>

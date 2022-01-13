@@ -1,4 +1,5 @@
-﻿using OSIsoft.AF.Asset;
+﻿using NLog;
+using OSIsoft.AF.Asset;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace PI_Replication_Tool.MVVM.Models
             set { _connectedPIServersList = value; }
         }
 
+        Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         // -------------------
         // CONSTRUCTORS
         // -------------------
@@ -45,15 +48,15 @@ namespace PI_Replication_Tool.MVVM.Models
             PIServer PIServer = null;
             try
             {
+                Logger.Info("Trying to connect to " + p_PIServerName);
                 PIServer = PIServer.FindPIServer(p_PIServerName);
                 PIServer.Connect();
-
+                Logger.Info("Successfully connected to " + p_PIServerName);
             }
             catch (Exception e)
             {
                 // Write log error
-
-
+                Logger.Error("Cannot connect to " + p_PIServerName);
                 throw e;
             }
             _connectedPIServersList.Add(PIServer.Name);
@@ -64,13 +67,14 @@ namespace PI_Replication_Tool.MVVM.Models
         {
             try
             {
+                Logger.Info("Trying to connect to " + p_PIServer.Name);
                 p_PIServer.Connect();
+                Logger.Info("Successfully connected to " + p_PIServer.Name);
             }
             catch (Exception e)
             {
                 // Write log error
-
-
+                Logger.Error("Cannot connect to " + p_PIServer.Name);
                 throw e;
             }
             _connectedPIServersList.Add(p_PIServer.Name);
@@ -84,11 +88,14 @@ namespace PI_Replication_Tool.MVVM.Models
                 {
                     try
                     {
+                        Logger.Debug("Trying to reconnect to the server " + PIServ.Name);
                         PIServ.Connect();
+                        Logger.Debug("Sucessfully reconnected to " + PIServ.Name);
                     }
                     catch (Exception e)
                     {
                         // Log the reconnection error and inform server has been removed
+                        Logger.Error(e.Message);
 
                         // Remove server from connectedServerList and go next server
                         _connectedPIServersList.Remove(PIServ.Name);

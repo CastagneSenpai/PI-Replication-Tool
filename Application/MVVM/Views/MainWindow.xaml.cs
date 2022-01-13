@@ -1,5 +1,6 @@
 ﻿using OSIsoft.AF.PI;
 using PI_Replication_Tool.MVVM.Models;
+using PI_Replication_Tool.MVVM.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,38 +24,20 @@ namespace PI_Replication_Tool
     /// </summary>
     public partial class MainWindow : Window
     {
-        //public ObservableCollection 
-
         public MainWindow()
         {
             InitializeComponent();
 
-            //List<string> list = new List<string>();
-            //list.Add("ezkdos"); list.Add("561616"); list.Add("cksdc64");
+            //var PILocalServers = PIServers.GetPIServers();
 
-            //list<string> piservernames = new list<string>();
-            //foreach (var server in piservers.getpiservers())
-            //{
-            //    piservernames.add(server.name);
-            //}
+            //// Chargement de la liste des serveurs sources
+            //listSourceServer.ItemsSource = PILocalServers;
 
-            var PILocalServers = PIServers.GetPIServers();
-
-            // Chargement de la liste des serveurs sources
-            listSourceServer.ItemsSource = PILocalServers;
-
-            // Chargement de la liste des serveurs cibles
-            listTargetServer.ItemsSource = PILocalServers;
+            //// Chargement de la liste des serveurs cibles
+            //listTargetServer.ItemsSource = PILocalServers;
         }
 
-        private void Button_Continue_Click(object sender, RoutedEventArgs e)
-        {
-            string sourceServer = listSourceServer.SelectedItem.ToString();
-            string targetServer = listTargetServer.SelectedItem.ToString();
 
-            PIConnectionManager PIConnection = new PIConnectionManager();
-            
-        }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
