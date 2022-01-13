@@ -37,11 +37,9 @@ namespace PI_Replication_Tool
             //listTargetServer.ItemsSource = PILocalServers;
         }
 
-
-
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed) 
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }
@@ -61,7 +59,7 @@ namespace PI_Replication_Tool
         {
             if (Application.Current.MainWindow.WindowState != WindowState.Maximized)
                 Application.Current.MainWindow.WindowState = WindowState.Maximized;
-            else 
+            else
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
     }

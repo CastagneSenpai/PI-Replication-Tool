@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OSIsoft.AF.PI;
+using PI_Replication_Tool.Core;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using OSIsoft.AF.PI;
 
 namespace PI_Replication_Tool.MVVM.ViewModels
 {
@@ -16,6 +12,8 @@ namespace PI_Replication_Tool.MVVM.ViewModels
 
         public ObservableCollection<PIServer> ListSourceServer;
         public ObservableCollection<PIServer> ListTargetServer;
+
+        public RelayCommand ContinueButton { get; set; }
 
         public MainViewModel()
         {
