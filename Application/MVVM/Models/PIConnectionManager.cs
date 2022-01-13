@@ -50,8 +50,15 @@ namespace PI_Replication_Tool.MVVM.Models
             {
                 Logger.Info("Trying to connect to " + p_PIServerName);
                 PIServer = PIServer.FindPIServer(p_PIServerName);
-                PIServer.Connect();
-                Logger.Info("Successfully connected to " + p_PIServerName);
+                if(!PIServer.ConnectionInfo.IsConnected)
+                {
+                    PIServer.Connect();
+                    Logger.Info("Successfully connected to " + p_PIServerName);
+                }
+                else
+                {
+                    Logger.Info("Already connected to " + p_PIServerName);
+                }
             }
             catch (Exception e)
             {
@@ -68,8 +75,12 @@ namespace PI_Replication_Tool.MVVM.Models
             try
             {
                 Logger.Info("Trying to connect to " + p_PIServer.Name);
-                p_PIServer.Connect();
-                Logger.Info("Successfully connected to " + p_PIServer.Name);
+                if (!p_PIServer.ConnectionInfo.IsConnected)
+                {
+                    p_PIServer.Connect();
+                    Logger.Info("Successfully connected to " + p_PIServer.Name);
+                }
+                Logger.Info("Already connected to " + p_PIServer.Name);                
             }
             catch (Exception e)
             {

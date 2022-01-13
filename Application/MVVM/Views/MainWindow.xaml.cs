@@ -31,7 +31,7 @@ namespace Views
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed) 
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }
@@ -51,7 +51,7 @@ namespace Views
         {
             if (Application.Current.MainWindow.WindowState != WindowState.Maximized)
                 Application.Current.MainWindow.WindowState = WindowState.Maximized;
-            else 
+            else
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
     }

@@ -87,7 +87,7 @@
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0">
-            <ListView x:Name="listSourceServer" ItemsSource="{Binding listSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
+            <ListView x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedValue="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="1">
@@ -103,7 +103,7 @@
             <Button Grid.Column="3" Grid.Row="3" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center" 
-                    Command="{Binding ButtonContinue}">Continue</Button>
+                    Command="{Binding ButtonConnectServer}">Connect to servers</Button>
         </Grid>
     </Grid>
 </Window>
