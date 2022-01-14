@@ -87,23 +87,43 @@
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0">
-            <ListView x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedValue="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
+            <ListView x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedItem="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="1">
-            <ListView x:Name="listTargetServer" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
+            <ListView x:Name="listTargetServer" ItemsSource="{Binding ListTargetServer}" SelectedItem="{Binding SelectedTargetServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
 
+        <Grid Grid.Row="4" Grid.Column="0">
+            <Button 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Command="{Binding ButtonConnectSourceServer}">
+                Connect
+            </Button>
+        </Grid>
+
+        <Button Grid.Row="4" Grid.Column="1"
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Command="{Binding ButtonConnectTargetServer}">
+            Connect
+        </Button>
+        
         <Grid Grid.Row="4" Grid.Column="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450"/>
                 <ColumnDefinition Width="150" />
             </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="3" Grid.Row="3" 
+            
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Button Grid.Column="1" Grid.Row="4" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Center" 
-                    Command="{Binding ButtonConnectServer}">Connect to servers</Button>
+                    Command="{Binding ButtonContinueNextView}">
+                    Continue
+                </Button>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

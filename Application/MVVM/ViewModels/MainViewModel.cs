@@ -9,55 +9,45 @@ using OSIsoft.AF.PI;
 using Core;
 using PI_Replication_Tool.MVVM.Models;
 using System.Web.UI.WebControls;
+using System.Windows.Input;
 
 namespace ViewModels
 {
     internal class MainViewModel
     {
-        //public PIServers ListSourceServer { get; set; }
-        //public PIServers ListTargetServer { get; set; }
-        public ObservableCollection<PIServer> ListSourceServer;
+        public PIServers ListSourceServer { get; set; }
+        public PIServers ListTargetServer { get; set; }
+        //public ObservableCollection<PIServers> ListSourceServer;
+        //public ObservableCollection<PIServers> ListTargetServer;
         public string SelectedSourceServer { get; set; }
+        public string SelectedTargetServer { get; set; }
 
 
         //public ObservableCollection<PIServer> ListTargetServer;
         public PIConnectionManager ConnectionManager = new PIConnectionManager();
-        public RelayCommand ButtonConnectServer { get; set; }
+        public RelayCommand ButtonConnectSourceServer { get; set; }
+        public RelayCommand ButtonConnectTargetServer { get; set; }
+        public RelayCommand ButtonContinueNextView { get; set; }
+        
 
         public MainViewModel()
         {
-            // Action to connect to selected PI source server
-            ButtonConnectServer = new RelayCommand(
-                // Appel de la fonction de connexion au serveur
-                o => ConnectionManager.ConnectToPIServer("AOEPTTA-APPIL01"),
-
-                // Condition : serveur selectionné dans la liste
-                o => true);
-                // TODO: o => ListSourceServer.SelectedValue != null);
-
-
             var PILocalServers = PIServers.GetPIServers();
+            ListSourceServer = PILocalServers;
+            ListTargetServer = PILocalServers;
 
+            // Action to connect to selected PI source server
+            ButtonConnectSourceServer = new RelayCommand(
+                o => ConnectionManager.ConnectToPIServer(SelectedSourceServer));
+            //o => SelectedSourceServer.Length > 0);
 
-            // Chargement de la liste des serveurs sources
-            // ListSourceServer = PILocalServers;
-            //ListSourceServer = new ObservableCollection<PIServer>();
-            //ListTargetServer = new ObservableCollection<PIServer>();
-            //foreach (var PIServ in PILocalServers)
-            //{
-            //    ListSourceServer.Add(PIServ);
-            //    ListTargetServer.Add(PIServ);
-            //}
+            // Action to connect to selected PI target server
+            ButtonConnectTargetServer = new RelayCommand(
+                o => ConnectionManager.ConnectToPIServer(SelectedTargetServer));
+            //o => SelectedTargetServer.Length > 0);
 
-
-            // Chargement de la liste des serveurs cibles
-            //ListTargetServer = PILocalServers;
-
-        }
-        private void Button_Continue_Click(object sender, RoutedEventArgs e)
-        {
-            //string SourceServer = ListSourceServer.SelectedItem.ToString();
-            //string TargetServer = ListTargetServer.SelectedItem.ToString();
+            // Action to go to the next view
+            // TODO : command to use ButtonContinueNextView
         }
     }
 }

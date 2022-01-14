@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PI_Replication_Tool.MVVM.Models
 {
@@ -22,9 +23,9 @@ namespace PI_Replication_Tool.MVVM.Models
             set { _localPIServerList = value; }
         }
 
-        private PIServers _connectedPIServersList = new PIServers();
+        private List<PIServer> _connectedPIServersList = new List<PIServer>();
 
-        public PIServers ConnectedPIServersList
+        public List<PIServer> ConnectedPIServersList
         {
             get { return _connectedPIServersList; }
             set { _connectedPIServersList = value; }
@@ -45,7 +46,7 @@ namespace PI_Replication_Tool.MVVM.Models
         // -------------------
         public PIServer ConnectToPIServer(string p_PIServerName)
         {
-            PIServer PIServer = null;
+            PIServer PIServer;
             try
             {
                 Logger.Info("Trying to connect to " + p_PIServerName);
@@ -53,6 +54,7 @@ namespace PI_Replication_Tool.MVVM.Models
                 if(!PIServer.ConnectionInfo.IsConnected)
                 {
                     PIServer.Connect();
+                    _connectedPIServersList.Add(PIServer);
                     Logger.Info("Successfully connected to " + p_PIServerName);
                 }
                 else
@@ -64,9 +66,9 @@ namespace PI_Replication_Tool.MVVM.Models
             {
                 // Write log error
                 Logger.Error("Cannot connect to " + p_PIServerName);
-                throw e;
+                return null;
+                //throw e;
             }
-            _connectedPIServersList.Add(PIServer.Name);
             return PIServer;
         }
 
@@ -78,6 +80,7 @@ namespace PI_Replication_Tool.MVVM.Models
                 if (!p_PIServer.ConnectionInfo.IsConnected)
                 {
                     p_PIServer.Connect();
+                    _connectedPIServersList.Add(p_PIServer);
                     Logger.Info("Successfully connected to " + p_PIServer.Name);
                 }
                 Logger.Info("Already connected to " + p_PIServer.Name);                
@@ -88,7 +91,6 @@ namespace PI_Replication_Tool.MVVM.Models
                 Logger.Error("Cannot connect to " + p_PIServer.Name);
                 throw e;
             }
-            _connectedPIServersList.Add(p_PIServer.Name);
         }
 
         public void RefreshAllConnections()
@@ -109,7 +111,7 @@ namespace PI_Replication_Tool.MVVM.Models
                         Logger.Error(e.Message);
 
                         // Remove server from connectedServerList and go next server
-                        _connectedPIServersList.Remove(PIServ.Name);
+                        _connectedPIServersList.Remove(PIServ);
                         continue;
                     }
                 }
