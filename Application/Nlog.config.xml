@@ -41,10 +41,10 @@
     Write all events with minimal level of Debug (So Debug, Info, Warn, Error and Fatal, but not Trace)  to "f"
     <logger name="*" minlevel="Debug" writeTo="f" />
     -->
-    <logger name="*" minlevel="Debug" writeTo="logfile, logconsole" />
-    <logger name="*" minlevel="Info" writeTo="logfile, logconsole" />
-    <logger name="*" minlevel="Warning" writeTo="logfile, logconsole" />
-    <logger name="*" minlevel="Error" writeTo="logfile, logconsole" />
+    <logger name="PIReplicationToolLogger" minlevel="Debug" writeTo="logfile, logconsole" />
+    <logger name="PIReplicationToolLogger" minlevel="Info" writeTo="logfile, logconsole" />
+    <logger name="PIReplicationToolLogger" minlevel="Warning" writeTo="logfile, logconsole" />
+    <logger name="PIReplicationToolLogger" minlevel="Error" writeTo="logfile, logconsole" />
     
   </rules>
 

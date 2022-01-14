@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PI_Replication_Tool.MVVM.Models
+namespace Models
 {
     internal class PIConnectionManager
     {
@@ -31,7 +31,7 @@ namespace PI_Replication_Tool.MVVM.Models
             set { _connectedPIServersList = value; }
         }
 
-        Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        Logger Logger = NLog.LogManager.GetLogger("PIReplicationToolLogger");
 
         // -------------------
         // CONSTRUCTORS

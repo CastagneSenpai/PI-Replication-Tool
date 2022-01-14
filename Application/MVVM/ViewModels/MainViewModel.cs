@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using OSIsoft.AF.PI;
 using Core;
-using PI_Replication_Tool.MVVM.Models;
+using Models;
 using System.Web.UI.WebControls;
 using System.Windows.Input;
 
@@ -15,6 +15,7 @@ namespace ViewModels
 {
     internal class MainViewModel
     {
+        public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
         //public ObservableCollection<PIServers> ListSourceServer;
@@ -38,12 +39,12 @@ namespace ViewModels
 
             // Action to connect to selected PI source server
             ButtonConnectSourceServer = new RelayCommand(
-                o => ConnectionManager.ConnectToPIServer(SelectedSourceServer));
+                o => PIReplicationManager.PIConnectionManager.ConnectToPIServer(SelectedSourceServer));
             //o => SelectedSourceServer.Length > 0);
 
             // Action to connect to selected PI target server
             ButtonConnectTargetServer = new RelayCommand(
-                o => ConnectionManager.ConnectToPIServer(SelectedTargetServer));
+                o => PIReplicationManager.PIConnectionManager.ConnectToPIServer(SelectedTargetServer));
             //o => SelectedTargetServer.Length > 0);
 
             // Action to go to the next view

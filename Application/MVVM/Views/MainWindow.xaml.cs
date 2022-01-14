@@ -1,6 +1,4 @@
 ﻿using OSIsoft.AF.PI;
-using PI_Replication_Tool.MVVM.Models;
-using ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

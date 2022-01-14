@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PI_Replication_Tool.MVVM.Models
+namespace Models
 {
     internal class PIReplicationManager
     {
-        public PIConnectionManager PIConnectionManager { get; set; }   
+        public PIConnectionManager PIConnectionManager = new PIConnectionManager();
+        public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
     }
 }

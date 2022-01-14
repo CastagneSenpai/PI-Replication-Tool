@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PI_Replication_Tool.MVVM.Models
+namespace Models
 {
     internal class PIAttributesUpdateManager
     {
-        public List<string> a;
+        
     }
 }
