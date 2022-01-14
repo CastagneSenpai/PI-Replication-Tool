@@ -18,11 +18,11 @@ using System.Windows.Shapes;
 namespace Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ConnectionWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ConnectionWindow : Window
     {
-        public MainWindow()
+        public ConnectionWindow()
         {
             InitializeComponent();
         }

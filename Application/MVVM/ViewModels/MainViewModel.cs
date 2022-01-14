@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
-    internal class MainViewModel
+    internal class ConnectionViewModel
     {
         public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
@@ -31,7 +31,7 @@ namespace ViewModels
         public RelayCommand ButtonContinueNextView { get; set; }
         
 
-        public MainViewModel()
+        public ConnectionViewModel()
         {
             var PILocalServers = PIServers.GetPIServers();
             ListSourceServer = PILocalServers;
@@ -49,6 +49,7 @@ namespace ViewModels
 
             // Action to go to the next view
             // TODO : command to use ButtonContinueNextView
+
         }
     }
 }

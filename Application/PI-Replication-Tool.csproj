@@ -95,7 +95,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MVVM\Views\MainWindow.xaml">
+    <Page Include="MVVM\Themes\ConnectionCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\Views\ConnectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -108,12 +112,19 @@
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
     <Compile Include="MVVM\Models\PIReplicationManager.cs" />
     <Compile Include="MVVM\ViewModels\MainViewModel.cs" />
-    <Compile Include="MVVM\Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MVVM\Views\ConnectionWindow.xaml.cs">
+      <DependentUpon>ConnectionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\Views\LoadTagsAttributesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MVVM\Views\LoadTagsAttributesWindow.xaml.cs">
+      <DependentUpon>LoadTagsAttributesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
