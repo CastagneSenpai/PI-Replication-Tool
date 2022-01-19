@@ -18,14 +18,8 @@ namespace ViewModels
         public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
-        //public ObservableCollection<PIServers> ListSourceServer;
-        //public ObservableCollection<PIServers> ListTargetServer;
         public string SelectedSourceServer { get; set; }
         public string SelectedTargetServer { get; set; }
-
-
-        //public ObservableCollection<PIServer> ListTargetServer;
-        public PIConnectionManager ConnectionManager = new PIConnectionManager();
         public RelayCommand ButtonConnectSourceServer { get; set; }
         public RelayCommand ButtonConnectTargetServer { get; set; }
         public RelayCommand ButtonContinueNextView { get; set; }
@@ -39,17 +33,17 @@ namespace ViewModels
 
             // Action to connect to selected PI source server
             ButtonConnectSourceServer = new RelayCommand(
-                o => PIReplicationManager.PIConnectionManager.ConnectToPIServer(SelectedSourceServer));
+                o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
             //o => SelectedSourceServer.Length > 0);
 
             // Action to connect to selected PI target server
             ButtonConnectTargetServer = new RelayCommand(
-                o => PIReplicationManager.PIConnectionManager.ConnectToPIServer(SelectedTargetServer));
+                o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
             //o => SelectedTargetServer.Length > 0);
 
             // Action to go to the next view
             // TODO : command to use ButtonContinueNextView
-
+            MessageBox.Show(SelectedSourceServer);
         }
     }
 }

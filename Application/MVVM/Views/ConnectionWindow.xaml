@@ -138,7 +138,7 @@
         </Grid>
 
         <Grid Grid.Row="2" Grid.Column="1">
-            <ListView x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedItem="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5" />
+            <ListBox x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedItem="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
 
         <Grid Grid.Row="2" Grid.Column="2">

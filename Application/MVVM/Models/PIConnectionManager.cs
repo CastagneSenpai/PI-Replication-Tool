@@ -31,6 +31,22 @@ namespace Models
             set { _connectedPIServersList = value; }
         }
 
+        private string _piSourceServerName;
+
+        public string PISourceServerName
+        {
+            get { return _piSourceServerName; }
+            set { _piSourceServerName = value; }
+        }
+
+        private string _piTargetServerName;
+
+        public string PITargetServerName
+        {
+            get { return _piTargetServerName; }
+            set { _piTargetServerName = value; }
+        }
+
         Logger Logger = NLog.LogManager.GetLogger("PIReplicationToolLogger");
 
         // -------------------
@@ -44,54 +60,72 @@ namespace Models
         // -------------------
         // FUNCTIONS
         // -------------------
-        public PIServer ConnectToPIServer(string p_PIServerName)
+        async public Task ConnectToPIServer(string p_PIServerName)
         {
-            PIServer PIServer;
-            try
+            await Task.Run(() =>
             {
-                Logger.Info("Trying to connect to " + p_PIServerName);
-                PIServer = PIServer.FindPIServer(p_PIServerName);
-                if(!PIServer.ConnectionInfo.IsConnected)
+                PIServer PIServer;
+                try
                 {
-                    PIServer.Connect();
-                    _connectedPIServersList.Add(PIServer);
-                    Logger.Info("Successfully connected to " + p_PIServerName);
+                    Logger.Info("Trying to connect to " + p_PIServerName);
+                    PIServer = PIServer.FindPIServer(p_PIServerName);
+                    if (!PIServer.ConnectionInfo.IsConnected)
+                    {
+                        PIServer.Connect();
+                        _connectedPIServersList.Add(PIServer);
+                        Logger.Info("Successfully connected to " + p_PIServerName);
+                    }
+                    else
+                    {
+                        Logger.Info("Already connected to " + p_PIServerName);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Logger.Info("Already connected to " + p_PIServerName);
+                    // Write log error
+                    Logger.Error("Cannot connect to " + p_PIServerName);
+                    // return null;
+                    //throw e;
                 }
-            }
-            catch (Exception e)
-            {
-                // Write log error
-                Logger.Error("Cannot connect to " + p_PIServerName);
-                return null;
-                //throw e;
-            }
-            return PIServer;
+            });
         }
 
-        public void ConnectToPIServer(PIServer p_PIServer)
+        public async Task ConnectToPIServer(PIServer p_PIServer)
         {
-            try
+            await Task.Run(() =>
             {
-                Logger.Info("Trying to connect to " + p_PIServer.Name);
-                if (!p_PIServer.ConnectionInfo.IsConnected)
+                try
                 {
-                    p_PIServer.Connect();
-                    _connectedPIServersList.Add(p_PIServer);
-                    Logger.Info("Successfully connected to " + p_PIServer.Name);
+                    Logger.Info("Trying to connect to " + p_PIServer.Name);
+                    if (!p_PIServer.ConnectionInfo.IsConnected)
+                    {
+                        p_PIServer.Connect();
+                        _connectedPIServersList.Add(p_PIServer);
+                        Logger.Info("Successfully connected to " + p_PIServer.Name);
+                    }
+                    Logger.Info("Already connected to " + p_PIServer.Name);
                 }
-                Logger.Info("Already connected to " + p_PIServer.Name);                
-            }
-            catch (Exception e)
-            {
-                // Write log error
-                Logger.Error("Cannot connect to " + p_PIServer.Name);
-                throw e;
-            }
+                catch (Exception e)
+                {
+                    // Write log error
+                    Logger.Error("Cannot connect to " + p_PIServer.Name);
+                    throw e;
+                }
+            });
         }
+
+        public async Task ConnectToPISourceServer(string p_PIServerName)
+        {
+            this._piSourceServerName = p_PIServerName;
+            await this.ConnectToPIServer(p_PIServerName);
+        }
+
+        async public void ConnectToPITargetServer(string p_PIServerName)
+        {
+            this._piTargetServerName = p_PIServerName;
+            await this.ConnectToPIServer(p_PIServerName);
+        }
+
 
         public void RefreshAllConnections()
         {
