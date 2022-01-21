@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
-    internal class LoadTagsConfigurationViewModel : BaseViewModel
+    internal class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
         private ICommand _goToPushTagsConfigurationView;
 
@@ -21,6 +21,11 @@ namespace ViewModels
                     Mediator.Notify("GoTo2Screen", "");
                 }));
             }
+        }
+
+        public LoadTagsConfigurationViewModel()
+        {
+
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
-    internal class ConnectionViewModel : BaseViewModel
+    internal class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
         public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
@@ -78,6 +78,7 @@ namespace ViewModels
 
             CurrentPageViewModel = PageViewModels[0];
 
+            //TODO
             //Mediator.Subscribe("GoTo1Screen", OnGo1Screen);
             //Mediator.Subscribe("GoTo2Screen", OnGo2Screen);
 
