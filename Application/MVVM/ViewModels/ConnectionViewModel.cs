@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace ViewModels
 {
-    internal class ConnectionViewModel
+    internal class ConnectionViewModel : BaseViewModel
     {
         public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
@@ -43,7 +43,6 @@ namespace ViewModels
 
             // Action to go to the next view
             // TODO : command to use ButtonContinueNextView
-            MessageBox.Show(SelectedSourceServer);
         }
     }
 }

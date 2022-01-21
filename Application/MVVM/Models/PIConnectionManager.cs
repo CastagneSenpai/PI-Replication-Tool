@@ -74,17 +74,19 @@ namespace Models
                         PIServer.Connect();
                         _connectedPIServersList.Add(PIServer);
                         Logger.Info("Successfully connected to " + p_PIServerName);
+                        MessageBox.Show("Successfully connected to " + p_PIServerName);
                     }
                     else
                     {
                         Logger.Info("Already connected to " + p_PIServerName);
+                        MessageBox.Show("Already connected to " + p_PIServerName);
                     }
                 }
                 catch (Exception e)
                 {
                     // Write log error
                     Logger.Error("Cannot connect to " + p_PIServerName);
-                    // return null;
+                    MessageBox.Show("Cannot connect to " + p_PIServerName);
                     //throw e;
                 }
             });
@@ -102,25 +104,28 @@ namespace Models
                         p_PIServer.Connect();
                         _connectedPIServersList.Add(p_PIServer);
                         Logger.Info("Successfully connected to " + p_PIServer.Name);
+                        MessageBox.Show("Successfully connected to " + p_PIServer.Name);
                     }
                     Logger.Info("Already connected to " + p_PIServer.Name);
+                    MessageBox.Show("Already connected to " + p_PIServer.Name);
                 }
                 catch (Exception e)
                 {
                     // Write log error
                     Logger.Error("Cannot connect to " + p_PIServer.Name);
+                    MessageBox.Show("Cannot connect to " + p_PIServer.Name);
                     throw e;
                 }
             });
         }
 
-        public async Task ConnectToPISourceServer(string p_PIServerName)
+        public async void ConnectToPISourceServer(string p_PIServerName)
         {
             this._piSourceServerName = p_PIServerName;
             await this.ConnectToPIServer(p_PIServerName);
         }
 
-        async public void ConnectToPITargetServer(string p_PIServerName)
+        public async void ConnectToPITargetServer(string p_PIServerName)
         {
             this._piTargetServerName = p_PIServerName;
             await this.ConnectToPIServer(p_PIServerName);

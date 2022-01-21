@@ -37,7 +37,7 @@
 
             <Grid HorizontalAlignment="Stretch">
                 <Label HorizontalAlignment="Left"
-                       Content="PI Server Connection"
+                       Content="PI Replication Tool"
                        Foreground="Gray"
                        FontWeight="SemiBold"/>
 

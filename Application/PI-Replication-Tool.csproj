@@ -111,7 +111,8 @@
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
     <Compile Include="MVVM\Models\PIReplicationManager.cs" />
-    <Compile Include="MVVM\ViewModels\MainViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\BaseViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\ConnectionViewModel.cs" />
     <Compile Include="MVVM\Views\ConnectionWindow.xaml.cs">
       <DependentUpon>ConnectionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
