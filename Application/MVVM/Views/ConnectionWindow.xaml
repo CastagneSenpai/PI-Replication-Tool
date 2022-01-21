@@ -30,10 +30,10 @@
             <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Border = Proprétés de la fenêtre Windows-->
         <Border Grid.ColumnSpan="3"
                 Background="#252525"
                 MouseDown="Border_MouseDown" >
-
 
             <Grid HorizontalAlignment="Stretch">
                 <Label HorizontalAlignment="Left"
@@ -44,35 +44,35 @@
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3">
 
+                <Button Width="20" Height="20" 
+                        Content="🗕"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="Gray"
+                        FontWeight="Bold"
+                        Margin="0 0 0 3"
+                        Click="Button_MinimizeClick"/>
 
-                    <Button Width="20" Height="20" 
-                            Content="🗕"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="Gray"
-                            FontWeight="Bold"
-                            Margin="0 0 0 3"
-                            Click="Button_MinimizeClick"/>
-
-                    <Button Width="20" Height="20" 
-                            Content="▢"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="Gray"
-                            FontWeight="Bold"
-                            Click="WindowsStateButton_Click"/>
-
-                    <Button Width="20" Height="20" 
-                            Content="✕"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="Gray"
-                            FontWeight="Bold"
-                            Click="CloseButton_Click"/>
+                <Button Width="20" Height="20" 
+                        Content="▢"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="Gray"
+                        FontWeight="Bold"
+                        Click="WindowsStateButton_Click"/>
+                    
+                <Button Width="20" Height="20" 
+                        Content="✕"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="Gray"
+                        FontWeight="Bold"
+                        Click="CloseButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
 
+        
         <Grid Background="#2F3136"
               Grid.Row="1"
               Grid.RowSpan="5">
@@ -84,97 +84,80 @@
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
 
-            <Label Content="Connection"
+            <Label Grid.Row="0" 
+                   Content="Connection"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
                    Foreground="Gray"
                    Margin="8,0,0,0"/>
-
-            <ListView ItemsSource="{Binding Connection}" 
+            <ListView Grid.Row="0"
+                      ItemsSource="{Binding Connection}" 
                       Background="Transparent"
                       BorderThickness="0"
-                      Grid.Row="0"
                       ItemContainerStyle="{StaticResource ConnectionCard}"/>
 
-            <Label Content="Load Tags Attributes"
+            <Label Grid.Row="1" 
+                   Content="Load Tags Attributes"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
                    Foreground="Gray"
-                   Margin="8,0,0,0"
-                   Grid.Row="1"/>
-
-            <ListView ItemsSource="{Binding LoadTagsAttributes}" 
+                   Margin="8,0,0,0"/>
+            <ListView Grid.Row="1"
+                      ItemsSource="{Binding LoadTagsAttributes}" 
                       Background="Transparent"
-                      BorderThickness="0"
-                      Grid.Row="1"/>
+                      BorderThickness="0"/>
 
-            <Label Content="Push Tags Attributes"
-                   VerticalAlignment="Center"
-                   FontWeight="Medium"
-                   Foreground="Gray"
-                   Margin="8,0,0,0"
-                   Grid.Row="2"/>
-
+            <Label Grid.Row="2"
+                    Content="Push Tags Attributes"
+                    VerticalAlignment="Center"
+                    FontWeight="Medium"
+                    Foreground="Gray"
+                    Margin="8,0,0,0"/>
             <ListView ItemsSource="{Binding PushTagsAttributes}" 
                       Background="Transparent"
                       BorderThickness="0"
                       Grid.Row="2"/>
-
         </Grid>
         
-        <Grid Grid.Row="1"
-              Grid.ColumnSpan="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition>
-                </ColumnDefinition>
-                <ColumnDefinition>
-                </ColumnDefinition>
-                <ColumnDefinition>
-                </ColumnDefinition>
-            </Grid.ColumnDefinitions>
+        <Image Grid.Row="1"  Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="400,0,0,0" />
 
-            <Image Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="274,0,0,-20" />
+        <ListView Grid.Row="2" Grid.Column="1" 
+                 x:Name="listSourceServer" 
+                 ItemsSource="{Binding ListSourceServer}" 
+                 SelectedItem="{Binding SelectedSourceServer}" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Width="245" 
+                 RenderTransformOrigin="0.5,0.5"/>
 
-        </Grid>
+        <ListView Grid.Row ="2" Grid.Column="2" 
+                  x:Name="listTargetServer" 
+                  ItemsSource="{Binding ListTargetServer}" 
+                  SelectedItem="{Binding SelectedTargetServer}" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Width="245" 
+                  RenderTransformOrigin="0.5,0.5"/>
 
-        <Grid Grid.Row="2" Grid.Column="1">
-            <ListBox x:Name="listSourceServer" ItemsSource="{Binding ListSourceServer}" SelectedItem="{Binding SelectedSourceServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
-        </Grid>
-
-        <Grid Grid.Row="2" Grid.Column="2">
-            <ListView x:Name="listTargetServer" ItemsSource="{Binding ListTargetServer}" SelectedItem="{Binding SelectedTargetServer}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="245" RenderTransformOrigin="0.5,0.5"/>
-        </Grid>
-
-        <Grid Grid.Row="3" Grid.Column="1">
-            <Button 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Command="{Binding ButtonConnectSourceServer}">
-                Connect
-            </Button>
-        </Grid>
+        <Button Grid.Row="3" Grid.Column="1"
+                Content="Connect"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Command="{Binding ButtonConnectSourceServer}">
+        </Button>
 
         <Button Grid.Row="3" Grid.Column="2"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Command="{Binding ButtonConnectTargetServer}">
-            Connect
+                Content="Connect"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Command="{Binding ButtonConnectTargetServer}">
         </Button>
         
-        <Grid Grid.Row="4" Grid.Column="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="370"/>
-                <ColumnDefinition Width="150" />
-            </Grid.ColumnDefinitions>
-            
-            <Grid Grid.Row="0" Grid.Column="1">
-                <Button Grid.Column="1" Grid.Row="4" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    Command="{Binding ButtonContinueNextView}">
-                    Continue
-                </Button>
-            </Grid>
-        </Grid>
+        <Button Grid.Row="4" Grid.Column="2"
+                Content="Next"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Command="{Binding ButtonNextView}">
+        </Button>
     </Grid>
 </Window>

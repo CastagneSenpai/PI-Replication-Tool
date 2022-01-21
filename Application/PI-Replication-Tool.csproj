@@ -107,24 +107,36 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\EventArgs.cs" />
+    <Compile Include="Core\EventRaiser.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
     <Compile Include="MVVM\Models\PIReplicationManager.cs" />
     <Compile Include="MVVM\ViewModels\BaseViewModel.cs" />
     <Compile Include="MVVM\ViewModels\ConnectionViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\IPageViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\LoadTagsConfigurationViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\PushTagsConfigurationViewModel.cs" />
     <Compile Include="MVVM\Views\ConnectionWindow.xaml.cs">
       <DependentUpon>ConnectionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MVVM\Views\LoadTagsAttributesWindow.xaml">
+    <Page Include="MVVM\Views\LoadTagsConfigurationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\Views\PushTagsConfigurationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVVM\Views\LoadTagsAttributesWindow.xaml.cs">
-      <DependentUpon>LoadTagsAttributesWindow.xaml</DependentUpon>
+    <Compile Include="MVVM\Views\LoadTagsConfigurationWindow.xaml.cs">
+      <DependentUpon>LoadTagsConfigurationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Views\PushTagsConfigurationWindow.xaml.cs">
+      <DependentUpon>PushTagsConfigurationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
