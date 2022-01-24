@@ -18,7 +18,7 @@ namespace ViewModels
             {
                 return _goToPushTagsConfigurationView ?? (_goToPushTagsConfigurationView = new RelayCommand(x =>
                 {
-                    Mediator.Notify("GoTo2Screen", "");
+                    Mediator.Notify("GoToPushTagConfigurationScreen", "");
                 }));
             }
         }

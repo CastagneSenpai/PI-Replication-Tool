@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Core\EventArgs.cs" />
     <Compile Include="Core\EventRaiser.cs" />
+    <Compile Include="Core\Mediator.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
@@ -117,12 +118,17 @@
     <Compile Include="MVVM\ViewModels\ConnectionViewModel.cs" />
     <Compile Include="MVVM\ViewModels\IPageViewModel.cs" />
     <Compile Include="MVVM\ViewModels\LoadTagsConfigurationViewModel.cs" />
+    <Compile Include="MVVM\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="MVVM\ViewModels\PushTagsConfigurationViewModel.cs" />
     <Compile Include="MVVM\Views\ConnectionWindow.xaml.cs">
       <DependentUpon>ConnectionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MVVM\Views\LoadTagsConfigurationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\Views\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,6 +140,9 @@
   <ItemGroup>
     <Compile Include="MVVM\Views\LoadTagsConfigurationWindow.xaml.cs">
       <DependentUpon>LoadTagsConfigurationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\Views\PushTagsConfigurationWindow.xaml.cs">
       <DependentUpon>PushTagsConfigurationWindow.xaml</DependentUpon>
