@@ -1,12 +1,16 @@
-﻿<Window x:Class="PI_Replication_Tool.MVVM.Views.PushTagsConfigurationWindow"
+﻿<Window x:Class="Views.PushTagsConfigurationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Views"
+        xmlns:viewmodels="clr-namespace:ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:PushTagsConfigurationViewModel}"
         mc:Ignorable="d"
         Title="PI Replication Tool" Height="450" Width="800">
     <Grid>
-
+        <Button
+            Content="back"
+            Command="{Binding GoToLoadTagsConfigurationView}"
+            Width="90" Height="30" />
     </Grid>
 </Window>

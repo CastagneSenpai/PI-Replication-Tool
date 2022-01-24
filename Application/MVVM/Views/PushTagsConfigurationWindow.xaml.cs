@@ -7,9 +7,9 @@ namespace Views
     /// </summary>
     public partial class PushTagsConfiguration : Window
     {
-        //public PushTagsConfiguration()
-        //{
-        //    InitializeComponent();
-        //}
+        public PushTagsConfiguration()
+        {
+            InitializeComponent();
+        }
     }
 }

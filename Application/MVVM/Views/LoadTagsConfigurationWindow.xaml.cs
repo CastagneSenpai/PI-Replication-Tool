@@ -7,9 +7,9 @@ namespace Views
     /// </summary>
     public partial class LoadTagsAttributesWindow : Window
     {
-        //public LoadTagsAttributesWindow()
-        //{
-        //    InitializeComponent();
-        //}
+        public LoadTagsAttributesWindow()
+        {
+            InitializeComponent();
+        }
     }
 }
