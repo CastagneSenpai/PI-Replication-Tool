@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Views
@@ -6,7 +7,7 @@ namespace Views
     /// <summary>
     /// Interaction logic for ConnectionWindow.xaml
     /// </summary>
-    public partial class ConnectionWindow : Window
+    public partial class ConnectionWindow : UserControl
     {
         public ConnectionWindow()
         {
@@ -17,7 +18,7 @@ namespace Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                DragMove();
+                //DragMove();
             }
         }
 

@@ -1,19 +1,16 @@
-﻿<Window x:Class="Views.ConnectionWindow"
+﻿<UserControl x:Class="Views.ConnectionWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Viewmodel="clr-namespace:ViewModels"
-        mc:Ignorable="d"
+        xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
+             mc:Ignorable="d"
         Height="650" Width="1200"
-        Background="#36393F"
-        ResizeMode="CanResizeWithGrip"
-        WindowStyle="None"
-        AllowsTransparency="True">
-
-    <Window.DataContext>
+        Background="#36393F">
+    
+    <UserControl.DataContext>
         <Viewmodel:ConnectionViewModel/>
-    </Window.DataContext>
+    </UserControl.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -44,7 +41,7 @@
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3">
 
-                <Button Width="20" Height="20" 
+                    <Button Width="20" Height="20" 
                         Content="🗕"
                         Background="Transparent"
                         BorderThickness="0"
@@ -53,15 +50,15 @@
                         Margin="0 0 0 3"
                         Click="Button_MinimizeClick"/>
 
-                <Button Width="20" Height="20" 
+                    <Button Width="20" Height="20" 
                         Content="▢"
                         Background="Transparent"
                         BorderThickness="0"
                         Foreground="Gray"
                         FontWeight="Bold"
                         Click="WindowsStateButton_Click"/>
-                    
-                <Button Width="20" Height="20" 
+
+                    <Button Width="20" Height="20" 
                         Content="✕"
                         Background="Transparent"
                         BorderThickness="0"
@@ -72,7 +69,6 @@
             </Grid>
         </Border>
 
-        
         <Grid Background="#2F3136"
               Grid.Row="1"
               Grid.RowSpan="5">
@@ -160,4 +156,4 @@
                 Command="{Binding ButtonNextView}">
         </Button>
     </Grid>
-</Window>
+</UserControl>
