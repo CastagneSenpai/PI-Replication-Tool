@@ -1,15 +1,15 @@
-﻿using System.Windows;
+﻿using System.Windows.Controls;
 
 namespace Views
 {
     /// <summary>
-    /// Interaction logic for PushTagsConfiguration.xaml
+    /// Logique d'interaction pour PushTagsConfigurationWindow.xaml
     /// </summary>
-    public partial class PushTagsConfiguration : Window
+    public partial class PushTagsConfigurationWindow : UserControl
     {
-        //public PushTagsConfiguration()
-        //{
-        //    InitializeComponent();
-        //}
+        public PushTagsConfigurationWindow()
+        {
+            InitializeComponent();
+        }
     }
 }

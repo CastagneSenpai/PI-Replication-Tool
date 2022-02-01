@@ -1,13 +1,14 @@
-﻿<UserControl x:Class="Views.ConnectionWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
-             mc:Ignorable="d"
-        Height="650" Width="1200"
-        Background="#36393F">
-    
+﻿<UserControl 
+    x:Class="Views.ConnectionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
+    mc:Ignorable="d"
+    Height="650" Width="1200"
+    Background="#36393F">
+
     <UserControl.DataContext>
         <Viewmodel:ConnectionViewModel/>
     </UserControl.DataContext>
@@ -114,7 +115,7 @@
                       BorderThickness="0"
                       Grid.Row="2"/>
         </Grid>
-        
+
         <Image Grid.Row="1"  Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="400,0,0,0" />
 
         <ListView Grid.Row="2" Grid.Column="1" 
@@ -148,7 +149,7 @@
                 VerticalAlignment="Center" 
                 Command="{Binding ButtonConnectTargetServer}">
         </Button>
-        
+
         <Button Grid.Row="4" Grid.Column="2"
                 Content="Next"
                 HorizontalAlignment="Center" 

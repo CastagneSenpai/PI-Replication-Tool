@@ -3,17 +3,31 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:viewmodels="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-        mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:viewmodels="clr-namespace:ViewModels" 
+      xmlns:views="clr-namespace:Views" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="1200"
+      Height="650" Width="1200"
       Title="PI Replication Tool">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewmodels:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Grid>
-        <ContentControl Content="{Binding CurrentPageViewModel}" />
+        <ContentControl Content="{Binding CurrentPageViewModel}">
+            <ContentControl.Resources>
+                <!--<DataTemplate DataType="{x:Type viewmodels:LoadTagsConfigurationViewModel}">
+                    <views:LoadTagsConfigurationWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:PushTagsConfigurationViewModel}">
+                    <views:PushTagsConfigurationWindow />
+                </DataTemplate>-->
+                <DataTemplate DataType="{x:Type viewmodels:ConnectionViewModel}">
+                    <views:ConnectionWindow />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
     </Grid>
     
 </Window>
