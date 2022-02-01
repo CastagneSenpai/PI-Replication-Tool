@@ -6,7 +6,7 @@
         xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
              mc:Ignorable="d"
         Height="650" Width="1200"
-        Background="#36393F">
+        Background="#FFFFFF">
     
     <UserControl.DataContext>
         <Viewmodel:ConnectionViewModel/>
@@ -29,14 +29,21 @@
 
         <!-- Border = Proprétés de la fenêtre Windows-->
         <Border Grid.ColumnSpan="3"
-                Background="#252525"
+                Background="#2e86de"
                 MouseDown="Border_MouseDown" >
 
             <Grid HorizontalAlignment="Stretch">
                 <Label HorizontalAlignment="Left"
                        Content="PI Replication Tool"
-                       Foreground="Gray"
-                       FontWeight="SemiBold"/>
+                       Foreground="#FFFFFF"
+                       FontWeight="SemiBold"
+                       FontSize="13px"/>
+
+                <Label HorizontalAlignment="Center"
+                       Content="Connection"
+                       Foreground="#FFFFFF"
+                       FontWeight="SemiBold"
+                       FontSize="13px"/>
 
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3">
@@ -45,7 +52,7 @@
                         Content="🗕"
                         Background="Transparent"
                         BorderThickness="0"
-                        Foreground="Gray"
+                        Foreground="#FFFFFF"
                         FontWeight="Bold"
                         Margin="0 0 0 3"
                         Click="Button_MinimizeClick"/>
@@ -54,7 +61,7 @@
                         Content="▢"
                         Background="Transparent"
                         BorderThickness="0"
-                        Foreground="Gray"
+                        Foreground="#FFFFFF"
                         FontWeight="Bold"
                         Click="WindowsStateButton_Click"/>
 
@@ -62,14 +69,14 @@
                         Content="✕"
                         Background="Transparent"
                         BorderThickness="0"
-                        Foreground="Gray"
+                        Foreground="#FFFFFF"
                         FontWeight="Bold"
                         Click="CloseButton_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <Grid Background="#2F3136"
+        <Grid Background="#c8d6e5"
               Grid.Row="1"
               Grid.RowSpan="5">
             <Grid.RowDefinitions>
@@ -84,7 +91,7 @@
                    Content="Connection"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
-                   Foreground="Gray"
+                   Foreground="#8395a7"
                    Margin="8,0,0,0"/>
             <ListView Grid.Row="0"
                       ItemsSource="{Binding Connection}" 
@@ -96,7 +103,7 @@
                    Content="Load Tags Attributes"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
-                   Foreground="Gray"
+                   Foreground="#8395a7"
                    Margin="8,0,0,0"/>
             <ListView Grid.Row="1"
                       ItemsSource="{Binding LoadTagsAttributes}" 
@@ -107,7 +114,7 @@
                     Content="Push Tags Attributes"
                     VerticalAlignment="Center"
                     FontWeight="Medium"
-                    Foreground="Gray"
+                    Foreground="#8395a7"
                     Margin="8,0,0,0"/>
             <ListView ItemsSource="{Binding PushTagsAttributes}" 
                       Background="Transparent"
