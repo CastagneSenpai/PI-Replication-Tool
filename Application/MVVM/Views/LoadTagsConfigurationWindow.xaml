@@ -3,16 +3,272 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Viewmodel="clr-namespace:ViewModels" mc:Ignorable="d"
-        Height="450" Width="800">
-    <UserControl.DataContext>
-        <Viewmodel:LoadTagsConfigurationViewModel/>
-    </UserControl.DataContext>
+        xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:LoadTagsConfigurationViewModel}"
+             mc:Ignorable="d"
+        Height="650" Width="1200"
+        Background="#FFFFFF">
+
+    <UserControl.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="15" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9"/>
+        <Style x:Key="RoundedMenuButton2" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd" CornerRadius="15" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     
+    <UserControl.DataContext>
+        <Viewmodel:ConnectionViewModel/>
+    </UserControl.DataContext>
+
+
     <Grid>
-        <Button
-            Content="Next"
-            Command="{Binding GoToPushTagsConfigurationView}"
-            Width="90" Height="30" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="68*" />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="550"/>
+            <ColumnDefinition Width="500"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Border = Proprétés de la fenêtre Windows-->
+        <Border Grid.ColumnSpan="3"
+                Background="#2e86de"
+                MouseDown="Border_MouseDown" >
+
+            <Grid HorizontalAlignment="Stretch">
+                <Label HorizontalAlignment="Left"
+                       Content="PI Replication Tool"
+                       Foreground="#FFFFFF"
+                       FontWeight="SemiBold"
+                       FontSize="13px"/>
+
+                <Label HorizontalAlignment="Center"
+                       Content="Load Tags Configuration"
+                       Foreground="#FFFFFF"
+                       FontWeight="SemiBold"
+                       FontSize="13px"/>
+
+                <StackPanel HorizontalAlignment="Right"
+                            Orientation="Horizontal" Grid.ColumnSpan="3">
+
+                    <Button Width="20" Height="20" 
+                        Content="🗕"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#FFFFFF"
+                        FontWeight="Bold"
+                        Margin="0 0 0 3"
+                        Click="Button_MinimizeClick"/>
+
+                    <Button Width="20" Height="20" 
+                        Content="▢"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#FFFFFF"
+                        FontWeight="Bold"
+                        Click="WindowsStateButton_Click"/>
+
+                    <Button Width="20" Height="20" 
+                        Content="✕"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#FFFFFF"
+                        FontWeight="Bold"
+                        Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Background="#c8d6e5"
+              Grid.Row="1"
+              Grid.RowSpan="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" 
+                   Content="Connection"
+                   HorizontalContentAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Medium"
+                   Foreground="#8395a7"
+                   Margin="8,0,0,0"/>
+            <ListBox Grid.Row="0"
+                      ItemsSource="{Binding Connection}" 
+                      Background="Transparent"
+                      BorderThickness="0"
+                      ItemContainerStyle="{StaticResource ConnectionCard}"/>
+
+            <Label Grid.Row="1" 
+                   Content="Load Tags Attributes"
+                   HorizontalContentAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Medium"
+                   Foreground="White"
+                   Background="#2e86de"
+                   Margin="8,0,0,0"/>
+            <ListBox Style="{DynamicResource RoundedMenuButton2}" Grid.Row="1"
+                      ItemsSource="{Binding LoadTagsAttributes}" 
+                      Background="Transparent"
+                      BorderThickness="0"/>
+
+            <Label Grid.Row="2"
+                   Content="Push Tags Attributes"
+                   HorizontalContentAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Medium"
+                   Foreground="#8395a7"
+                   Margin="8,0,0,0"/>
+            <ListBox ItemsSource="{Binding PushTagsAttributes}" 
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Grid.Row="2"/>
+        </Grid>
+
+        <Image Grid.Row="1"  Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="400,0,0,0" />
+
+        <ListView Grid.Row="2" Grid.Column="1" 
+                 x:Name="listSourceServer" 
+                 ItemsSource="{Binding ListSourceServer}" 
+                 SelectedItem="{Binding SelectedSourceServer}" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Width="245" 
+                 RenderTransformOrigin="0.5,0.5"/>
+
+        <ListView Grid.Row ="2" Grid.Column="2" 
+                  x:Name="listTargetServer" 
+                  ItemsSource="{Binding ListTargetServer}" 
+                  SelectedItem="{Binding SelectedTargetServer}" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Width="245" 
+                  RenderTransformOrigin="0.5,0.5"/>
+
+        <Button Grid.Row="3" Grid.Column="1"
+                Content="Connect"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Command="{Binding ButtonConnectSourceServer}">
+        </Button>
+
+        <Button Grid.Row="3" Grid.Column="2"
+                Content="Connect"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Command="{Binding ButtonConnectTargetServer}">
+        </Button>
+
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="4" Grid.Column="2"
+                Content="Next"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Height="25"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Command="{Binding ButtonNextView}">
+        </Button>
     </Grid>
 </UserControl>
