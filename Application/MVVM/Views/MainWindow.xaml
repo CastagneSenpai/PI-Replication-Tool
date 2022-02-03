@@ -5,10 +5,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:viewmodels="clr-namespace:ViewModels" 
       xmlns:views="clr-namespace:Views" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-      mc:Ignorable="d" 
-      d:DesignHeight="650" d:DesignWidth="1200"
-      Height="620" Width="1200"
-      WindowStyle="None">
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Height="Auto" Width="Auto"
+      WindowStyle="None"
+      ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
 
     <!--<Window.DataContext>
         <viewmodels:MainWindowViewModel/>
@@ -22,26 +23,22 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Border = Proprétés de la fenêtre Windows-->
+        <!-- Menu Window -->
         <Border Grid.ColumnSpan="3" Grid.Row="0"
                 Background="#2e86de"
                 MouseDown="Border_MouseDown" >
 
             <Grid HorizontalAlignment="Stretch">
-                <Label HorizontalAlignment="Left"
+                <Label HorizontalAlignment="center"
                        Content="PI Replication Tool"
                        Foreground="#FFFFFF"
                        FontWeight="SemiBold"
-                       FontSize="13px"/>
-
-                <Label HorizontalAlignment="Center"
-                       Content="PI Data Archive Server Connection"
-                       Foreground="#FFFFFF"
-                       FontWeight="SemiBold"
-                       FontSize="13px"/>
+                       FontSize="12px"
+                       VerticalAlignment="Center"/>
 
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
@@ -74,7 +71,19 @@
             </Grid>
         </Border>
 
-        <ContentControl Content="{Binding CurrentPageViewModel}" Grid.ColumnSpan="3" Grid.Row="1">
+        <!-- Menu Title -->
+        <Border Grid.ColumnSpan="3" Grid.Row="1"
+                Background="#dfe6e9"
+                MouseDown="Border_MouseDown" >
+
+            <Label HorizontalAlignment="Left"
+                       Content="PI Data Archive Connection"
+                       Foreground="#2d3436"
+                       FontWeight="Light"
+                       FontSize="15px"/>
+        </Border>
+
+        <ContentControl Content="{Binding CurrentPageViewModel}" Grid.ColumnSpan="3" Grid.Row="2">
             <ContentControl.Resources>
                 <!--<DataTemplate DataType="{x:Type viewmodels:LoadTagsConfigurationViewModel}">
                     <views:LoadTagsConfigurationWindow />

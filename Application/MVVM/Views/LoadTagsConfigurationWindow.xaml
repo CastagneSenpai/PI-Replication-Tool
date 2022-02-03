@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:LoadTagsConfigurationViewModel}"
              mc:Ignorable="d"
-        Height="620" Width="1200"
+        Height="Auto" Width="Auto"
         Background="#FFFFFF">
 
     <UserControl.Resources>
@@ -105,16 +105,16 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    
+
     <UserControl.DataContext>
         <Viewmodel:ConnectionViewModel/>
     </UserControl.DataContext>
 
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="68*" />
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
@@ -122,13 +122,16 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="550"/>
-            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="225*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Background="#c8d6e5"
-              Grid.Row="1"
-              Grid.RowSpan="5">
+              Grid.Row="0"
+              Grid.RowSpan="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
                 <RowDefinition Height="40" />
@@ -176,41 +179,76 @@
                       Grid.Row="2"/>
         </Grid>
 
-        <Image Grid.Row="1"  Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="400,0,0,0" />
+        <TextBlock Name="textBlock1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
+          <Bold>Source Server :</Bold> PI-DA-HQ-PPR
+        </TextBlock>
 
-        <ListView Grid.Row="2" Grid.Column="1" 
-                 x:Name="listSourceServer" 
-                 ItemsSource="{Binding ListSourceServer}" 
-                 SelectedItem="{Binding SelectedSourceServer}" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 Width="245" 
-                 RenderTransformOrigin="0.5,0.5"/>
+        <CheckBox x:Name="cb1" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
+            Content="Load with local input (CSV)" IsThreeState="True" />
+        
+        <CheckBox x:Name="cb2" Grid.Row="2" Grid.Column="2" Margin="5,0,0,0" 
+            Content="Loadall tags not replicated" IsThreeState="True" />
 
-        <ListView Grid.Row ="2" Grid.Column="2" 
-                  x:Name="listTargetServer" 
-                  ItemsSource="{Binding ListTargetServer}" 
-                  SelectedItem="{Binding SelectedTargetServer}" 
-                  HorizontalAlignment="Center" 
-                  VerticalAlignment="Center" 
-                  Width="245" 
-                  RenderTransformOrigin="0.5,0.5"/>
-
-        <Button Grid.Row="3" Grid.Column="1"
-                Content="Connect"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="5"
+                Content="Continue"
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                Command="{Binding ButtonConnectSourceServer}">
+                VerticalAlignment="Center"
+                Height="25"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Command="{Binding ButtonNextView}">
         </Button>
 
-        <Button Grid.Row="3" Grid.Column="2"
-                Content="Connect"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="4"
+                Content="Load Tags"
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                Command="{Binding ButtonConnectTargetServer}">
+                VerticalAlignment="Center"
+                Height="25"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Command="{Binding ButtonNextView}">
         </Button>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="4" Grid.Column="2"
+        <Grid Margin="10" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="6">
+            <DataGrid Name="dgUsers" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday}" />
+                </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <DockPanel Background="GhostWhite">
+                            <Image DockPanel.Dock="Left" Source="{Binding ImageUrl}" Height="64" Margin="10" />
+                            <Grid Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="ID: " FontWeight="Bold" />
+                                <TextBlock Text="{Binding Id}" Grid.Column="1" />
+                                <TextBlock Text="Name: " FontWeight="Bold" Grid.Row="1" />
+                                <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="1" />
+                                <TextBlock Text="Birthday: " FontWeight="Bold" Grid.Row="2" />
+                                <TextBlock Text="{Binding Birthday, StringFormat=d}" Grid.Column="1" Grid.Row="2" />
+
+                            </Grid>
+                        </DockPanel>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+        </Grid>
+
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="4" Grid.Column="5"
                 Content="Next"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"

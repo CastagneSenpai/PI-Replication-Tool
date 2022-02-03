@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
              mc:Ignorable="d"
-        Height="620" Width="1200"
+        d:DesignHeight="600" d:DesignWidth="1200"
+
+        Height="Auto" Width="Auto"
         Background="#FFFFFF">
     <UserControl.Resources>
         <Style x:Key="FocusVisual">
@@ -84,7 +86,7 @@
             <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="#c8d6e5"
+        <Grid Background="#dfe6e9"
               Grid.Row="0"
               Grid.RowSpan="5">
             <Grid.RowDefinitions>
