@@ -1,8 +1,6 @@
 ﻿using Core;
 using Models;
 using OSIsoft.AF.PI;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ViewModels
 {
@@ -17,47 +15,47 @@ namespace ViewModels
         public RelayCommand ButtonConnectTargetServer { get; set; }
         public RelayCommand ButtonNextView { get; set; }
 
-        // NAVIGATION
-        private IPageViewModel _currentPageViewModel;
-        private List<IPageViewModel> _pageViewModels;
+        //// NAVIGATION
+        //private IPageViewModel _currentPageViewModel;
+        //private List<IPageViewModel> _pageViewModels;
 
-        public List<IPageViewModel> PageViewModels
-        {
-            get
-            {
-                if (_pageViewModels == null)
-                    _pageViewModels = new List<IPageViewModel>();
+        //public List<IPageViewModel> PageViewModels
+        //{
+        //    get
+        //    {
+        //        if (_pageViewModels == null)
+        //            _pageViewModels = new List<IPageViewModel>();
 
-                return _pageViewModels;
-            }
-        }
+        //        return _pageViewModels;
+        //    }
+        //}
 
-        public IPageViewModel CurrentPageViewModel
-        {
-            get
-            {
-                return _currentPageViewModel;
-            }
-            set
-            {
-                _currentPageViewModel = value;
-                OnPropertyChanged("CurrentPageViewModel");
-            }
-        }
+        //public IPageViewModel CurrentPageViewModel
+        //{
+        //    get
+        //    {
+        //        return _currentPageViewModel;
+        //    }
+        //    set
+        //    {
+        //        _currentPageViewModel = value;
+        //        OnPropertyChanged("CurrentPageViewModel");
+        //    }
+        //}
 
-        private void ChangeViewModel(IPageViewModel viewModel)
-        {
-            if (!PageViewModels.Contains(viewModel))
-                PageViewModels.Add(viewModel);
+        //private void ChangeViewModel(IPageViewModel viewModel)
+        //{
+        //    if (!PageViewModels.Contains(viewModel))
+        //        PageViewModels.Add(viewModel);
 
-            CurrentPageViewModel = PageViewModels
-                .FirstOrDefault(vm => vm == viewModel);
-        }
+        //    CurrentPageViewModel = PageViewModels
+        //        .FirstOrDefault(vm => vm == viewModel);
+        //}
 
-        private void OnGo1Screen(object obj)
-        {
-            ChangeViewModel(PageViewModels[0]);
-        }
+        //private void OnGo1Screen(object obj)
+        //{
+        //    ChangeViewModel(PageViewModels[0]);
+        //}
 
 
         
@@ -66,10 +64,10 @@ namespace ViewModels
         public ConnectionViewModel()
         {
             // Add available pages and set page
-            PageViewModels.Add(new LoadTagsConfigurationViewModel());
-            PageViewModels.Add(new PushTagsConfigurationViewModel());
+            //PageViewModels.Add(new LoadTagsConfigurationViewModel());
+            //PageViewModels.Add(new PushTagsConfigurationViewModel());
 
-            CurrentPageViewModel = PageViewModels[0];
+            //CurrentPageViewModel = PageViewModels[0];
 
             //TODO
             //Mediator.Subscribe("GoTo1Screen", OnGo1Screen);

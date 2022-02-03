@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Views
 {
@@ -8,9 +10,6 @@ namespace Views
     /// </summary>
     public partial class LoadTagsAttributesWindow : Page
     {
-        //public LoadTagsAttributesWindow()
-        //{
-        //    InitializeComponent();
-        //}
     }
 }
+

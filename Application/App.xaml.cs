@@ -1,6 +1,6 @@
-﻿using Views;
-using System.Windows;
+﻿using System.Windows;
 using ViewModels;
+using Views;
 
 namespace PI_Replication_Tool
 {
@@ -11,12 +11,15 @@ namespace PI_Replication_Tool
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainWindowViewModel()
+            };
+            //MainWindowViewModel context = new MainWindowViewModel();
+            //app.DataContext = context;
+            MainWindow.Show();
 
-            MainWindow app = new MainWindow();
-            MainWindowViewModel context = new MainWindowViewModel();
-            app.DataContext = context;
-            app.Show();
+            base.OnStartup(e);
         }
     }
 }
