@@ -82,7 +82,7 @@ namespace Models
                         MessageBox.Show("Already connected to " + p_PIServerName);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // Write log error
                     Logger.Error("Cannot connect to " + p_PIServerName);
@@ -130,7 +130,6 @@ namespace Models
             this._piTargetServerName = p_PIServerName;
             await this.ConnectToPIServer(p_PIServerName);
         }
-
 
         public void RefreshAllConnections()
         {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using ViewModels;
+using Views;
 
 namespace PI_Replication_Tool
 {
@@ -13,5 +9,17 @@ namespace PI_Replication_Tool
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            MainWindow = new MainWindow()
+            {
+                DataContext = new MainWindowViewModel()
+            };
+            //MainWindowViewModel context = new MainWindowViewModel();
+            //app.DataContext = context;
+            MainWindow.Show();
+
+            base.OnStartup(e);
+        }
     }
 }
