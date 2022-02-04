@@ -17,14 +17,15 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="550"/>
-            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="550*"/>
+            <ColumnDefinition Width="500*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <!-- Menu Window -->
@@ -80,7 +81,26 @@
                        Content="PI Data Archive Connection"
                        Foreground="#2d3436"
                        FontWeight="Light"
-                       FontSize="15px"/>
+                       FontSize="15px"
+                       Margin="20,0,0,0"/>
+        </Border>
+
+        <!-- Bottom Bar -->
+        <Border Grid.ColumnSpan="3" Grid.Row="3"
+                Background="#dfe6e9">
+
+            <Button Grid.Row="3" Grid.Column="2"
+                Content="Next"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Center"
+                Margin="0,0,18,0"
+                Height="30"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Command="{Binding ButtonNextView}">
+            </Button>
         </Border>
 
         <ContentControl Content="{Binding CurrentPageViewModel}" Grid.ColumnSpan="3" Grid.Row="2">

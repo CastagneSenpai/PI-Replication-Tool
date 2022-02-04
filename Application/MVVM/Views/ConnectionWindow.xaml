@@ -6,7 +6,6 @@
              xmlns:Viewmodel="clr-namespace:ViewModels" d:DataContext="{d:DesignInstance Type=Viewmodel:ConnectionViewModel}"
              mc:Ignorable="d"
         d:DesignHeight="600" d:DesignWidth="1200"
-
         Height="Auto" Width="Auto"
         Background="#FFFFFF">
     <UserControl.Resources>
