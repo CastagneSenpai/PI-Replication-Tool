@@ -8,6 +8,11 @@
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="1200"
       Height="Auto" Width="Auto"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextElement.FontWeight="Medium"
+      TextElement.FontSize="14"
+      FontFamily="{materialDesign:MaterialDesignFont}"
       WindowStyle="None"
       ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
 
@@ -17,7 +22,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="500*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -44,29 +49,38 @@
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
                     
-                    <Button Width="20" Height="20" 
+                    <Button Width="50" Height="40" 
                         Content="🗕"
                         Background="Transparent"
                         BorderThickness="0"
                         Foreground="#FFFFFF"
                         FontWeight="Bold"
-                        Margin="0 0 0 3"
+                        Margin="0 0 0 5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="15"
                         Click="Button_MinimizeClick"/>
 
-                    <Button Width="20" Height="20" 
+                    <Button Width="50" Height="40" 
                         Content="▢"
                         Background="Transparent"
                         BorderThickness="0"
                         Foreground="#FFFFFF"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
                         FontWeight="Bold"
+                       FontSize="15"
                         Click="WindowsStateButton_Click"/>
 
-                    <Button Width="20" Height="20" 
+                    <Button Width="50" Height="40" 
                         Content="✕"
                         Background="Transparent"
                         BorderThickness="0"
                         Foreground="#FFFFFF"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
                         FontWeight="Bold"
+                        FontSize="15"
                         Click="CloseButton_Click"/>
                 </StackPanel>
             </Grid>
