@@ -35,18 +35,18 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="45*"/>
-            <RowDefinition Height="25*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition Height="45*"/>
 
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*"/>
-            <ColumnDefinition Width="150*"/>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="40*"/>
         </Grid.ColumnDefinitions>
 
         <Label HorizontalAlignment="Left"
@@ -64,8 +64,8 @@
                  x:Name="listSourceServer" 
                  ItemsSource="{Binding ListSourceServer}" 
                  SelectedItem="{Binding SelectedSourceServer}" 
-                 VerticalAlignment="Center" 
-                 Width="245" 
+                 VerticalAlignment="Top" 
+                 Width="500"        
                  RenderTransformOrigin="0.5,0.5"/>
 
         <Label HorizontalAlignment="Left"
@@ -83,32 +83,38 @@
                   ItemsSource="{Binding ListTargetServer}" 
                   SelectedItem="{Binding SelectedTargetServer}" 
                   HorizontalAlignment="Left" 
-                  VerticalAlignment="Center" 
-                  Width="245" 
+                  VerticalAlignment="Top" 
+                  Width="500" 
                   RenderTransformOrigin="0.5,0.5"/>
 
         <Button Grid.Row="1" Grid.Column="2"
                 Content="Connect"
                 HorizontalAlignment="Left" 
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Width="100"
                 Height="20"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
                 Command="{Binding ButtonConnectSourceServer}">
         </Button>
 
-        <Image Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Source="/Assets/Cross.png" Visibility="Hidden"/>
-        <Image Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Source="/Assets/Check.png" Visibility="Hidden"/>
+        <Image Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Source="/Assets/Cross.png" Visibility="Hidden"/>
+        <Image Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Source="/Assets/Check.png" Visibility="Hidden"/>
 
         <Button Grid.Row="3" Grid.Column="2"
                 Content="Connect"
                 HorizontalAlignment="Left" 
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Width="100"
                 Height="20"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
                 Command="{Binding ButtonConnectTargetServer}">
         </Button>
 
-        <Image Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Source="/Assets/Cross.png" Visibility="Hidden"/>
-        <Image Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Source="/Assets/Check.png" Visibility="Hidden"/>
+        <Image Grid.Row="3" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Source="/Assets/Cross.png" Visibility="Hidden"/>
+        <Image Grid.Row="3" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Source="/Assets/Check.png" Visibility="Hidden"/>
     </Grid>
 </UserControl>
