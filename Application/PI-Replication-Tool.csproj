@@ -116,6 +116,7 @@
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
     <Compile Include="MVVM\Models\PIReplicationManager.cs" />
+    <Compile Include="MVVM\Models\TagsReportGenerator.cs" />
     <Compile Include="MVVM\ViewModels\BaseViewModel.cs" />
     <Compile Include="MVVM\ViewModels\ConnectionViewModel.cs" />
     <Compile Include="MVVM\ViewModels\IPageViewModel.cs" />
