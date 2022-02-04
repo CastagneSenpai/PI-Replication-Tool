@@ -27,43 +27,6 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="15" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
     
     <UserControl.DataContext>
@@ -76,68 +39,14 @@
             <RowDefinition Height="68*" />
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="550"/>
             <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="#dfe6e9"
-              Grid.Row="0"
-              Grid.RowSpan="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
-                <RowDefinition/>
-                <RowDefinition Height="60"/>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" 
-                   Content="Connection"
-                   HorizontalContentAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontWeight="Medium"
-                   Foreground="White"
-                   Background="#2e86de"
-                   Margin="8,0,0,0"/>
-            <ListBox Grid.Row="0"
-                      ItemsSource="{Binding Connection}" 
-                      Background="Transparent"
-                      BorderThickness="0"
-                      ItemContainerStyle="{StaticResource ConnectionCard}"/>
-
-            <Label Grid.Row="1" 
-                   Content="Load Tags Attributes"
-                   HorizontalContentAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontWeight="Medium"
-                   Foreground="#8395a7"
-                   Margin="8,0,0,0"/>
-            <ListBox Grid.Row="1"
-                      ItemsSource="{Binding LoadTagsAttributes}" 
-                      Background="Transparent"
-                      BorderThickness="0"/>
-
-            <Label Grid.Row="2"
-                    Content="Push Tags Attributes"
-                    HorizontalContentAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontWeight="Medium"
-                    Foreground="#8395a7"
-                    Margin="8,0,0,0"/>
-            <ListBox ItemsSource="{Binding PushTagsAttributes}" 
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Grid.Row="2"/>
-        </Grid>
-
-        <Image Grid.Row="0"  Grid.Column="2" Source="/Assets/TotalEnergies.png" Margin="396,0,0,437" Grid.RowSpan="2" />
-
-        <ListView Grid.Row="1" Grid.Column="1" 
+        <ListView Grid.Row="1" Grid.Column="0" 
                  x:Name="listSourceServer" 
                  ItemsSource="{Binding ListSourceServer}" 
                  SelectedItem="{Binding SelectedSourceServer}" 
@@ -146,7 +55,7 @@
                  Width="245" 
                  RenderTransformOrigin="0.5,0.5"/>
 
-        <ListView Grid.Row ="1" Grid.Column="2" 
+        <ListView Grid.Row ="1" Grid.Column="1" 
                   x:Name="listTargetServer" 
                   ItemsSource="{Binding ListTargetServer}" 
                   SelectedItem="{Binding SelectedTargetServer}" 
@@ -178,18 +87,5 @@
 
         <Image Grid.Row="2" Grid.Column="2" Source="/Assets/Cross.png" Margin="228,12,58,12" />
         <Image Grid.Row="2" Grid.Column="1" Source="/Assets/Check.png" Margin="228,12,58,12" />
-
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="3" Grid.Column="2"
-                Content="Next"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Center"
-                Margin="0,0,18,0"
-                Height="30"
-                Width="90"
-                FontFamily="Arial"
-                Foreground="#FFFFFF"
-                Background="#2e86de"
-                Command="{Binding ButtonNextView}">
-        </Button>
     </Grid>
 </UserControl>
