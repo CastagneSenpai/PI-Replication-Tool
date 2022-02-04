@@ -18,7 +18,7 @@ namespace Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                //DragMove();
+                DragMove();
             }
         }
 

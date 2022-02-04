@@ -5,10 +5,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:viewmodels="clr-namespace:ViewModels" 
       xmlns:views="clr-namespace:Views" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-      mc:Ignorable="d" 
-      d:DesignHeight="650" d:DesignWidth="1200"
-      Height="620" Width="1200"
-      WindowStyle="None">
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Height="Auto" Width="Auto"
+      WindowStyle="None"
+      ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
 
     <!--<Window.DataContext>
         <viewmodels:MainWindowViewModel/>
@@ -16,32 +17,29 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="550"/>
-            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="500*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <!-- Border = Proprétés de la fenêtre Windows-->
+        <!-- Menu Window -->
         <Border Grid.ColumnSpan="3" Grid.Row="0"
                 Background="#2e86de"
                 MouseDown="Border_MouseDown" >
 
             <Grid HorizontalAlignment="Stretch">
-                <Label HorizontalAlignment="Left"
+                <Label HorizontalAlignment="center"
                        Content="PI Replication Tool"
                        Foreground="#FFFFFF"
                        FontWeight="SemiBold"
-                       FontSize="13px"/>
-
-                <Label HorizontalAlignment="Center"
-                       Content="PI Data Archive Server Connection"
-                       Foreground="#FFFFFF"
-                       FontWeight="SemiBold"
-                       FontSize="13px"/>
+                       FontSize="12px"
+                       VerticalAlignment="Center"/>
 
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
@@ -74,7 +72,90 @@
             </Grid>
         </Border>
 
-        <ContentControl Content="{Binding CurrentPageViewModel}" Grid.ColumnSpan="3" Grid.Row="1">
+        <!-- Menu Title -->
+        <Border Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"
+                Background="#dfe6e9">
+
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                       Content="PI Data Archive Connection"
+                       Foreground="#2d3436"
+                       FontWeight="Light"
+                       FontSize="15px"
+                       Margin="20,0,0,0"/>
+        </Border>
+        
+        <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
+
+        <!-- Menu Left Panel -->
+        <Grid Background="#dfe6e9"
+              Grid.Row="2" Grid.RowSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" 
+                   Content="Connection"
+                   HorizontalContentAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Medium"
+                   Foreground="White"
+                   Background="#2e86de"
+                   Margin="0,20,0,0"/>
+            <ListBox Grid.Row="0"
+                      ItemsSource="{Binding Connection}" 
+                      Background="Transparent"
+                      BorderThickness="0"
+                      ItemContainerStyle="{StaticResource ConnectionCard}"/>
+
+            <Label Grid.Row="1" 
+                   Content="Load Tags Attributes"
+                   HorizontalContentAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Medium"
+                   Foreground="#8395a7"
+                   Margin="0,20,0,0"/>
+            <ListBox Grid.Row="1"
+                      ItemsSource="{Binding LoadTagsAttributes}" 
+                      Background="Transparent"
+                      BorderThickness="0"/>
+
+            <Label Grid.Row="2"
+                    Content="Push Tags Attributes"
+                    HorizontalContentAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontWeight="Medium"
+                    Foreground="#8395a7"
+                    Margin="0,20,0,0"/>
+            <ListBox ItemsSource="{Binding PushTagsAttributes}" 
+                      Background="Transparent"
+                      BorderThickness="0"
+                      Grid.Row="2"/>
+        </Grid>
+        
+        <!-- Bottom Bar -->
+        <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4"
+                Background="#d1d8e0" BorderBrush="Black" >
+
+            <Button Grid.Row="3" Grid.Column="2"
+                Content="Next"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Center"
+                Margin="0,0,18,0"
+                Height="30"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Command="{Binding ButtonNextView}">
+            </Button>
+        </Border>
+
+        <!-- Content -->
+        <ContentControl Content="{Binding CurrentPageViewModel}" Grid.Column="1" Grid.Row="3">
             <ContentControl.Resources>
                 <!--<DataTemplate DataType="{x:Type viewmodels:LoadTagsConfigurationViewModel}">
                     <views:LoadTagsConfigurationWindow />
