@@ -1,6 +1,8 @@
 ﻿using Core;
 using Models;
 using OSIsoft.AF.PI;
+using System;
+using System.Threading.Tasks;
 
 namespace ViewModels
 {
@@ -11,86 +13,62 @@ namespace ViewModels
         public PIServers ListTargetServer { get; set; }
         public string SelectedSourceServer { get; set; }
         public string SelectedTargetServer { get; set; }
-        public RelayCommand ButtonConnectSourceServer { get; set; }
-        public RelayCommand ButtonConnectTargetServer { get; set; }
-        public RelayCommand ButtonNextView { get; set; }
+        //public RelayCommand ButtonConnectSourceServer { get; set; }
+        //public RelayCommand ButtonConnectTargetServer { get; set; }
+        //public RelayCommand ButtonNextView { get; set; }        
+        public IAsyncCommand ButtonConnectSourceServer { get; set; }
+        public IAsyncCommand ButtonConnectTargetServer { get; set; }
 
-        //// NAVIGATION
-        //private IPageViewModel _currentPageViewModel;
-        //private List<IPageViewModel> _pageViewModels;
-
-        //public List<IPageViewModel> PageViewModels
-        //{
-        //    get
-        //    {
-        //        if (_pageViewModels == null)
-        //            _pageViewModels = new List<IPageViewModel>();
-
-        //        return _pageViewModels;
-        //    }
-        //}
-
-        //public IPageViewModel CurrentPageViewModel
-        //{
-        //    get
-        //    {
-        //        return _currentPageViewModel;
-        //    }
-        //    set
-        //    {
-        //        _currentPageViewModel = value;
-        //        OnPropertyChanged("CurrentPageViewModel");
-        //    }
-        //}
-
-        //private void ChangeViewModel(IPageViewModel viewModel)
-        //{
-        //    if (!PageViewModels.Contains(viewModel))
-        //        PageViewModels.Add(viewModel);
-
-        //    CurrentPageViewModel = PageViewModels
-        //        .FirstOrDefault(vm => vm == viewModel);
-        //}
-
-        //private void OnGo1Screen(object obj)
-        //{
-        //    ChangeViewModel(PageViewModels[0]);
-        //}
-
-
-        
-        
         // CONSTRUCTEUR
         public ConnectionViewModel()
         {
-            // Add available pages and set page
-            //PageViewModels.Add(new LoadTagsConfigurationViewModel());
-            //PageViewModels.Add(new PushTagsConfigurationViewModel());
-
-            //CurrentPageViewModel = PageViewModels[0];
-
-            //TODO
-            //Mediator.Subscribe("GoTo1Screen", OnGo1Screen);
-            //Mediator.Subscribe("GoTo2Screen", OnGo2Screen);
-
-
             var PILocalServers = PIServers.GetPIServers();
             ListSourceServer = PILocalServers;
             ListTargetServer = PILocalServers;
 
-            ButtonConnectSourceServer = new RelayCommand(
-                o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
-            //o => SelectedSourceServer.Length > 0);
+            ButtonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync);
+            ButtonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync);
 
-            ButtonConnectTargetServer = new RelayCommand(
-                o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
+            //ButtonConnectSourceServer = new RelayCommand(
+            //    o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
+            ////o => SelectedSourceServer.Length > 0);
+
+            //ButtonConnectTargetServer = new RelayCommand(
+            //    o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
             //o => SelectedTargetServer.Length > 0);
 
             // TODO : change function called to execute
             //ButtonNextView = new RelayCommand(
             //    o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
-
-            
         }
+
+        private async Task ConnectPISourceServerAsync()
+        {
+            await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedSourceServer);
+        }
+
+        private bool CanConnectOnSourceServer()
+        {
+            if (SelectedSourceServer.Length > 0)
+                return true;
+            else
+                return false;
+            //return SelectedSourceServer.Length > 0;
+        }
+
+        private async Task ConnectPITargetServerAsync()
+        {
+            await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedTargetServer);
+        }
+
+        private bool CanConnectOnTargerServer()
+        {
+            if (SelectedTargetServer.Length > 0)
+                return true;
+            else
+                return false;
+            //return SelectedTargetServer.Length > 0;
+        }
+
     }
 }

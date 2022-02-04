@@ -1,10 +1,7 @@
 ﻿using NLog;
-using OSIsoft.AF.Asset;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -60,8 +57,8 @@ namespace Models
         // -------------------
         // FUNCTIONS
         // -------------------
-        async public Task ConnectToPIServer(string p_PIServerName)
-        {
+         public async Task ConnectToPIServerAsync(string p_PIServerName)
+        {           
             await Task.Run(() =>
             {
                 PIServer PIServer;
@@ -92,43 +89,16 @@ namespace Models
             });
         }
 
-        public async Task ConnectToPIServer(PIServer p_PIServer)
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    Logger.Info("Trying to connect to " + p_PIServer.Name);
-                    if (!p_PIServer.ConnectionInfo.IsConnected)
-                    {
-                        p_PIServer.Connect();
-                        _connectedPIServersList.Add(p_PIServer);
-                        Logger.Info("Successfully connected to " + p_PIServer.Name);
-                        MessageBox.Show("Successfully connected to " + p_PIServer.Name);
-                    }
-                    Logger.Info("Already connected to " + p_PIServer.Name);
-                    MessageBox.Show("Already connected to " + p_PIServer.Name);
-                }
-                catch (Exception e)
-                {
-                    // Write log error
-                    Logger.Error("Cannot connect to " + p_PIServer.Name);
-                    MessageBox.Show("Cannot connect to " + p_PIServer.Name);
-                    throw e;
-                }
-            });
-        }
-
-        public async void ConnectToPISourceServer(string p_PIServerName)
+        public async Task ConnectToPISourceServerAsync(string p_PIServerName)
         {
             this._piSourceServerName = p_PIServerName;
-            await this.ConnectToPIServer(p_PIServerName);
+            await this.ConnectToPIServerAsync(p_PIServerName);
         }
 
-        public async void ConnectToPITargetServer(string p_PIServerName)
+        public async Task ConnectToPITargetServerAsync(string p_PIServerName)
         {
             this._piTargetServerName = p_PIServerName;
-            await this.ConnectToPIServer(p_PIServerName);
+            await this.ConnectToPIServerAsync(p_PIServerName);
         }
 
         public void RefreshAllConnections()
