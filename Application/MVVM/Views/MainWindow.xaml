@@ -171,12 +171,12 @@
         <!-- Content -->
         <ContentControl Content="{Binding CurrentPageViewModel}" Grid.Column="1" Grid.Row="3">
             <ContentControl.Resources>
-                <!--<DataTemplate DataType="{x:Type viewmodels:LoadTagsConfigurationViewModel}">
+                <DataTemplate DataType="{x:Type viewmodels:LoadTagsConfigurationViewModel}">
                     <views:LoadTagsConfigurationWindow />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:PushTagsConfigurationViewModel}">
                     <views:PushTagsConfigurationWindow />
-                </DataTemplate>-->
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:ConnectionViewModel}">
                     <views:ConnectionWindow />
                 </DataTemplate>

@@ -1,6 +1,7 @@
 ﻿using Core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ViewModels
 {
@@ -8,6 +9,19 @@ namespace ViewModels
     {
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
+
+        private RelayCommand _buttonNextView;
+        public RelayCommand ButtonNextView
+        {
+            get
+            {
+                return _buttonNextView ?? (_buttonNextView = new RelayCommand(x =>
+                {
+                    Mediator.Notify("GoToLoadTagConfigurationScreen", "");
+                    ChangeViewModel(PageViewModels[1]);
+                }));
+            }
+        }
 
         public List<IPageViewModel> PageViewModels
         {

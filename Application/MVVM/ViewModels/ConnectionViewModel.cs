@@ -3,12 +3,13 @@ using Models;
 using OSIsoft.AF.PI;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ViewModels
 {
     internal class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager PIReplicationManager = new PIReplicationManager();
+        public PIReplicationManager PIReplicationManager = new PIReplicationManager();        
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
         public string SelectedSourceServer { get; set; }
@@ -28,6 +29,7 @@ namespace ViewModels
 
             ButtonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync);
             ButtonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync);
+            //ButtonNextView = new AsyncCommand();
 
             //ButtonConnectSourceServer = new RelayCommand(
             //    o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
@@ -68,7 +70,6 @@ namespace ViewModels
             else
                 return false;
             //return SelectedTargetServer.Length > 0;
-        }
-
+        }   
     }
 }
