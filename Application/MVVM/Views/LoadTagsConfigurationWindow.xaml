@@ -247,17 +247,5 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
-
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="4" Grid.Column="5"
-                Content="Next"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
-                Height="25"
-                Width="90"
-                FontFamily="Arial"
-                Foreground="#FFFFFF"
-                Background="#2e86de"
-                Command="{Binding ButtonNextView}">
-        </Button>
     </Grid>
 </UserControl>
