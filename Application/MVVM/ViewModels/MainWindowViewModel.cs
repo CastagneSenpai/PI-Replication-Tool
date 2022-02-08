@@ -1,7 +1,8 @@
-﻿using Core;
+﻿using Commands;
+using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace ViewModels
 {
@@ -17,9 +18,10 @@ namespace ViewModels
             {
                 return _buttonNextView ?? (_buttonNextView = new RelayCommand(x =>
                 {
-                    Mediator.Notify("GoToLoadTagConfigurationScreen", "");
-                    ChangeViewModel(PageViewModels[1]);
-                }));
+                    Mediator.Notify("GoToLoadTagConfigurationScreen", "");                    
+                    //ChangeViewModel(PageViewModels[1]); ;
+                }
+                ));
             }
         }
 

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Core
+namespace Commands
 {
     public interface IAsyncCommand : ICommand
     {

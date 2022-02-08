@@ -16,9 +16,9 @@
       WindowStyle="None"
       ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
 
-    <!--<Window.DataContext>
+    <Window.DataContext>
         <viewmodels:MainWindowViewModel/>
-    </Window.DataContext>-->
+    </Window.DataContext>
 
     <Grid>
         <Grid.ColumnDefinitions>
