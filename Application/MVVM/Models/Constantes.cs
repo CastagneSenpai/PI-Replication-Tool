@@ -8,10 +8,11 @@ namespace Models
 {
     public class Constantes
     {
-        public const string InputPathFile = @"E:\input.txt";
-        private Constantes()
-        {
-                
-        }
+        public const string InputPathFile = @"E:\PIReplicationTool\Input\input.txt";
+        public const string OutputPath = @"E:\PIReplicationTool\Output\";
+        public const string OutputFileName_SourceTags = "SourceTags.csv";
+        public const string OutputFileName_TargetTags = "TargetTags.csv";
+
+        private Constantes() { }
     }
 }
