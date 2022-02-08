@@ -1,9 +1,7 @@
-﻿using Core;
+﻿using Commands;
 using Models;
 using OSIsoft.AF.PI;
-using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ViewModels
 {
@@ -29,7 +27,6 @@ namespace ViewModels
 
             ButtonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync);
             ButtonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync);
-            //ButtonNextView = new AsyncCommand();
 
             //ButtonConnectSourceServer = new RelayCommand(
             //    o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));

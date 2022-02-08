@@ -1,15 +1,16 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 
 namespace Views
 {
     /// <summary>
     /// Interaction logic for LoadTagsAttributesWindow.xaml
     /// </summary>
-    public partial class LoadTagsAttributesWindow : Page
+    public partial class LoadTagsConfigurationWindow : UserControl
     {
+        public LoadTagsConfigurationWindow()
+        {
+            InitializeComponent();
+        }
     }
 }
 

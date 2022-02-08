@@ -110,12 +110,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\AsyncCommand.cs" />
+    <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Core\EventArgs.cs" />
     <Compile Include="Core\EventRaiser.cs" />
     <Compile Include="Core\IErrorHandler.cs" />
     <Compile Include="Core\Mediator.cs" />
-    <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Core\TaskUtilities.cs" />
     <Compile Include="MVVM\Models\Constantes.cs" />
     <Compile Include="MVVM\Models\FilesManager.cs" />
