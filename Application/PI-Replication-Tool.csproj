@@ -119,6 +119,8 @@
     <Compile Include="Core\Mediator.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Core\TaskUtilities.cs" />
+    <Compile Include="MVVM\Models\Constantes.cs" />
+    <Compile Include="MVVM\Models\FilesManager.cs" />
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
     <Compile Include="MVVM\Models\PIReplicationManager.cs" />
