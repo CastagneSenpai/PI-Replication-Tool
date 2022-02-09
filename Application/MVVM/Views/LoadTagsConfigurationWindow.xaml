@@ -132,11 +132,11 @@
           <Bold>Source Server :</Bold> PI-DA-HQ-PPR
         </TextBlock>
 
-        <CheckBox x:Name="cb1" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
-            Content="Load with local input (CSV)" IsThreeState="True" FontSize="14px"/>
-        
-        <CheckBox x:Name="cb2" Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" 
-            Content="Loadall tags not replicated" IsThreeState="True" FontSize="14px" />
+        <RadioButton x:Name="cb1" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
+            Content="Load with local input files" IsChecked="True" FontSize="14px"/>
+
+        <RadioButton x:Name="cb2" Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" 
+            Content="Load all tags not replicated" IsChecked="False" FontSize="14px" />
 
         <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="5"
                 Content="Continue"
