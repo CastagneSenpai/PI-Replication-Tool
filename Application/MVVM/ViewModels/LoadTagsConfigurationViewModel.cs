@@ -1,9 +1,10 @@
 ﻿namespace ViewModels
 {
-    internal class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
+    public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
-        public LoadTagsConfigurationViewModel()
-        {
-        }
+        //public LoadTagsConfigurationViewModel()
+        //{
+            
+        //}
     }
 }

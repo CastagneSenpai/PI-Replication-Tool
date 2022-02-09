@@ -7,10 +7,20 @@ namespace ViewModels
 {
     internal class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager PIReplicationManager = new PIReplicationManager();        
+        private string _selectedSourceServer;
+
+        public PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
-        public string SelectedSourceServer { get; set; }
+        public string SelectedSourceServer
+        {
+            set
+            {
+                _selectedSourceServer = value;
+                OnPropertyChanged(nameof(SelectedSourceServer));
+            }
+            get => _selectedSourceServer;
+        }
         public string SelectedTargetServer { get; set; }
         //public RelayCommand ButtonConnectSourceServer { get; set; }
         //public RelayCommand ButtonConnectTargetServer { get; set; }
@@ -25,7 +35,7 @@ namespace ViewModels
             ListSourceServer = PILocalServers;
             ListTargetServer = PILocalServers;
 
-            ButtonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync);
+            ButtonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync, CanConnectOnSourceServer);
             ButtonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync);
 
             //ButtonConnectSourceServer = new RelayCommand(
@@ -48,11 +58,18 @@ namespace ViewModels
 
         private bool CanConnectOnSourceServer()
         {
-            if (SelectedSourceServer.Length > 0)
-                return true;
-            else
-                return false;
-            //return SelectedSourceServer.Length > 0;
+            //if (SelectedSourceServer?.Length > 0)
+            //    return true;
+            //else
+            //    return false;
+            //return SelectedSourceServer?.Length > 0;
+            //if (SelectedSourceServer == null)
+            //    return false;
+            //else if (SelectedSourceServer.Length == 0)
+            //    return false;
+            //else
+            //    return true;
+            return !string.IsNullOrEmpty(SelectedSourceServer);
         }
 
         private async Task ConnectPITargetServerAsync()
@@ -67,6 +84,6 @@ namespace ViewModels
             else
                 return false;
             //return SelectedTargetServer.Length > 0;
-        }   
+        }
     }
 }

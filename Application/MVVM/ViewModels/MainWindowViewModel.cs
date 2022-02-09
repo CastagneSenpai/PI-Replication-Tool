@@ -1,25 +1,25 @@
 ﻿using Commands;
 using Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ViewModels
 {
-    public class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel, IPageViewModel
     {
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
 
-        private RelayCommand _buttonNextView;
-        public RelayCommand ButtonNextView
+        private ICommand _buttonNextView;
+        public ICommand ButtonNextView
         {
             get
             {
                 return _buttonNextView ?? (_buttonNextView = new RelayCommand(x =>
                 {
-                    Mediator.Notify("GoToLoadTagConfigurationScreen", "");                    
-                    //ChangeViewModel(PageViewModels[1]); ;
+                    //Mediator.Notify("GoToLoadTagConfigurationScreen", "");
+                    ChangeViewModel(PageViewModels[1]);
                 }
                 ));
             }
@@ -54,8 +54,7 @@ namespace ViewModels
             if (!PageViewModels.Contains(viewModel))
                 PageViewModels.Add(viewModel);
 
-            CurrentPageViewModel = PageViewModels
-                .FirstOrDefault(vm => vm == viewModel);
+            CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
         }
 
         private void OnGoConnectionScreen(object obj)
