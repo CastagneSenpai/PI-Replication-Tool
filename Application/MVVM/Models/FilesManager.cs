@@ -19,7 +19,7 @@ namespace Models
             try
             {
                 int counter = 0;
-                foreach (string line in File.ReadLines(@"E:\test.txt"))
+                foreach (string line in File.ReadLines(Constantes.InputPath + Constantes.InputFileName))
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
