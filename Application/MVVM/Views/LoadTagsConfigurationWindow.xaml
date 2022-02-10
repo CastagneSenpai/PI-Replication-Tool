@@ -116,43 +116,28 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="68*" />
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="225"/>
-            <ColumnDefinition Width="225"/>
-            <ColumnDefinition Width="225"/>
-            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="225*"/>
+            <ColumnDefinition Width="225*"/>
+            <ColumnDefinition Width="225*"/>
             <ColumnDefinition Width="225*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" FontSize="16px">
+        <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
           <Bold>Source Server :</Bold> PI-DA-HQ-PPR
         </TextBlock>
 
-        <RadioButton x:Name="cb1" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
+        <RadioButton x:Name="cb1" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Center" 
             Content="Load with local input files" IsChecked="True" FontSize="14px"/>
 
-        <RadioButton x:Name="cb2" Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" 
+        <RadioButton x:Name="cb2" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" HorizontalAlignment="Left" 
             Content="Load all tags not replicated" IsChecked="False" FontSize="14px" />
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="5"
-                Content="Continue"
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Center"
-                Height="25"
-                Width="90"
-                FontFamily="Arial"
-                Foreground="#FFFFFF"
-                Background="#2e86de"
-                Command="{Binding ButtonNextView}">
-        </Button>
-
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="4"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Load Tags"
-                HorizontalAlignment="Right" 
+                HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,0,20,0"
                 Height="25"
@@ -163,8 +148,8 @@
                 Command="{Binding ButtonNextView}">
         </Button>
 
-        <Grid Margin="10,20,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <DataGrid Name="dgUsers" AutoGenerateColumns="False">
+        <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
+            <DataGrid Name="dgUsers" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Point Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
@@ -189,7 +174,6 @@
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
                         <DockPanel Background="GhostWhite">
-                            <Image DockPanel.Dock="Left" Source="{Binding ImageUrl}" Height="64" Margin="10" />
                             <Grid Margin="0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
