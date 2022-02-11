@@ -1,25 +1,22 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using NLog;
+﻿using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
-    public class FilesManager
+    public static class FilesManager
     {
-        readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
 
         //TextFieldParser 
-        public void ParseInputFileToTagsList(ref List<string> p_TagsList)
+        public static void ParseInputFileToTagsList(ref List<string> p_TagsList)
         {
             try
             {
                 int counter = 0;
-                foreach (string line in File.ReadLines(Constantes.InputPath + Constantes.InputFileName))
+                foreach (string line in File.ReadLines(@"C:\Users\WL1000621\Desktop\input.txt.txt"))
+                //foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
@@ -32,12 +29,12 @@ namespace Models
             }
         }
 
-        public void CreateTagsOutputFile(List<string> p_AttributesValueList)
+        public static void CreateTagsOutputFile(List<string> p_AttributesValueList)
         {
             try
             {
                 //TODO : différencier si source ou target file
-                string outputFileFullName = Constantes.OutputPath + Constantes.OutputFileName_SourceTags + DateTime.Now.ToString() + "csv";
+                string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + DateTime.Now.ToString() + "csv";
                 File.Create(outputFileFullName);
 
                 // Prepare to write in the output file

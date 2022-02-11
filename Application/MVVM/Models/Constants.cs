@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Constantes
+    public class Constants
     {
         public const string OutputPath = @"E:\PIReplicationTool\Output\";
         public const string InputPath = @"E:\PIReplicationTool\Input\";
@@ -15,6 +15,6 @@ namespace Models
         public const string OutputFileName_SourceTags = "SourceTags";
         public const string OutputFileName_TargetTags = "TargetTags";
 
-        private Constantes() { }
+        private Constants() { }
     }
 }
