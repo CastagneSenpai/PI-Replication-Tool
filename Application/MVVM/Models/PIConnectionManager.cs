@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace Models
 {
-    internal class PIConnectionManager
+    public class PIConnectionManager
     {
         // -------------------
         // PROPERTIES OF CLASS
@@ -91,13 +91,13 @@ namespace Models
 
         public async Task ConnectToPISourceServerAsync(string p_PIServerName)
         {
-            this._piSourceServerName = p_PIServerName;
+            this.PISourceServerName = p_PIServerName;
             await this.ConnectToPIServerAsync(p_PIServerName);
         }
 
         public async Task ConnectToPITargetServerAsync(string p_PIServerName)
         {
-            this._piTargetServerName = p_PIServerName;
+            this.PITargetServerName = p_PIServerName;
             await this.ConnectToPIServerAsync(p_PIServerName);
         }
 

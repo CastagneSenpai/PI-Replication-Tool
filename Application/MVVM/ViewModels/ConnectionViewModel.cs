@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 
 namespace ViewModels
 {
-    internal class ConnectionViewModel : BaseViewModel, IPageViewModel
+    public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
         private string _selectedSourceServer;
         private string _selectedTargetServer;
         private readonly AsyncCommand _buttonConnectSourceServer;
         private readonly AsyncCommand _buttonConnectTargetServer;
 
-        public PIReplicationManager PIReplicationManager = new PIReplicationManager();
+        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
+        //public PIReplicationManager PIReplicationManager;
+
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
         public string SelectedSourceServer
@@ -46,6 +48,9 @@ namespace ViewModels
         // CONSTRUCTEUR
         public ConnectionViewModel()
         {
+
+            //PIReplicationManager = toto;
+
             var PILocalServers = PIServers.GetPIServers();
             ListSourceServer = PILocalServers;
             ListTargetServer = PILocalServers;

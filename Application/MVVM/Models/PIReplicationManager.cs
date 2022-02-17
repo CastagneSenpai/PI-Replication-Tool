@@ -1,13 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Models
 {
-    internal class PIReplicationManager
+    public sealed class PIReplicationManager
     {
+        private static PIReplicationManager _replicationManager = null;
+        private static readonly object padlock = new object();
+
+        public PIReplicationManager()
+        {
+
+        }
+
+        public static PIReplicationManager ReplicationManager
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (_replicationManager == null)
+                    {
+                        _replicationManager = new PIReplicationManager();
+                    }
+                    return _replicationManager;
+                }
+            }
+        }
+
+        //public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
     }

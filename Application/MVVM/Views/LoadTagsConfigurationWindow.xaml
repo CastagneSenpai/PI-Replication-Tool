@@ -126,7 +126,9 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
-          <Bold>Source Server :</Bold> PI-DA-HQ-PPR
+          <Bold>Source Server :</Bold>
+        </TextBlock>
+        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="200,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding SourceServer, Mode=TwoWay}">
         </TextBlock>
 
         <RadioButton x:Name="cb1" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Center" 
@@ -145,7 +147,7 @@
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2e86de"
-                Command="{Binding ButtonNextView}">
+                Command="{Binding ButtonLoadTags}">
         </Button>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">

@@ -1,4 +1,4 @@
-﻿namespace PI_Replication_Tool.MVVM.Models
+﻿namespace Models
 {
     internal class PiPoints
     {
