@@ -1,11 +1,27 @@
 ﻿using Commands;
 using Models;
+using OSIsoft.AF.Asset;
+using OSIsoft.AF.PI;
+using System.Collections.Generic;
 
 namespace ViewModels
 {
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager replicationManager = PIReplicationManager.ReplicationManager;
+        private PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
+
+        List<IDictionary<string, object>> dicti = new List<IDictionary<string, object>>();
+
+        private List<IDictionary<string, object>> _attributes;
+        public List<IDictionary<string, object>> Attributes
+        {
+            get { return _attributes; }
+            set
+            {
+                _attributes = dicti;
+                OnPropertyChanged(nameof(Attributes));
+            }
+        }
 
         private string _sourceServer;
         public string SourceServer
@@ -16,20 +32,35 @@ namespace ViewModels
             }
             set
             {
-                _sourceServer = value;
+                _sourceServer = _replicationManager.PIConnectionManager.PISourceServerName;
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
+
+        public List<string> uneListe = new List<string>();
+        PIPoint unPoint = null;
+        AFValue uneValeur = null;
+
 
         private readonly RelayCommand _buttonLoadTags;
         public RelayCommand ButtonLoadTags => _buttonLoadTags;
 
         public LoadTagsConfigurationViewModel()
         {
-            SourceServer = replicationManager.PIConnectionManager.PISourceServerName;
-            //_buttonLoadTags = new RelayCommand(
-            //    o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
+            SourceServer = _replicationManager.PIConnectionManager.PISourceServerName;
+            _buttonLoadTags = new RelayCommand(
+                o => LoadAttributes(),
+                o => true);
         }
+
+        void LoadAttributes()
+        {
+            List<string> liste = new List<string>();
+            //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
+            FilesManager.ParseInputFileToTagsList(ref liste);
+            _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
+        }
+
 
     }
 }

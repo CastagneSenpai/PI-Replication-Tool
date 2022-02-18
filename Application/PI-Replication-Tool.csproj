@@ -99,7 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MVVM\Models\PiPoints.cs" />
+    <Compile Include="MVVM\Models\PIPoints.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Page Include="MVVM\Themes\ConnectionCard.xaml">
       <SubType>Designer</SubType>

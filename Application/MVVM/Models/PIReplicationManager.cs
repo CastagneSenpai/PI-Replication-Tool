@@ -25,7 +25,6 @@
             }
         }
 
-        //public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
     }
