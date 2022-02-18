@@ -59,8 +59,7 @@ namespace ViewModels
             //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
             FilesManager.ParseInputFileToTagsList(ref liste);
             _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
+            FilesManager.CreateTagsOutputFile(dicti);
         }
-
-
     }
 }

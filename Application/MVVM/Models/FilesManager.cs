@@ -29,20 +29,21 @@ namespace Models
             }
         }
 
-        public static void CreateTagsOutputFile(List<string> p_AttributesValueList)
+        //public static void CreateTagsOutputFile(List<string> p_AttributesValueList)
+        public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList)
         {
             try
             {
-                //TODO : différencier si source ou target file
+                //TODO : différencier si source ou target file (pour le moment,, source uniquement)
                 string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + DateTime.Now.ToString() + "csv";
                 File.Create(outputFileFullName);
 
                 // Prepare to write in the output file
-                foreach(string line in p_AttributesValueList)
-                {
-                    string[] currentTagAttributes = line.Split(';');
-                    File.WriteAllLines(outputFileFullName, currentTagAttributes);
-                }
+                //foreach(string line in p_AttributesValueList)
+                //{
+                 //   string[] currentTagAttributes = line.Split(';');
+                //    File.WriteAllLines(outputFileFullName, currentTagAttributes);
+                //}
             }
             catch (Exception e)
             {
