@@ -1,25 +1,43 @@
 ﻿using Commands;
 using Models;
-using OSIsoft.AF.Asset;
-using OSIsoft.AF.PI;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace ViewModels
 {
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
-        private PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
+        private readonly PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
+
+        private readonly CollectionViewSource cvs = new CollectionViewSource();
+        private ObservableCollection<PIPoint> col = new ObservableCollection<PIPoint>();
 
         List<IDictionary<string, object>> dicti = new List<IDictionary<string, object>>();
 
-        private List<IDictionary<string, object>> _attributes;
-        public List<IDictionary<string, object>> Attributes
+        public ICollectionView Attributes
         {
-            get { return _attributes; }
+            get
+            {
+                if (cvs.Source == null)
+                {
+                    LoadAttributes();
+                    Populate();
+                    cvs.View.CurrentChanged += (sender, e) => PIPoint = cvs.View.CurrentItem as PIPoint;
+                }
+                return cvs.View;
+            }
+        }
+
+        private PIPoint _pipoint = null;
+        public PIPoint PIPoint
+        {
+            get => this._pipoint;
             set
             {
-                _attributes = dicti;
-                OnPropertyChanged(nameof(Attributes));
+                this._pipoint = value;
+                OnPropertyChanged(nameof(PIPoint));
             }
         }
 
@@ -36,11 +54,6 @@ namespace ViewModels
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
-
-        public List<string> uneListe = new List<string>();
-        PIPoint unPoint = null;
-        AFValue uneValeur = null;
-
 
         private readonly RelayCommand _buttonLoadTags;
         public RelayCommand ButtonLoadTags => _buttonLoadTags;
@@ -59,8 +72,19 @@ namespace ViewModels
             //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
             FilesManager.ParseInputFileToTagsList(ref liste);
             _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
+            //Populate();
         }
 
+        private void Populate()
+        {
+            foreach(var pipoint in dicti)
+            {
+                col.Add(new PIPoint(
+                    pipoint["tag"] as string
+                    ));
+            }
+            cvs.Source = col;
+        }
 
     }
 }
