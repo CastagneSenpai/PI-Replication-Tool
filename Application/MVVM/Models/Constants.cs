@@ -15,6 +15,8 @@ namespace Models
         public const string OutputFileName_SourceTags = "SourceTags";
         public const string OutputFileName_TargetTags = "TargetTags";
 
+        public const char fieldSeparator = ';';
+
         private Constants() { }
     }
 }

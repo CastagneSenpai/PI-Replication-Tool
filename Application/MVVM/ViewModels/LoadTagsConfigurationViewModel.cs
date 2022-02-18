@@ -56,6 +56,7 @@ namespace ViewModels
         void LoadAttributes()
         {
             List<string> liste = new List<string>();
+            dicti.Clear();
             //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
             FilesManager.ParseInputFileToTagsList(ref liste);
             _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
