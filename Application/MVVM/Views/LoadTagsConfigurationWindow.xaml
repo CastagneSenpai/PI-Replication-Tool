@@ -153,25 +153,24 @@
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
             <DataGrid Name="dgUsers" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" ItemsSource="{Binding Attributes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Point Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-                    <DataGridTextColumn Header="DisplayDigits" Binding="{Binding DisplayDigits}" />
-                    <DataGridTextColumn Header="Engunits" Binding="{Binding Engunits}" />
-                    <DataGridTextColumn Header="Exdesc" Binding="{Binding Exdesc}" />
-                    <DataGridTextColumn Header="Ptclassname" Binding="{Binding Ptclassname}" />
                     <DataGridTextColumn Header="PointType" Binding="{Binding PointType}" />
-                    <DataGridTextColumn Header="Sourcetag" Binding="{Binding Sourcetag}" />
-                    <DataGridTextColumn Header="DigitalSet" Binding="{Binding DigitalSet}" />
-                    <DataGridTextColumn Header="Scan" Binding="{Binding Scan}" />
-                    <DataGridTextColumn Header="Shutdown" Binding="{Binding Shutdown}" />
-                    <DataGridTextColumn Header="Archiving" Binding="{Binding Archiving}" />
-                    <DataGridTextColumn Header="Convers" Binding="{Binding Convers}" />
+                    <DataGridTextColumn Header="PointSource" Binding="{Binding PointSource}" />
                     <DataGridTextColumn Header="Location1" Binding="{Binding Location1}" />
-                    <DataGridTextColumn Header="Location2" Binding="{Binding Location2}" />
-                    <DataGridTextColumn Header="Location3" Binding="{Binding Location3}" />
-                    <DataGridTextColumn Header="Location4" Binding="{Binding Location4}" />
-                    <DataGridTextColumn Header="Location5" Binding="{Binding Location5}" />
+                    <DataGridTextColumn Header="Zero" Binding="{Binding Zero}" />
+                    <DataGridTextColumn Header="TypicalValue" Binding="{Binding TypicalValue}" />
+                    <DataGridTextColumn Header="Span" Binding="{Binding Span}" />
+                    <DataGridTextColumn Header="Compressing" Binding="{Binding Compressing}" />
+                    <DataGridTextColumn Header="CompDev" Binding="{Binding CompDev}" />
+                    <DataGridTextColumn Header="CompMin" Binding="{Binding CompMin}" />
+                    <DataGridTextColumn Header="CompDevPercent" Binding="{Binding CompDevPercent}" />
+                    <DataGridTextColumn Header="ExcDev" Binding="{Binding ExcDev}" />
+                    <DataGridTextColumn Header="ExcMin" Binding="{Binding ExcMin}" />
+                    <DataGridTextColumn Header="ExcMax" Binding="{Binding ExcMax}" />
+                    <DataGridTextColumn Header="ExcDevPercent" Binding="{Binding ExcDevPercent}" />
+                    <DataGridTextColumn Header="DataSecurity" Binding="{Binding DataSecurity}" />
+                    <DataGridTextColumn Header="PtSecurity" Binding="{Binding PtSecurity}" />
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
