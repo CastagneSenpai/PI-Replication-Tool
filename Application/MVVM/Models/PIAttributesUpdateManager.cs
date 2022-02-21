@@ -38,12 +38,37 @@ namespace Models
         }
 
         
-
-        
-
         private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
-            throw new NotImplementedException();
+            string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
+            
+            if (v_Trigramme != null)
+            {
+                // Get the PointSource of PI Target Server
+
+                // Select the PointSource which contains the trigramme - Remove the others
+
+                // Select the PointSource N & D with minimal PointCount - Remove the others
+
+                // Foreach tag, if Numerical, replace PointSource by N, else D.
+                // TODO : use AttributesTagsList;
+
+            }
+        }
+
+        private string GetTrigrammeFromPIServer(PIServer p_PIServer)
+        {
+            string v_AliasSourceServerName;
+            string v_Trigramme = "";
+
+            if (p_PIServer.AliasNames.Contains("PI-DA-"))
+            {
+                // TODO : Trouver comment isoler l'alias qui contient le trigramme a récupérer.
+                // v_AliasSourceServerName = p_PIServer.AliasNames;
+
+            }
+
+            return v_Trigramme;
         }
 
         private void UpdateCompressionAttributes()
@@ -55,7 +80,6 @@ namespace Models
         {
             throw new NotImplementedException();
         }
-
 
         private void VerifyTypicalValues()
         {
