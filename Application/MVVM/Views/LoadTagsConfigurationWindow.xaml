@@ -128,7 +128,7 @@
         <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
           <Bold>Source Server :</Bold>
         </TextBlock>
-        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="200,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding SourceServer, Mode=TwoWay}">
+        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding SourceServer, Mode=TwoWay}">
         </TextBlock>
 
         <RadioButton x:Name="cb1" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" HorizontalAlignment="Center" 
