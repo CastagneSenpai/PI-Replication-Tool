@@ -12,11 +12,11 @@ namespace Models
 
         public void LoadAttributes(PIServer p_PIServer, List<string> p_PITagNames, ref List<IDictionary<string, object>> p_ListAttributes)
         {
-            List<PIPoint> v_PIPointList = new List<PIPoint>();            
+            List<OSIsoft.AF.PI.PIPoint> v_PIPointList = new List<OSIsoft.AF.PI.PIPoint>();            
 
             foreach (string piTagNames in p_PITagNames)
             {
-                var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
+                var v_PIPoint = OSIsoft.AF.PI.PIPoint.FindPIPoint(p_PIServer, piTagNames);
                 v_PIPointList.Add(v_PIPoint);
             }
 

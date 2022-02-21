@@ -16,8 +16,8 @@ namespace Models
             try
             {
                 int counter = 0;
-                //foreach (string line in File.ReadLines(@"C:\Users\WL1000621\Desktop\input.txt.txt"))
-                foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
+                foreach (string line in File.ReadLines(@"C:\Users\WL1000621\Desktop\input.txt"))
+                //foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
@@ -30,7 +30,6 @@ namespace Models
             }
         }
 
-        //public static void CreateTagsOutputFile(List<string> p_AttributesValueList)
         public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList)
         {
             try
@@ -55,7 +54,7 @@ namespace Models
                     {
                         currentLine += attribute.ToString() + Constants.fieldSeparator;
                     }
-                    FileLines.Add(currentLine);                    
+                    FileLines.Add(currentLine);
                 }
 
                 // Write lines in output file

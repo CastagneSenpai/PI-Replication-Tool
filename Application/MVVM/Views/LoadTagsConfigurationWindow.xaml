@@ -151,7 +151,7 @@
         </Button>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <DataGrid Name="dgUsers" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" ItemsSource="{Binding Attributes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="True" ItemsSource="{Binding Attributes}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
@@ -172,31 +172,6 @@
                     <DataGridTextColumn Header="DataSecurity" Binding="{Binding DataSecurity}" />
                     <DataGridTextColumn Header="PtSecurity" Binding="{Binding PtSecurity}" />
                 </DataGrid.Columns>
-                <DataGrid.RowDetailsTemplate>
-                    <DataTemplate>
-                        <DockPanel Background="GhostWhite">
-                            <Grid Margin="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Text="ID: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Id}" Grid.Column="1" />
-                                <TextBlock Text="Name: " FontWeight="Bold" Grid.Row="1" />
-                                <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="1" />
-                                <TextBlock Text="Birthday: " FontWeight="Bold" Grid.Row="2" />
-                                <TextBlock Text="{Binding Birthday, StringFormat=d}" Grid.Column="1" Grid.Row="2" />
-
-                            </Grid>
-                        </DockPanel>
-                    </DataTemplate>
-                </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
     </Grid>

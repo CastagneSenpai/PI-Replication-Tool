@@ -1,25 +1,43 @@
 ﻿using Commands;
 using Models;
-using OSIsoft.AF.Asset;
-using OSIsoft.AF.PI;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace ViewModels
 {
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
-        private PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
+        private readonly PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
 
-        List<IDictionary<string, object>> dicti = new List<IDictionary<string, object>>();
+        private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
+        private readonly ObservableCollection<PIPoint> _collectionTags = new ObservableCollection<PIPoint>();
 
-        private List<IDictionary<string, object>> _attributes;
-        public List<IDictionary<string, object>> Attributes
+        List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
+
+        public ICollectionView Attributes
         {
-            get { return _attributes; }
+            get
+            {
+                if (_collectionViewSource.Source == null)
+                {
+                    LoadAttributes();
+                    Populate();
+                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPoint = _collectionViewSource.View.CurrentItem as PIPoint;
+                }
+                return _collectionViewSource.View;
+            }
+        }
+
+        private PIPoint _pipoint = null;
+        public PIPoint PIPoint
+        {
+            get => this._pipoint;
             set
             {
-                _attributes = dicti;
-                OnPropertyChanged(nameof(Attributes));
+                this._pipoint = value;
+                OnPropertyChanged(nameof(PIPoint));
             }
         }
 
@@ -37,11 +55,6 @@ namespace ViewModels
             }
         }
 
-        public List<string> uneListe = new List<string>();
-        PIPoint unPoint = null;
-        AFValue uneValeur = null;
-
-
         private readonly RelayCommand _buttonLoadTags;
         public RelayCommand ButtonLoadTags => _buttonLoadTags;
 
@@ -55,12 +68,41 @@ namespace ViewModels
 
         void LoadAttributes()
         {
-            List<string> liste = new List<string>();
-            dicti.Clear();
-            //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
-            FilesManager.ParseInputFileToTagsList(ref liste);
-            _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
-            FilesManager.CreateTagsOutputFile(dicti);
+            List<string> v_TagsNameList = new List<string>();
+            AttributesTagsList.Clear();
+            FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+            _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], v_TagsNameList, ref AttributesTagsList);
+            FilesManager.CreateTagsOutputFile(AttributesTagsList);
         }
+
+        private void Populate()
+        {
+            foreach (var pipoint in AttributesTagsList)
+            {
+                _collectionTags.Add(new PIPoint(
+                    pipoint["tag"] as string,
+                    pipoint["instrumenttag"] as string,
+                    pipoint["pointtype"] as string,
+                    pipoint["pointsource"] as string,
+                    int.Parse(pipoint["location1"].ToString()),
+                    float.Parse(pipoint["zero"].ToString()),
+                    float.Parse(pipoint["typicalvalue"].ToString()),
+                    float.Parse(pipoint["span"].ToString()),
+                    int.Parse(pipoint["compressing"].ToString()),
+                    float.Parse(pipoint["compdev"].ToString()),
+                    float.Parse(pipoint["compdevpercent"].ToString()),
+                    float.Parse(pipoint["compmin"].ToString()),
+                    float.Parse(pipoint["excDev"].ToString()),
+                    float.Parse(pipoint["excMin"].ToString()),
+                    float.Parse(pipoint["excMax"].ToString()),
+                    float.Parse(pipoint["excdevpercent"].ToString()),
+                    float.Parse(pipoint["compdevpercent"].ToString()),
+                    pipoint["datasecurity"].ToString(),
+                    pipoint["ptsecurity"].ToString()
+                    ));
+            }
+            _collectionViewSource.Source = _collectionTags;
+        }
+
     }
 }
