@@ -2,7 +2,7 @@
 {
     public class PIPoint
     {
-        public PIPoint(string name, string instrumentTag, string pointType, string pointSource, string location1, string zero, string typicalValue, string span, string compressing, string compDev, string compDevPercent, string compMin, string excDev, string excMin, string excMax, string excDevPercent, string dataSecurity, string ptSecurity)
+        public PIPoint(string name, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
         {
             Name = name;
             InstrumentTag = instrumentTag;
@@ -24,27 +24,22 @@
             PtSecurity = ptSecurity;
         }
 
-        public PIPoint(string tag)
-        {
-            Name = tag;
-        }
-
         public string Name { get; set; }
         public string InstrumentTag { get; set; }
         public string PointType { get; set; }
         public string PointSource { get; set; }
-        public string Location1 { get; set; }
-        public string Zero { get; set; }
-        public string TypicalValue { get; set; }
-        public string Span { get; set; }
-        public string Compressing { get; set; }
-        public string CompDev { get; set; }
-        public string CompDevPercent { get; set; }
-        public string CompMin { get; set; }
-        public string ExcDev { get; set; }
-        public string ExcMin { get; set; }
-        public string ExcMax { get; set; }
-        public string ExcDevPercent { get; set; }
+        public int Location1 { get; set; }
+        public float Zero { get; set; }
+        public float TypicalValue { get; set; }
+        public float Span { get; set; }
+        public int Compressing { get; set; }
+        public float CompDev { get; set; }
+        public float CompDevPercent { get; set; }
+        public float CompMin { get; set; }
+        public float ExcDev { get; set; }
+        public float ExcMin { get; set; }
+        public float ExcMax { get; set; }
+        public float ExcDevPercent { get; set; }
         public string DataSecurity { get; set; }
         public string PtSecurity { get; set; }
     }

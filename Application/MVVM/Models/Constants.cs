@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Models
+﻿namespace Models
 {
     public class Constants
     {
@@ -14,6 +8,8 @@ namespace Models
         public const string InputFileName = "input.txt";
         public const string OutputFileName_SourceTags = "SourceTags";
         public const string OutputFileName_TargetTags = "TargetTags";
+
+        public const char fieldSeparator = ';';
 
         private Constants() { }
     }

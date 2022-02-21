@@ -11,22 +11,22 @@ namespace ViewModels
     {
         private readonly PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
 
-        private readonly CollectionViewSource cvs = new CollectionViewSource();
-        private ObservableCollection<PIPoint> col = new ObservableCollection<PIPoint>();
+        private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
+        private readonly ObservableCollection<PIPoint> _collectionTags = new ObservableCollection<PIPoint>();
 
-        List<IDictionary<string, object>> dicti = new List<IDictionary<string, object>>();
+        List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
 
         public ICollectionView Attributes
         {
             get
             {
-                if (cvs.Source == null)
+                if (_collectionViewSource.Source == null)
                 {
                     LoadAttributes();
                     Populate();
-                    cvs.View.CurrentChanged += (sender, e) => PIPoint = cvs.View.CurrentItem as PIPoint;
+                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPoint = _collectionViewSource.View.CurrentItem as PIPoint;
                 }
-                return cvs.View;
+                return _collectionViewSource.View;
             }
         }
 
@@ -68,22 +68,40 @@ namespace ViewModels
 
         void LoadAttributes()
         {
-            List<string> liste = new List<string>();
-            //List<IDictionary<string,object>> dicti = new List<IDictionary<string, object>>();           
-            FilesManager.ParseInputFileToTagsList(ref liste);
-            _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], liste, ref dicti);
-            //Populate();
+            List<string> v_TagsNameList = new List<string>();
+            AttributesTagsList.Clear();
+            FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+            _replicationManager.PIAttributesUpdateManager.LoadAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], v_TagsNameList, ref AttributesTagsList);
+            FilesManager.CreateTagsOutputFile(AttributesTagsList);
         }
 
         private void Populate()
         {
-            foreach(var pipoint in dicti)
+            foreach (var pipoint in AttributesTagsList)
             {
-                col.Add(new PIPoint(
-                    pipoint["tag"] as string
+                _collectionTags.Add(new PIPoint(
+                    pipoint["tag"] as string,
+                    pipoint["instrumenttag"] as string,
+                    pipoint["pointtype"] as string,
+                    pipoint["pointsource"] as string,
+                    int.Parse(pipoint["location1"].ToString()),
+                    float.Parse(pipoint["zero"].ToString()),
+                    float.Parse(pipoint["typicalvalue"].ToString()),
+                    float.Parse(pipoint["span"].ToString()),
+                    int.Parse(pipoint["compressing"].ToString()),
+                    float.Parse(pipoint["compdev"].ToString()),
+                    float.Parse(pipoint["compdevpercent"].ToString()),
+                    float.Parse(pipoint["compmin"].ToString()),
+                    float.Parse(pipoint["excDev"].ToString()),
+                    float.Parse(pipoint["excMin"].ToString()),
+                    float.Parse(pipoint["excMax"].ToString()),
+                    float.Parse(pipoint["excdevpercent"].ToString()),
+                    float.Parse(pipoint["compdevpercent"].ToString()),
+                    pipoint["datasecurity"].ToString(),
+                    pipoint["ptsecurity"].ToString()
                     ));
             }
-            cvs.Source = col;
+            _collectionViewSource.Source = _collectionTags;
         }
 
     }

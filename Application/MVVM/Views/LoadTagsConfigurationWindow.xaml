@@ -154,12 +154,12 @@
             <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="True" ItemsSource="{Binding Attributes}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                    <!--<DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
+                    <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
                     <DataGridTextColumn Header="PointType" Binding="{Binding PointType}" />
                     <DataGridTextColumn Header="PointSource" Binding="{Binding PointSource}" />
-                    <DataGridTextColumn Header="Location1" Binding="{Binding Location1}" />-->
-                    <!--<DataGridTextColumn Header="Zero" Binding="{Binding Zero}" />-->
-                    <!--<DataGridTextColumn Header="TypicalValue" Binding="{Binding TypicalValue}" />
+                    <DataGridTextColumn Header="Location1" Binding="{Binding Location1}" />
+                    <DataGridTextColumn Header="Zero" Binding="{Binding Zero}" />
+                    <DataGridTextColumn Header="TypicalValue" Binding="{Binding TypicalValue}" />
                     <DataGridTextColumn Header="Span" Binding="{Binding Span}" />
                     <DataGridTextColumn Header="Compressing" Binding="{Binding Compressing}" />
                     <DataGridTextColumn Header="CompDev" Binding="{Binding CompDev}" />
@@ -170,27 +170,8 @@
                     <DataGridTextColumn Header="ExcMax" Binding="{Binding ExcMax}" />
                     <DataGridTextColumn Header="ExcDevPercent" Binding="{Binding ExcDevPercent}" />
                     <DataGridTextColumn Header="DataSecurity" Binding="{Binding DataSecurity}" />
-                    <DataGridTextColumn Header="PtSecurity" Binding="{Binding PtSecurity}" />-->
+                    <DataGridTextColumn Header="PtSecurity" Binding="{Binding PtSecurity}" />
                 </DataGrid.Columns>
-                
-                <!--<DataGrid.RowDetailsTemplate>
-                    <DataTemplate>
-                        <DockPanel Background="GhostWhite">
-                            <Grid Margin="0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                            </Grid>
-                        </DockPanel>
-                    </DataTemplate>
-                </DataGrid.RowDetailsTemplate>-->
             </DataGrid>
         </Grid>
     </Grid>
