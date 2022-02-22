@@ -10,14 +10,14 @@ namespace Models
     {
         static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
 
-        List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
+        public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>() ;
         public PIAttributesUpdateManager()
         {
 
         }
 
         // TODO : Replace p_ListAttributes by the attribute in local instance this.AttributesTagsList
-        public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames, ref List<IDictionary<string, object>> p_ListAttributes)
+        public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
             List<OSIsoft.AF.PI.PIPoint> v_PIPointList = new List<OSIsoft.AF.PI.PIPoint>();            
 
@@ -29,8 +29,12 @@ namespace Models
 
             foreach (var v_PIPoint in v_PIPointList)
             {
-                p_ListAttributes.Add(v_PIPoint.GetAttributes());
+                AttributesTagsList.Add(v_PIPoint.GetAttributes());
             }
+        }
+        internal void Clear()
+        {
+            AttributesTagsList.Clear();
         }
 
         // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
@@ -42,7 +46,6 @@ namespace Models
             this.VerifyTypicalValues();
         }
 
-        
         private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
             string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
@@ -122,7 +125,7 @@ namespace Models
                 Logger.Warn($"The PI server {p_PISourceServer} does not contain an alias with the trigramme of site, which cause the application to not retrieve the Point sources to use.");
             }
         }
-        
+
         private string GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             string v_Trigramme = "";

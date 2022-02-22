@@ -15,7 +15,7 @@ namespace ViewModels
         private readonly ObservableCollection<PIPoint> _collectionTags = new ObservableCollection<PIPoint>();
 
         // TODO : to delete and use AttributeTagsList in PIAttributesUpdateManager instead !
-        List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
+        // TO DELETE : List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
 
         public ICollectionView Attributes
         {
@@ -70,11 +70,11 @@ namespace ViewModels
         void LoadAttributes()
         {
             List<string> v_TagsNameList = new List<string>();
-            AttributesTagsList.Clear();
+            _replicationManager.PIAttributesUpdateManager.Clear();
             FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
 
             // TODO : Changer le serveur ConnectedPIServersList[0] >> SelectedSourceServer
-            _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], v_TagsNameList, ref AttributesTagsList);
+            _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], v_TagsNameList);
             
             // TODO : A réactiver lorsque chargement du tableau sur le bouton
             //FilesManager.CreateTagsOutputFile(AttributesTagsList);
@@ -82,7 +82,7 @@ namespace ViewModels
 
         private void Populate()
         {
-            foreach (var pipoint in AttributesTagsList)
+            foreach (var pipoint in _replicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 _collectionTags.Add(new PIPoint(
                     pipoint["tag"] as string,
