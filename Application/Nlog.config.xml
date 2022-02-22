@@ -29,8 +29,47 @@
             layout="${longdate} ${uppercase:${level}} ${message}" />
             
     -->
-    <target name="logfile" xsi:type="File" fileName="${basedir}/logs/${shortdate}_logfile.txt" layout="${longdate}|${level:uppercase=true}|${logger}|${threadid}|${message}|${exception:format=tostring}" />
-    <target name="logconsole" xsi:type="Console" layout="${level:uppercase=true}|${logger}|${message}"/>
+    <!--<target name="logfile" xsi:type="File" fileName="${basedir}/logs/${shortdate}_logfile.txt" layout="${longdate}|${level:uppercase=true}|${logger}|${threadid}|${message}|${exception:format=tostring}" />-->
+    <target 
+      xsi:type="File"
+      name="logfile"  
+      fileName="E:\PIReplicationTool\Logs\${shortdate}_logfile.txt" 
+      layout="${longdate}|${level:uppercase=true}|${logger}|${threadid}|${message}|${exception:format=tostring}" />
+    
+    <target 
+      xsi:type="Console" 
+      name="logconsole" 
+      layout="${level:uppercase=true}|${logger}|${message}"/>
+
+      <!-- RichTextBox to display logs in WPF application --> 
+      <target xsi:type="RichTextBox"
+              name="logwindow"
+              layout="${level:uppercase=true}|${logger}|${message}"
+              height="12"
+              autoScroll="false"
+              maxLines="1"
+              showMinimized="false"
+              toolWindow="true"
+              controlName="LogControl"
+              formName="formName"
+              width="12"
+              useDefaultRowColoringRules="true"
+              allowAccessoryFormCreation="true"
+              messageRetention="None"
+              supportLinks="false"
+>
+
+        <!-- repeated word-colorings -->
+        <word-coloring backgroundColor=""
+                       fontColor="black" 
+                       ignoreCase="false"
+                       text="String"
+                       wholeWords="false"/>
+
+        <!-- repeated row-colorings-->
+        <row-coloring backgroundColor=""
+                      fontColor="black"/>
+      </target>
     
   </targets>
 

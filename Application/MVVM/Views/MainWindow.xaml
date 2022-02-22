@@ -168,6 +168,15 @@
             </Button>
         </Border>
 
+        <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" >
+            <RichTextBox >
+                <FlowDocument>
+                    <Paragraph FontSize="36">Hello, world!</Paragraph>
+                    <Paragraph FontStyle="Italic" TextAlignment="Left" FontSize="14" Foreground="Gray">Thanks to the RichTextBox control, this FlowDocument is completely editable!</Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </Border>
+
         <!-- Content -->
         <ContentControl Content="{Binding CurrentPageViewModel}" Grid.Column="1" Grid.Row="3">
             <ContentControl.Resources>
