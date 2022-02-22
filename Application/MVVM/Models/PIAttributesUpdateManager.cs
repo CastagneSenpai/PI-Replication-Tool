@@ -1,4 +1,5 @@
-﻿using OSIsoft.AF.PI;
+﻿using NLog;
+using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
 
@@ -6,6 +7,8 @@ namespace Models
 {
     public sealed class PIAttributesUpdateManager
     {
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+
         List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
         public PIAttributesUpdateManager()
         {
@@ -32,7 +35,7 @@ namespace Models
         public void UpdateTagsAttributes (PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
             this.UpdatePointSourceAttributes(p_PISourceServer, p_PITargetServer);
-            this.UpdateCompressionAttributes();
+            this.UpdateCompressionExceptionAttributes();
             this.UpdateSecurityAttributes();
             this.VerifyTypicalValues();
         }
@@ -58,32 +61,82 @@ namespace Models
 
         private string GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
-            string v_AliasSourceServerName;
             string v_Trigramme = "";
 
-            if (p_PIServer.AliasNames.Contains("PI-DA-"))
+            foreach(string aliasServer in p_PIServer.AliasNames)
             {
-                // TODO : Trouver comment isoler l'alias qui contient le trigramme a récupérer.
-                // v_AliasSourceServerName = p_PIServer.AliasNames;
-
+                if (aliasServer.Contains("PI-DA-"))
+                {
+                    // Cut the Alias server name to get the trigramme (Example : PI-DA-LAD-AO >> LAD)
+                    v_Trigramme = aliasServer.Substring(6, 3);
+                }
             }
-
             return v_Trigramme;
         }
 
-        private void UpdateCompressionAttributes()
+        private void UpdateCompressionExceptionAttributes()
         {
-            throw new NotImplementedException();
+            try
+            {
+                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
+                {
+                    tagAttributes["compressing"] = 0;
+                    tagAttributes["compdev"] = 0;
+                    tagAttributes["compmin"] = 0;
+                    tagAttributes["compmax"] = 0;
+                    tagAttributes["compdevpercent"] = 0;
+
+                    tagAttributes["excdev"] = 0;
+                    tagAttributes["excmin"] = 0;
+                    tagAttributes["excmax"] = 0;
+                    tagAttributes["excdevpercent"] = 0;
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.Error($"Error updating compression and exception attributes. {e.Message}");
+            }
         }
 
         private void UpdateSecurityAttributes()
         {
-            throw new NotImplementedException();
+            try
+            {
+                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
+                {
+                    tagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
+                    tagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating security attributes. {e.Message}");
+            }
         }
 
         private void VerifyTypicalValues()
         {
-            throw new NotImplementedException();
+            try
+            {
+                float zero, typicalvalue, span;
+
+                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
+                {
+                    zero = (float)tagAttributes["zero"];
+                    typicalvalue = (float)tagAttributes["typicalvalue"];
+                    span = (float)tagAttributes["span"];
+                    
+                    // If typicalvalue do not respect PI rules in source server, remove typical value
+                    if (typicalvalue < zero || typicalvalue > zero+span)
+                    {
+                        tagAttributes["typicalvalue"] = null;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error verifying typicalValue, zero or span attributes. {e.Message}");
+            }
         }
     }
 }
