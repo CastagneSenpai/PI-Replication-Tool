@@ -1,6 +1,7 @@
 ﻿using NLog;
 using OSIsoft.AF.PI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Models
@@ -32,6 +33,7 @@ namespace Models
             }
         }
 
+        // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
         public void UpdateTagsAttributes (PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
             this.UpdatePointSourceAttributes(p_PISourceServer, p_PITargetServer);
@@ -44,21 +46,83 @@ namespace Models
         private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
             string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
-            
+
             if (v_Trigramme != null)
             {
-                // Get the PointSource of PI Target Server
+                try
+                {
+                
+                    // Get the PointSource of PI Target Server
+                    ICollection<PIPointSource> allPointSources = p_PITargetServer.PointSources;
 
-                // Select the PointSource which contains the trigramme - Remove the others
+                    foreach (PIPointSource ps in allPointSources)
+                    {
+                        // Select the PointSource which contains the trigramme - Remove the others
+                        if (!ps.Name.Contains(v_Trigramme))
+                        {
+                            allPointSources.Remove(ps);
+                        }
+                    }
 
-                // Select the PointSource N & D with minimal PointCount - Remove the others
+                    long? currentDigitalPointCount = null, currentNumericalPointCount = null;
+                    string digitalPointSource, numericalPointSource;
 
-                // Foreach tag, if Numerical, replace PointSource by N, else D.
-                // TODO : use AttributesTagsList;
+                    foreach (PIPointSource ps in allPointSources)
+                    {
+                        // Select the PointSource N & D with minimal PointCount
+                        if (ps.Name.Contains("D0"))
+                        {
+                            if (currentDigitalPointCount is null || currentDigitalPointCount > ps.PointCount)
+                            {
+                                digitalPointSource = ps.Name;
+                                currentDigitalPointCount = ps.PointCount;
+                            }
+                        }
+                        else if (ps.Name.Contains("N0"))
+                        {
+                            if (currentNumericalPointCount is null || currentNumericalPointCount > ps.PointCount)
+                            {
+                                numericalPointSource = ps.Name;
+                                currentNumericalPointCount = ps.PointCount;
+                            }
+                        }
+                        else { } // do nothing and go for the next PointSource }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Error selecting the point sources to use from PI target server point source list. {e.Message}");
+                }
 
+                // Foreach tag, if Numerical, replace PointSource by N0X, else D0X.
+                try
+                {
+                    foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
+                    {
+                        // Put compression & exception parameter to 0
+                        tagAttributes["compressing"] = 0;
+                        tagAttributes["compdev"] = 0;
+                        tagAttributes["compmin"] = 0;
+                        tagAttributes["compmax"] = 0;
+                        tagAttributes["compdevpercent"] = 0;
+
+                        tagAttributes["excdev"] = 0;
+                        tagAttributes["excmin"] = 0;
+                        tagAttributes["excmax"] = 0;
+                        tagAttributes["excdevpercent"] = 0;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Error updating compression and exception attributes. {e.Message}");
+                }
+            }
+            else
+            {
+                Logger.Warn($"The PI server {p_PISourceServer} does not contain an alias with the trigramme of site, which cause the application to not retrieve the Point sources to use.");
             }
         }
-
+        
         private string GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             string v_Trigramme = "";
@@ -80,6 +144,7 @@ namespace Models
             {
                 foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
                 {
+                    // Put compression & exception parameter to 0
                     tagAttributes["compressing"] = 0;
                     tagAttributes["compdev"] = 0;
                     tagAttributes["compmin"] = 0;
