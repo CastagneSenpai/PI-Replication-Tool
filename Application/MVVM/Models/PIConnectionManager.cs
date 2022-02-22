@@ -13,6 +13,8 @@ namespace Models
         // PROPERTIES OF CLASS
         // -------------------
 
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+
         // Servers lists
         private PIServers _localPIServerList = PIServers.GetPIServers();
 
@@ -30,7 +32,7 @@ namespace Models
             set { _connectedPIServersList = value; }
         }
 
-        // mono server attributes
+        // Non-list servers
         private string _piSourceServerName;
 
         public string PISourceServerName
@@ -57,7 +59,6 @@ namespace Models
             get { return PIServer.FindPIServer(_piTargetServerName); }
         }
 
-        Logger Logger = NLog.LogManager.GetLogger("PIReplicationToolLogger");
 
         // -------------------
         // CONSTRUCTORS
