@@ -70,11 +70,12 @@ namespace ViewModels
         void LoadAttributes()
         {
             List<string> v_TagsNameList = new List<string>();
-            _replicationManager.PIAttributesUpdateManager.Clear();
             FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
 
+            _replicationManager.PIAttributesUpdateManager.Clear();
+
             // TODO : Changer le serveur ConnectedPIServersList[0] >> SelectedSourceServer
-            _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.ConnectedPIServersList[0], v_TagsNameList);
+            _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
             
             // TODO : A réactiver lorsque chargement du tableau sur le bouton
             //FilesManager.CreateTagsOutputFile(AttributesTagsList);
