@@ -102,17 +102,10 @@ namespace Models
                 {
                     foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
                     {
-                        // Put compression & exception parameter to 0
-                        tagAttributes["compressing"] = 0;
-                        tagAttributes["compdev"] = 0;
-                        tagAttributes["compmin"] = 0;
-                        tagAttributes["compmax"] = 0;
-                        tagAttributes["compdevpercent"] = 0;
+                        if((string)tagAttributes["pointtype"] == "test" )
+                        {
 
-                        tagAttributes["excdev"] = 0;
-                        tagAttributes["excmin"] = 0;
-                        tagAttributes["excmax"] = 0;
-                        tagAttributes["excdevpercent"] = 0;
+                        }
                     }
                 }
                 catch (Exception e)

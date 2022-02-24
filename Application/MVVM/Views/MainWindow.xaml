@@ -169,11 +169,15 @@
         </Border>
 
         <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" >
-            <RichTextBox >
-                <FlowDocument>
+            <RichTextBox x:Name="logwindow">
+                
+                <RichTextBox.Resources>
+                    
+                </RichTextBox.Resources>
+                <!--<FlowDocument>
                     <Paragraph FontSize="36">Hello, world!</Paragraph>
                     <Paragraph FontStyle="Italic" TextAlignment="Left" FontSize="14" Foreground="Gray">Thanks to the RichTextBox control, this FlowDocument is completely editable!</Paragraph>
-                </FlowDocument>
+                </FlowDocument>-->
             </RichTextBox>
         </Border>
 
