@@ -44,6 +44,13 @@ namespace Models
             this.UpdateCompressionExceptionAttributes();
             this.UpdateSecurityAttributes();
             this.VerifyTypicalValues();
+            this.updateInstrumentTagAndTagName(p_PISourceServer, p_PITargetServer);
+        }
+
+        private void updateInstrumentTagAndTagName(PIServer p_PISourceServer, PIServer p_PITargetServer)
+        {
+            // to implement : for some affiliate, add a prexife to the name and put instrumettag = old tag name
+            throw new NotImplementedException();
         }
 
         private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
