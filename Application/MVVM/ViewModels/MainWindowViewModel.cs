@@ -1,6 +1,7 @@
 ﻿using Commands;
 using Core;
 using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -74,6 +75,12 @@ namespace ViewModels
         {
             ChangeViewModel(PageViewModels[2]);
         }
+
+
+       public void LogTextUpdate()
+       {
+            throw new NotImplementedException();
+       }
 
         public MainWindowViewModel()
         {

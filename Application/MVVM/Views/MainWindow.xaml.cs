@@ -48,6 +48,7 @@ namespace Views
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
 
+
         //private void LogText(string message)
         //{
         //    this.Dispatcher.Invoke((Action)delegate () {

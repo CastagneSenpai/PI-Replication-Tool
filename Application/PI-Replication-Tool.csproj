@@ -61,7 +61,7 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>packages\NLog.4.7.13\lib\net45\NLog.dll</HintPath>
+      <HintPath>packages\NLog.4.7.14\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="OSIsoft.AF.UI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6238be57836698e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

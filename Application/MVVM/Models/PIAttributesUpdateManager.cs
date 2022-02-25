@@ -48,6 +48,8 @@ namespace Models
 
         private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
+            long? currentDigitalPointCount = null, currentNumericalPointCount = null;
+            string digitalPointSource = "", numericalPointSource = "";
             string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
 
             if (v_Trigramme != null)
@@ -66,9 +68,6 @@ namespace Models
                             allPointSources.Remove(ps);
                         }
                     }
-
-                    long? currentDigitalPointCount = null, currentNumericalPointCount = null;
-                    string digitalPointSource, numericalPointSource;
 
                     foreach (PIPointSource ps in allPointSources)
                     {
@@ -97,14 +96,18 @@ namespace Models
                     Logger.Error($"Error selecting the point sources to use from PI target server point source list. {e.Message}");
                 }
 
-                // Foreach tag, if Numerical, replace PointSource by N0X, else D0X.
                 try
                 {
+                    // Foreach tag, if Numerical, replace PointSource by N0X, else D0X.
                     foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
                     {
-                        if((string)tagAttributes["pointtype"] == "test" )
+                        if((string)tagAttributes["pointtype"] == "digital" || (string)tagAttributes["pointtype"] == "string")
                         {
-
+                            tagAttributes["pointsource"] = digitalPointSource;
+                        }
+                        else
+                        {
+                            tagAttributes["pointsource"] = numericalPointSource;
                         }
                     }
                 }

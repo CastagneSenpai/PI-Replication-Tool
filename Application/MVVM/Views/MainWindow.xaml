@@ -48,7 +48,7 @@
 
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
-                    
+
                     <Button Width="50" Height="40" 
                         Content="🗕"
                         Background="Transparent"
@@ -98,7 +98,7 @@
                        FontSize="15px"
                        Margin="20,0,0,0"/>
         </Border>
-        
+
         <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
 
         <!-- Menu Left Panel -->
@@ -149,36 +149,39 @@
                       BorderThickness="0"
                       Grid.Row="2"/>
         </Grid>
-        
-        <!-- Bottom Bar -->
-        <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4"
-                Background="#d1d8e0" BorderBrush="Black" >
 
-            <Button Grid.Row="3" Grid.Column="2"
+        <!-- Bottom Bar -->
+        <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" Background="#d1d8e0" BorderBrush="Black">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="logwindow" Text="{Binding LogTextUpdate, Mode=TwoWay }">
+                    
+                    <!--<RichTextBox.Resources>
+
+                    </RichTextBox.Resources>
+                    <FlowDocument>
+                        <Paragraph FontSize="36">Hello, world!</Paragraph>
+                        <Paragraph FontStyle="Italic" TextAlignment="Left" FontSize="14" Foreground="Gray">Thanks to the RichTextBox control, this FlowDocument is completely editable!</Paragraph>
+                    </FlowDocument>-->
+                </TextBox>
+
+                <Button Grid.Row="3" Grid.Column="2"
                 Content="Next"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Center"
-                Margin="0,0,18,0"
+                Margin="0,0,30,0"
                 Height="30"
                 Width="90"
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2e86de"
                 Command="{Binding ButtonNextView}">
-            </Button>
+                </Button>
+            </StackPanel>
         </Border>
 
         <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" >
-            <RichTextBox x:Name="logwindow">
-                
-                <RichTextBox.Resources>
-                    
-                </RichTextBox.Resources>
-                <!--<FlowDocument>
-                    <Paragraph FontSize="36">Hello, world!</Paragraph>
-                    <Paragraph FontStyle="Italic" TextAlignment="Left" FontSize="14" Foreground="Gray">Thanks to the RichTextBox control, this FlowDocument is completely editable!</Paragraph>
-                </FlowDocument>-->
-            </RichTextBox>
+
         </Border>
 
         <!-- Content -->
