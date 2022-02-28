@@ -1,8 +1,8 @@
 ﻿namespace Models
 {
-    public class PIPoint
+    public class PIPointGridFormat
     {
-        public PIPoint(string name, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
+        public PIPointGridFormat(string name, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
         {
             Name = name;
             InstrumentTag = instrumentTag;

@@ -12,33 +12,29 @@ namespace ViewModels
         private readonly PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
 
         private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
-        private readonly ObservableCollection<PIPoint> _collectionTags = new ObservableCollection<PIPoint>();
-
-        // TODO : to delete and use AttributeTagsList in PIAttributesUpdateManager instead !
-        // TO DELETE : List<IDictionary<string, object>> AttributesTagsList = new List<IDictionary<string, object>>();
+        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
 
         public ICollectionView Attributes
         {
             get
             {
-                if (_collectionViewSource.Source == null)
-                {
-                    LoadAttributes();
-                    Populate();
-                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPoint = _collectionViewSource.View.CurrentItem as PIPoint;
+                if (_collectionViewSource.View != null)
+                {                    
+                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
+                    return _collectionViewSource?.View;
                 }
-                return _collectionViewSource.View;
+                return null;
             }
         }
 
-        private PIPoint _pipoint = null;
-        public PIPoint PIPoint
+        private PIPointGridFormat _pipointgridformat = null;
+        public PIPointGridFormat PIPointGridFormat
         {
-            get => this._pipoint;
+            get => this._pipointgridformat;
             set
             {
-                this._pipoint = value;
-                OnPropertyChanged(nameof(PIPoint));
+                this._pipointgridformat = value;
+                OnPropertyChanged(nameof(PIPointGridFormat));
             }
         }
 
@@ -74,9 +70,13 @@ namespace ViewModels
 
             _replicationManager.PIAttributesUpdateManager.Clear();
 
-            // TODO : Changer le serveur ConnectedPIServersList[0] >> SelectedSourceServer
             _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
-            
+
+            Populate();
+            //var test = Attributes;
+            OnPropertyChanged("Attributes");
+            //_collectionViewSource.View.CurrentChanged += (sender, e) => PIPoint = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
+
             // TODO : A réactiver lorsque chargement du tableau sur le bouton
             //FilesManager.CreateTagsOutputFile(AttributesTagsList);
         }
@@ -85,7 +85,7 @@ namespace ViewModels
         {
             foreach (var pipoint in _replicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
-                _collectionTags.Add(new PIPoint(
+                _collectionTags.Add(new PIPointGridFormat(
                     pipoint["tag"] as string,
                     pipoint["instrumenttag"] as string,
                     pipoint["pointtype"] as string,
