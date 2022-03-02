@@ -8,7 +8,6 @@ namespace Models
     public sealed class PIAttributesUpdateManager
     {
         static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
-
         public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
         public PIAttributesUpdateManager()
         {
@@ -33,65 +32,63 @@ namespace Models
         {
             AttributesTagsList.Clear();
         }
-
         // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
-            string digitalPointSource = "", numericalPointSource = "";
-            this.FindPointSourcesToUse(p_PISourceServer, p_PITargetServer, ref digitalPointSource, ref numericalPointSource);
+            string v_DigitalPointSource = "", v_NumericalPointSource = "";
+            this.FindPointSourcesToUse(p_PISourceServer, p_PITargetServer, ref v_DigitalPointSource, ref v_NumericalPointSource);
 
             // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
-            AttributesTagsList.ForEach(o => UpdateTagAttributes(p_PISourceServer, p_PITargetServer, o, digitalPointSource, numericalPointSource));
+            AttributesTagsList.ForEach(o => UpdateTagAttributes(p_PISourceServer, o, v_DigitalPointSource, v_NumericalPointSource));
         }
-        private void UpdateTagAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, IDictionary<string, object> tagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
+        private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
         {
             try
             {
-                this.UpdatePointSourceAttributes(p_PISourceServer, p_PITargetServer, tagAttributes, p_DigitalPointSource, p_NumericalPointSource);
-                this.UpdateCompressionExceptionAttributes(tagAttributes);
-                this.UpdateSecurityAttributes(tagAttributes);
-                this.VerifyTypicalValues(tagAttributes);
-                this.UpdateTagNameAndInstrumentTag(p_PISourceServer, tagAttributes);
+                this.UpdatePointSourceAttributes(ref p_TagAttributes, p_DigitalPointSource, p_NumericalPointSource);
+                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
+                this.UpdateSecurityAttributes(ref p_TagAttributes);
+                this.VerifyTypicalValues(ref p_TagAttributes);
+                this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
             }
             catch (Exception e)
             {
-                Logger.Error($"Error updating tags attributes. {e.Message}");
+                Logger.Error($"Error updating tag {p_TagAttributes["tag"]} attributes. {e.Message}");
             }
         }
-        private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, IDictionary<string, object> tagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
+        private void UpdatePointSourceAttributes(ref IDictionary<string, object> p_TagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
         {
             try
             {
-                if ((string)tagAttributes["pointtype"] == "digital" || (string)tagAttributes["pointtype"] == "string")
+                if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
                 {
-                    tagAttributes["pointsource"] = p_DigitalPointSource;
+                    p_TagAttributes["pointsource"] = p_DigitalPointSource;
                 }
                 else
                 {
-                    tagAttributes["pointsource"] = p_NumericalPointSource;
+                    p_TagAttributes["pointsource"] = p_NumericalPointSource;
                 }
-
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating compression and exception attributes. {e.Message}");
             }
         }
-        private void UpdateCompressionExceptionAttributes(IDictionary<string, object> tagAttributes)
+        private void UpdateCompressionExceptionAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
             {
                 // Put compression & exception parameter to 0
-                tagAttributes["compressing"] = 0;
-                tagAttributes["compdev"] = 0;
-                tagAttributes["compmin"] = 0;
-                tagAttributes["compmax"] = 0;
-                tagAttributes["compdevpercent"] = 0;
+                p_TagAttributes["compressing"] = 0;
+                p_TagAttributes["compdev"] = 0;
+                p_TagAttributes["compmin"] = 0;
+                p_TagAttributes["compmax"] = 0;
+                p_TagAttributes["compdevpercent"] = 0;
 
-                tagAttributes["excdev"] = 0;
-                tagAttributes["excmin"] = 0;
-                tagAttributes["excmax"] = 0;
-                tagAttributes["excdevpercent"] = 0;
+                p_TagAttributes["excdev"] = 0;
+                p_TagAttributes["excmin"] = 0;
+                p_TagAttributes["excmax"] = 0;
+                p_TagAttributes["excdevpercent"] = 0;
 
             }
             catch (Exception e)
@@ -99,32 +96,32 @@ namespace Models
                 Logger.Error($"Error updating compression and exception attributes. {e.Message}");
             }
         }
-        private void UpdateSecurityAttributes(IDictionary<string, object> tagAttributes)
+        private void UpdateSecurityAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
             {
-                tagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
-                tagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
+                p_TagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
+                p_TagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating security attributes. {e.Message}");
             }
         }
-        private void VerifyTypicalValues(IDictionary<string, object> tagAttributes)
+        private void VerifyTypicalValues(ref IDictionary<string, object> p_TagAttributes)
         {
             try
             {
-                float zero, typicalvalue, span;
+                float v_Zero, v_Typicalvalue, v_Span;
 
-                zero = (float)tagAttributes["zero"];
-                typicalvalue = (float)tagAttributes["typicalvalue"];
-                span = (float)tagAttributes["span"];
+                v_Zero = (float)p_TagAttributes["zero"];
+                v_Typicalvalue = (float)p_TagAttributes["typicalvalue"];
+                v_Span = (float)p_TagAttributes["span"];
 
                 // If typicalvalue do not respect PI rules in source server, remove typical value
-                if (typicalvalue < zero || typicalvalue > zero + span)
+                if (v_Typicalvalue < v_Zero || v_Typicalvalue > v_Zero + v_Span)
                 {
-                    tagAttributes["typicalvalue"] = null;
+                    p_TagAttributes["typicalvalue"] = null;
                 }
 
             }
@@ -133,32 +130,32 @@ namespace Models
                 Logger.Error($"Error verifying typicalValue, zero or span attributes. {e.Message}");
             }
         }
-        private void UpdateTagNameAndInstrumentTag(PIServer p_PISourceServer, IDictionary<string, object> tagAttributes)
+        private void UpdateTagNameAndInstrumentTag(ref IDictionary<string, object> p_TagAttributes, PIServer p_PISourceServer)
         {
             try
             {
                 // Update InstrumentTag
-                tagAttributes["instrumenttag"] = tagAttributes["tag"];
+                p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
 
                 // Update TagName if source server is TEPNL, TEPUK or TEPGB
-                string Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
-                if (Trigramme == "NLD")
-                    tagAttributes["tag"] = "NLD_" + tagAttributes["tag"]; // NL : Prefixe NLD_
+                string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
+                if (v_Trigramme == "NLD")
+                    p_TagAttributes["tag"] = "NLD_" + p_TagAttributes["tag"]; // NL : Prefixe NLD_
 
-                else if (Trigramme == "ABZ")
-                    tagAttributes["tag"] = "UK_" + tagAttributes["tag"]; // UK : Prefixe UK_
+                else if (v_Trigramme == "ABZ")
+                    p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"]; // UK : Prefixe UK_
 
-                else if (Trigramme == "POG")
-                    tagAttributes["tag"] = "POG_" + tagAttributes["tag"]; // GB : Prefixe POG_
+                else if (v_Trigramme == "POG")
+                    p_TagAttributes["tag"] = "POG_" + p_TagAttributes["tag"]; // GB : Prefixe POG_
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating TagName and Instrumenttag attributes. {e.Message}");
             }
         }
-        private void FindPointSourcesToUse(PIServer p_PISourceServer, PIServer p_PITargetServer, ref string digitalPointSource, ref string numericalPointSource)
+        private void FindPointSourcesToUse(PIServer p_PISourceServer, PIServer p_PITargetServer, ref string p_DigitalPointSource, ref string p_NumericalPointSource)
         {
-            long? currentDigitalPointCount = null, currentNumericalPointCount = null;
+            long? v_CurrentDigitalPointCount = null, v_CurrentNumericalPointCount = null;
             string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
 
             if (v_Trigramme != null)
@@ -166,34 +163,34 @@ namespace Models
                 try
                 {
                     // Get the PointSource of PI Target Server
-                    ICollection<PIPointSource> allPointSources = p_PITargetServer.PointSources;
+                    ICollection<PIPointSource> v_AllPointSources = p_PITargetServer.PointSources;
 
-                    foreach (PIPointSource ps in allPointSources)
+                    foreach (PIPointSource v_ps in v_AllPointSources)
                     {
                         // Select the PointSource which contains the trigramme - Remove the others
-                        if (!ps.Name.Contains(v_Trigramme))
+                        if (!v_ps.Name.Contains(v_Trigramme))
                         {
-                            allPointSources.Remove(ps);
+                            v_AllPointSources.Remove(v_ps);
                         }
                     }
 
-                    foreach (PIPointSource ps in allPointSources)
+                    foreach (PIPointSource v_ps in v_AllPointSources)
                     {
                         // Select the PointSource N & D with minimal PointCount
-                        if (ps.Name.Contains("D0"))
+                        if (v_ps.Name.Contains("D0"))
                         {
-                            if (currentDigitalPointCount is null || currentDigitalPointCount > ps.PointCount)
+                            if (v_CurrentDigitalPointCount is null || v_CurrentDigitalPointCount > v_ps.PointCount)
                             {
-                                digitalPointSource = ps.Name;
-                                currentDigitalPointCount = ps.PointCount;
+                                p_DigitalPointSource = v_ps.Name;
+                                v_CurrentDigitalPointCount = v_ps.PointCount;
                             }
                         }
-                        else if (ps.Name.Contains("N0"))
+                        else if (v_ps.Name.Contains("N0"))
                         {
-                            if (currentNumericalPointCount is null || currentNumericalPointCount > ps.PointCount)
+                            if (v_CurrentNumericalPointCount is null || v_CurrentNumericalPointCount > v_ps.PointCount)
                             {
-                                numericalPointSource = ps.Name;
-                                currentNumericalPointCount = ps.PointCount;
+                                p_NumericalPointSource = v_ps.Name;
+                                v_CurrentNumericalPointCount = v_ps.PointCount;
                             }
                         }
                         else { } // do nothing and go for the next PointSource }
@@ -213,12 +210,12 @@ namespace Models
         {
             string v_Trigramme = "";
 
-            foreach (string aliasServer in p_PIServer.AliasNames)
+            foreach (string v_AliasServer in p_PIServer.AliasNames)
             {
-                if (aliasServer.Contains("PI-DA-"))
+                if (v_AliasServer.Contains("PI-DA-"))
                 {
                     // Cut the Alias server name to get the trigramme (Example : PI-DA-LAD-AO >> LAD)
-                    v_Trigramme = aliasServer.Substring(6, 3);
+                    v_Trigramme = v_AliasServer.Substring(6, 3);
                 }
             }
             return v_Trigramme;
