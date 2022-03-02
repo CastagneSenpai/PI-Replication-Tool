@@ -1,7 +1,6 @@
 ﻿using NLog;
 using OSIsoft.AF.PI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Models
@@ -17,11 +16,11 @@ namespace Models
         }
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
-            List<OSIsoft.AF.PI.PIPoint> v_PIPointList = new List<OSIsoft.AF.PI.PIPoint>();
+            List<PIPoint> v_PIPointList = new List<PIPoint>();            
 
             foreach (string piTagNames in p_PITagNames)
             {
-                var v_PIPoint = OSIsoft.AF.PI.PIPoint.FindPIPoint(p_PIServer, piTagNames);
+                var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
                 v_PIPointList.Add(v_PIPoint);
             }
 
