@@ -62,9 +62,12 @@ namespace ViewModels
         public LoadTagsConfigurationViewModel()
         {
             SourceServer = _replicationManager.PIConnectionManager.PISourceServerName;
+            // if bouton ratio option 1
             _buttonLoadTags = new RelayCommand(
                 o => LoadAttributes(),
                 o => true);
+
+            //sinon :
         }
 
         void LoadAttributes()

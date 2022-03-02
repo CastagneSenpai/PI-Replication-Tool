@@ -10,16 +10,14 @@ namespace Models
     {
         static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
 
-        public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>() ;
+        public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
         public PIAttributesUpdateManager()
         {
 
         }
-
-        // TODO : Replace p_ListAttributes by the attribute in local instance this.AttributesTagsList
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
-            List<OSIsoft.AF.PI.PIPoint> v_PIPointList = new List<OSIsoft.AF.PI.PIPoint>();            
+            List<OSIsoft.AF.PI.PIPoint> v_PIPointList = new List<OSIsoft.AF.PI.PIPoint>();
 
             foreach (string piTagNames in p_PITagNames)
             {
@@ -32,38 +30,142 @@ namespace Models
                 AttributesTagsList.Add(v_PIPoint.GetAttributes());
             }
         }
-        internal void Clear()
+        public void Clear()
         {
             AttributesTagsList.Clear();
         }
 
         // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
-        public void UpdateTagsAttributes (PIServer p_PISourceServer, PIServer p_PITargetServer)
+        public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
-            this.UpdatePointSourceAttributes(p_PISourceServer, p_PITargetServer);
-            this.UpdateCompressionExceptionAttributes();
-            this.UpdateSecurityAttributes();
-            this.VerifyTypicalValues();
-            this.updateInstrumentTagAndTagName(p_PISourceServer, p_PITargetServer);
-        }
+            string digitalPointSource = "", numericalPointSource = "";
+            this.FindPointSourcesToUse(p_PISourceServer, p_PITargetServer, ref digitalPointSource, ref numericalPointSource);
 
-        private void updateInstrumentTagAndTagName(PIServer p_PISourceServer, PIServer p_PITargetServer)
+            // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
+            AttributesTagsList.ForEach(o => UpdateTagAttributes(p_PISourceServer, p_PITargetServer, o, digitalPointSource, numericalPointSource));
+        }
+        private void UpdateTagAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, IDictionary<string, object> tagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
         {
-            // to implement : for some affiliate, add a prexife to the name and put instrumettag = old tag name
-            throw new NotImplementedException();
+            try
+            {
+                this.UpdatePointSourceAttributes(p_PISourceServer, p_PITargetServer, tagAttributes, p_DigitalPointSource, p_NumericalPointSource);
+                this.UpdateCompressionExceptionAttributes(tagAttributes);
+                this.UpdateSecurityAttributes(tagAttributes);
+                this.VerifyTypicalValues(tagAttributes);
+                this.UpdateTagNameAndInstrumentTag(p_PISourceServer, tagAttributes);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating tags attributes. {e.Message}");
+            }
         }
+        private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, IDictionary<string, object> tagAttributes, string p_DigitalPointSource, string p_NumericalPointSource)
+        {
+            try
+            {
+                if ((string)tagAttributes["pointtype"] == "digital" || (string)tagAttributes["pointtype"] == "string")
+                {
+                    tagAttributes["pointsource"] = p_DigitalPointSource;
+                }
+                else
+                {
+                    tagAttributes["pointsource"] = p_NumericalPointSource;
+                }
 
-        private void UpdatePointSourceAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating compression and exception attributes. {e.Message}");
+            }
+        }
+        private void UpdateCompressionExceptionAttributes(IDictionary<string, object> tagAttributes)
+        {
+            try
+            {
+                // Put compression & exception parameter to 0
+                tagAttributes["compressing"] = 0;
+                tagAttributes["compdev"] = 0;
+                tagAttributes["compmin"] = 0;
+                tagAttributes["compmax"] = 0;
+                tagAttributes["compdevpercent"] = 0;
+
+                tagAttributes["excdev"] = 0;
+                tagAttributes["excmin"] = 0;
+                tagAttributes["excmax"] = 0;
+                tagAttributes["excdevpercent"] = 0;
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating compression and exception attributes. {e.Message}");
+            }
+        }
+        private void UpdateSecurityAttributes(IDictionary<string, object> tagAttributes)
+        {
+            try
+            {
+                tagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
+                tagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating security attributes. {e.Message}");
+            }
+        }
+        private void VerifyTypicalValues(IDictionary<string, object> tagAttributes)
+        {
+            try
+            {
+                float zero, typicalvalue, span;
+
+                zero = (float)tagAttributes["zero"];
+                typicalvalue = (float)tagAttributes["typicalvalue"];
+                span = (float)tagAttributes["span"];
+
+                // If typicalvalue do not respect PI rules in source server, remove typical value
+                if (typicalvalue < zero || typicalvalue > zero + span)
+                {
+                    tagAttributes["typicalvalue"] = null;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error verifying typicalValue, zero or span attributes. {e.Message}");
+            }
+        }
+        private void UpdateTagNameAndInstrumentTag(PIServer p_PISourceServer, IDictionary<string, object> tagAttributes)
+        {
+            try
+            {
+                // Update InstrumentTag
+                tagAttributes["instrumenttag"] = tagAttributes["tag"];
+
+                // Update TagName if source server is TEPNL, TEPUK or TEPGB
+                string Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
+                if (Trigramme == "NLD")
+                    tagAttributes["tag"] = "NLD_" + tagAttributes["tag"]; // NL : Prefixe NLD_
+
+                else if (Trigramme == "ABZ")
+                    tagAttributes["tag"] = "UK_" + tagAttributes["tag"]; // UK : Prefixe UK_
+
+                else if (Trigramme == "POG")
+                    tagAttributes["tag"] = "POG_" + tagAttributes["tag"]; // GB : Prefixe POG_
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error updating TagName and Instrumenttag attributes. {e.Message}");
+            }
+        }
+        private void FindPointSourcesToUse(PIServer p_PISourceServer, PIServer p_PITargetServer, ref string digitalPointSource, ref string numericalPointSource)
         {
             long? currentDigitalPointCount = null, currentNumericalPointCount = null;
-            string digitalPointSource = "", numericalPointSource = "";
             string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
 
             if (v_Trigramme != null)
             {
                 try
                 {
-                
                     // Get the PointSource of PI Target Server
                     ICollection<PIPointSource> allPointSources = p_PITargetServer.PointSources;
 
@@ -102,38 +204,17 @@ namespace Models
                 {
                     Logger.Error($"Error selecting the point sources to use from PI target server point source list. {e.Message}");
                 }
-
-                try
-                {
-                    // Foreach tag, if Numerical, replace PointSource by N0X, else D0X.
-                    foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
-                    {
-                        if((string)tagAttributes["pointtype"] == "digital" || (string)tagAttributes["pointtype"] == "string")
-                        {
-                            tagAttributes["pointsource"] = digitalPointSource;
-                        }
-                        else
-                        {
-                            tagAttributes["pointsource"] = numericalPointSource;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error($"Error updating compression and exception attributes. {e.Message}");
-                }
             }
             else
             {
                 Logger.Warn($"The PI server {p_PISourceServer} does not contain an alias with the trigramme of site, which cause the application to not retrieve the Point sources to use.");
             }
         }
-
-        private string GetTrigrammeFromPIServer(PIServer p_PIServer)
+        public string GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             string v_Trigramme = "";
 
-            foreach(string aliasServer in p_PIServer.AliasNames)
+            foreach (string aliasServer in p_PIServer.AliasNames)
             {
                 if (aliasServer.Contains("PI-DA-"))
                 {
@@ -142,72 +223,6 @@ namespace Models
                 }
             }
             return v_Trigramme;
-        }
-
-        private void UpdateCompressionExceptionAttributes()
-        {
-            try
-            {
-                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
-                {
-                    // Put compression & exception parameter to 0
-                    tagAttributes["compressing"] = 0;
-                    tagAttributes["compdev"] = 0;
-                    tagAttributes["compmin"] = 0;
-                    tagAttributes["compmax"] = 0;
-                    tagAttributes["compdevpercent"] = 0;
-
-                    tagAttributes["excdev"] = 0;
-                    tagAttributes["excmin"] = 0;
-                    tagAttributes["excmax"] = 0;
-                    tagAttributes["excdevpercent"] = 0;
-                }
-            }
-            catch(Exception e)
-            {
-                Logger.Error($"Error updating compression and exception attributes. {e.Message}");
-            }
-        }
-
-        private void UpdateSecurityAttributes()
-        {
-            try
-            {
-                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
-                {
-                    tagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
-                    tagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Error updating security attributes. {e.Message}");
-            }
-        }
-
-        private void VerifyTypicalValues()
-        {
-            try
-            {
-                float zero, typicalvalue, span;
-
-                foreach (IDictionary<string, object> tagAttributes in AttributesTagsList)
-                {
-                    zero = (float)tagAttributes["zero"];
-                    typicalvalue = (float)tagAttributes["typicalvalue"];
-                    span = (float)tagAttributes["span"];
-                    
-                    // If typicalvalue do not respect PI rules in source server, remove typical value
-                    if (typicalvalue < zero || typicalvalue > zero+span)
-                    {
-                        tagAttributes["typicalvalue"] = null;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Error verifying typicalValue, zero or span attributes. {e.Message}");
-            }
         }
     }
 }
