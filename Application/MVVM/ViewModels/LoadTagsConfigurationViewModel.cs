@@ -61,6 +61,8 @@ namespace ViewModels
             _buttonLoadTags = new RelayCommand(
                 o => LoadAttributes(),
                 o => true);
+
+            //sinon :
         }
 
         void LoadAttributes()

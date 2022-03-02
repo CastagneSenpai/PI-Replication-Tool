@@ -17,8 +17,7 @@ namespace Models
             {
                 int counter = 0;
                 //foreach (string line in File.ReadLines(@"C:\Users\WL1000621\Desktop\input.txt"))
-                foreach (string line in File.ReadLines(@"\\main.glb.corp.local\FRHDTAR$\Homes\L1000621\Desktop\input.txt"))
-                //foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
+                foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
