@@ -13,7 +13,6 @@ namespace ViewModels
         private readonly AsyncCommand _buttonConnectTargetServer;
 
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
-        //public PIReplicationManager PIReplicationManager;
 
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
@@ -21,7 +20,7 @@ namespace ViewModels
         {
             set
             {
-                SetProperty(ref _selectedSourceServer, value);  
+                SetProperty(ref _selectedSourceServer, value);
                 OnPropertyChanged(nameof(SelectedSourceServer));
                 _buttonConnectSourceServer.RaiseCanExecuteChanged();
             }
@@ -36,11 +35,7 @@ namespace ViewModels
                 _buttonConnectTargetServer.RaiseCanExecuteChanged();
             }
             get => _selectedTargetServer;
-        }       
-        
-        //public RelayCommand ButtonConnectSourceServer { get; set; }
-        //public RelayCommand ButtonConnectTargetServer { get; set; }
-        //public RelayCommand ButtonNextView { get; set; }        
+        }
 
         public IAsyncCommand ButtonConnectSourceServer => _buttonConnectSourceServer;
         public IAsyncCommand ButtonConnectTargetServer => _buttonConnectTargetServer;
@@ -48,27 +43,12 @@ namespace ViewModels
         // CONSTRUCTEUR
         public ConnectionViewModel()
         {
-
-            //PIReplicationManager = toto;
-
             var PILocalServers = PIServers.GetPIServers();
             ListSourceServer = PILocalServers;
             ListTargetServer = PILocalServers;
 
             _buttonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync, CanConnectOnSourceServer);
             _buttonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync, CanConnectOnTargetServer);
-
-            //ButtonConnectSourceServer = new RelayCommand(
-            //    o => PIReplicationManager.PIConnectionManager.ConnectToPISourceServer(SelectedSourceServer));
-            ////o => SelectedSourceServer.Length > 0);
-
-            //ButtonConnectTargetServer = new RelayCommand(
-            //    o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
-            //o => SelectedTargetServer.Length > 0);
-
-            // TODO : change function called to execute
-            //ButtonNextView = new RelayCommand(
-            //    o => PIReplicationManager.PIConnectionManager.ConnectToPITargetServer(SelectedTargetServer));
         }
 
         private async Task ConnectPISourceServerAsync()
@@ -77,7 +57,7 @@ namespace ViewModels
         }
 
         private bool CanConnectOnSourceServer()
-        {           
+        {
             return !string.IsNullOrEmpty(SelectedSourceServer);
         }
 

@@ -3,47 +3,45 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public static class Mediator
+    public sealed class Mediator
     {
-        private static readonly IDictionary<string, List<Action<object>>> pl_dict =
-           new Dictionary<string, List<Action<object>>>();
+        private static readonly Mediator instance = new Mediator();
+        private readonly Dictionary<string, List<Action<object>>> pl_dict
+          = new Dictionary<string, List<Action<object>>>();
 
-        public static void Subscribe(string token, Action<object> callback)
+        private Mediator() { }
+
+        public static Mediator Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public void Subscribe(string token, Action<object> callback)
         {
             if (!pl_dict.ContainsKey(token))
             {
-                var list = new List<Action<object>>
-                {
-                    callback
-                };
-                pl_dict.Add(token, list);
-
-                //var list = new List<Action<object>>();
-                //list.Add(callback);
-                //pl_dict.Add(token, list);
+                pl_dict[token] = new List<Action<object>>();
             }
-            else
+
+            pl_dict[token].Add(callback);
+        }
+
+        public void Unsubscribe(string token, Action<object> callback)
+        {
+            pl_dict[token].Remove(callback);
+
+            if (pl_dict[token].Count == 0)
             {
-                bool found = false;
-                foreach (var item in pl_dict[token])
-                    if (item.Method.ToString() == callback.Method.ToString())
-                        found = true;
-                if (!found)
-                    pl_dict[token].Add(callback);
+                pl_dict.Remove(token);
             }
         }
 
-        public static void Unsubscribe(string token, Action<object> callback)
+        public void Notify(string token, object args = null)
         {
-            if (pl_dict.ContainsKey(token))
-                pl_dict[token].Remove(callback);
-        }
-
-        public static void Notify(string token, object args = null)
-        {
-            if (pl_dict.ContainsKey(token))
-                foreach (var callback in pl_dict[token])
-                    callback(args);
+            pl_dict[token].ForEach(callback => callback(args));
         }
     }
 }

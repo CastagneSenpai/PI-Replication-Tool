@@ -9,7 +9,7 @@ namespace ViewModels
 {
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
-        private readonly PIReplicationManager _replicationManager = PIReplicationManager.ReplicationManager;
+        public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
         private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
@@ -19,7 +19,7 @@ namespace ViewModels
             get
             {
                 if (_collectionViewSource.View != null)
-                {                    
+                {
                     _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
                     return _collectionViewSource?.View;
                 }
@@ -47,7 +47,7 @@ namespace ViewModels
             }
             set
             {
-                _sourceServer = _replicationManager.PIConnectionManager.PISourceServerName;
+                _sourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
@@ -57,7 +57,7 @@ namespace ViewModels
 
         public LoadTagsConfigurationViewModel()
         {
-            SourceServer = _replicationManager.PIConnectionManager.PISourceServerName;
+            SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
             _buttonLoadTags = new RelayCommand(
                 o => LoadAttributes(),
                 o => true);
@@ -68,22 +68,20 @@ namespace ViewModels
             List<string> v_TagsNameList = new List<string>();
             FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
 
-            _replicationManager.PIAttributesUpdateManager.Clear();
+            ReplicationManager.PIAttributesUpdateManager.Clear();
+            _collectionTags.Clear();
 
-            _replicationManager.PIAttributesUpdateManager.LoadTagsAttributes(_replicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
             Populate();
-            //var test = Attributes;
             OnPropertyChanged("Attributes");
-            //_collectionViewSource.View.CurrentChanged += (sender, e) => PIPoint = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
 
-            // TODO : A réactiver lorsque chargement du tableau sur le bouton
-            //FilesManager.CreateTagsOutputFile(AttributesTagsList);
+            FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList);
         }
 
         private void Populate()
         {
-            foreach (var pipoint in _replicationManager.PIAttributesUpdateManager.AttributesTagsList)
+            foreach (var pipoint in ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 _collectionTags.Add(new PIPointGridFormat(
                     pipoint["tag"] as string,
@@ -109,6 +107,5 @@ namespace ViewModels
             }
             _collectionViewSource.Source = _collectionTags;
         }
-
     }
 }

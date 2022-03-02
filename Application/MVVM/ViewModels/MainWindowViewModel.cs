@@ -10,7 +10,7 @@ namespace ViewModels
 {
     public class MainWindowViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager PIReplicationManager = new PIReplicationManager();
+        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
 
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
@@ -22,8 +22,52 @@ namespace ViewModels
             {
                 return _buttonNextView ?? (_buttonNextView = new RelayCommand(x =>
                 {
-                    //Mediator.Notify("GoToLoadTagConfigurationScreen", "");
-                    ChangeViewModel(PageViewModels[1]);
+                    Mediator.Instance.Notify(GetNextViewModel(), "");
+                },
+               o =>
+               {
+                   if (PIReplicationManager.PIConnectionManager.PISourceServer != null && PIReplicationManager.PIConnectionManager.PITargetServer != null)
+                       return PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected;
+                    return false;
+               }
+                ));
+            }
+        }
+
+        private ICommand _connectionMenuButton;
+        public ICommand ConnectionMenuButton
+        {
+            get
+            {
+                return _connectionMenuButton ?? (_connectionMenuButton = new RelayCommand(x =>
+                {
+                    Mediator.Instance.Notify("GoToConnectionScreen", "");
+                }
+                ));
+            }
+        }
+
+        private ICommand _loadTagsAttributesMenuButton;
+        public ICommand LoadTagsAttributesMenuButton
+        {
+            get
+            {
+                return _loadTagsAttributesMenuButton ?? (_loadTagsAttributesMenuButton = new RelayCommand(x =>
+                {
+                    Mediator.Instance.Notify("GoToLoadTagConfigurationScreen", "");
+                }
+                ));
+            }
+        }
+
+        private ICommand _pushTagsAttributesMenuButton;
+        public ICommand PushTagsAttributesMenuButton
+        {
+            get
+            {
+                return _pushTagsAttributesMenuButton ?? (_pushTagsAttributesMenuButton = new RelayCommand(x =>
+                {
+                    Mediator.Instance.Notify("GoToPushTagConfigurationScreen", "");
                 }
                 ));
             }
@@ -61,6 +105,24 @@ namespace ViewModels
             CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
         }
 
+        private string GetNextViewModel()
+        {
+            var index = PageViewModels.FindIndex(vm => vm == CurrentPageViewModel);
+            IPageViewModel v_nextViewModel = PageViewModels.Find(vm => vm == PageViewModels[index]);
+            switch (v_nextViewModel.ToString())
+            {
+                case "ViewModels.ConnectionViewModel":
+                    return "GoToLoadTagConfigurationScreen";
+                case "ViewModels.LoadTagsConfigurationViewModel":
+                    return "GoToPushTagConfigurationScreen";
+                case "ViewModels.PushTagsConfigurationViewModel":
+                    return "GoToPushTagConfigurationScreen";
+                default:
+                    // Go to main page in case of errors
+                    return "GoToConnectionScreen";
+            }
+        }
+
         private void OnGoConnectionScreen(object obj)
         {
             ChangeViewModel(PageViewModels[0]);
@@ -77,10 +139,10 @@ namespace ViewModels
         }
 
 
-       public void LogTextUpdate()
-       {
+        public void LogTextUpdate()
+        {
             throw new NotImplementedException();
-       }
+        }
 
         public MainWindowViewModel()
         {
@@ -91,9 +153,9 @@ namespace ViewModels
 
             CurrentPageViewModel = PageViewModels[0];
 
-            Mediator.Subscribe("GoToConnectionScreen", OnGoConnectionScreen);
-            Mediator.Subscribe("GoToLoadTagConfigurationScreen", OnGoLoadTagConfigurationScreen);
-            Mediator.Subscribe("GoToPushTagConfigurationScreen", OnGoPushTagConfigurationScreen);
+            Mediator.Instance.Subscribe("GoToConnectionScreen", OnGoConnectionScreen);
+            Mediator.Instance.Subscribe("GoToLoadTagConfigurationScreen", OnGoLoadTagConfigurationScreen);
+            Mediator.Instance.Subscribe("GoToPushTagConfigurationScreen", OnGoPushTagConfigurationScreen);
         }
     }
 }

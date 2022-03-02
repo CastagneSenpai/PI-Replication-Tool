@@ -119,35 +119,37 @@
                    Foreground="White"
                    Background="#2e86de"
                    Margin="0,20,0,0"/>
-            <ListBox Grid.Row="0"
-                      ItemsSource="{Binding Connection}" 
+            <!--<ListBox Grid.Row="0"
+                      ItemsSource="{Binding ConnectionMenuButton}" 
                       Background="Transparent"
                       BorderThickness="0"
-                      ItemContainerStyle="{StaticResource ConnectionCard}"/>
+                      ItemContainerStyle="{StaticResource ConnectionCard}"/>-->
 
-            <Label Grid.Row="1" 
+            <Button Grid.Row="1" 
                    Content="Load Tags Attributes"
                    HorizontalContentAlignment="Center"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
-                   Foreground="#8395a7"
-                   Margin="0,20,0,0"/>
-            <ListBox Grid.Row="1"
-                      ItemsSource="{Binding LoadTagsAttributes}" 
+                   Foreground="white"
+                   Margin="0,20,0,0"
+                   Command="{Binding LoadTagsAttributesMenuButton}"/>
+            <!--<ListBox Grid.Row="1"
+                      ItemsSource="{Binding LoadTagsAttributesMenuButton}" 
                       Background="Transparent"
-                      BorderThickness="0"/>
+                      BorderThickness="0"/>-->
 
-            <Label Grid.Row="2"
+            <Button Grid.Row="2"
                     Content="Push Tags Attributes"
                     HorizontalContentAlignment="Center"
                     VerticalAlignment="Center"
                     FontWeight="Medium"
-                    Foreground="#8395a7"
-                    Margin="0,20,0,0"/>
-            <ListBox ItemsSource="{Binding PushTagsAttributes}" 
+                    Foreground="white"
+                    Margin="0,20,0,0"
+                    Command="{Binding PushTagsAttributesMenuButton}"/>
+            <!--<ListBox ItemsSource="{Binding PushTagsAttributes}" 
                       Background="Transparent"
                       BorderThickness="0"
-                      Grid.Row="2"/>
+                      Grid.Row="2"/>-->
         </Grid>
 
         <!-- Bottom Bar -->
@@ -155,7 +157,7 @@
 
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="logwindow" Text="{Binding LogTextUpdate, Mode=TwoWay }">
-                    
+
                     <!--<RichTextBox.Resources>
 
                     </RichTextBox.Resources>
