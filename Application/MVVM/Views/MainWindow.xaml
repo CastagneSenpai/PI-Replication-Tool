@@ -46,6 +46,21 @@
                        FontSize="12px"
                        VerticalAlignment="Center"/>
 
+                <StackPanel HorizontalAlignment="Left"
+                            Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
+
+                    <Button Width="50" Height="40" 
+                        Content="&lt;"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#FFFFFF"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        FontSize="15"
+                        Click="BackButton_Click"/>
+                </StackPanel>
+
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
 
@@ -106,20 +121,22 @@
               Grid.Row="2" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="80" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" 
+            <Button Grid.Row="0" 
                    Content="Connection"
                    HorizontalContentAlignment="Center"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
-                   Foreground="White"
+                   Foreground="white"
                    Background="#2e86de"
                    FontSize="12px"
-                   Margin="0,20,0,0"/>
+                   Margin="0,0,0,0"
+                   Height="25"
+                   Command="{Binding ConnectionMenuButton}"/>
             <!--<ListBox Grid.Row="0"
                       ItemsSource="{Binding ConnectionMenuButton}" 
                       Background="Transparent"
@@ -145,7 +162,7 @@
             <Button Grid.Row="2"
                     Content="Push Tags Attributes"
                     HorizontalContentAlignment="Center"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     FontWeight="Medium"
                     Foreground="white"
                     Background="#2e86de"
