@@ -11,8 +11,11 @@ namespace ViewModels
     {
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
-        private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
-        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
+        //private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
+        //private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
+
+        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection._collectionViewSource;
+        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection._collectionTags;
 
         public ICollectionView Attributes
         {

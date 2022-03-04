@@ -101,6 +101,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\NLogMemorityTarget.cs" />
     <Compile Include="Core\TotalEnergiesInfra.cs" />
+    <Compile Include="MVVM\Models\DataGridCollection.cs" />
     <Compile Include="MVVM\Models\PIPointGridFormat.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Page Include="MVVM\Themes\ConnectionCard.xaml">

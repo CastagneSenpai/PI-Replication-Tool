@@ -1,4 +1,6 @@
-﻿namespace Models
+﻿using PI_Replication_Tool.MVVM.Models;
+
+namespace Models
 {
     public sealed class PIReplicationManager
     {
@@ -27,5 +29,6 @@
 
         public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
+        public DataGridCollection DataGridCollection = new DataGridCollection();
     }
 }

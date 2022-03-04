@@ -60,7 +60,7 @@ namespace Models
                 // Write lines in output file
                 //TODO : différencier si source ou target file (pour le moment, source uniquement)
                 //string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                string outputFileFullName = @"\\main.glb.corp.local\FRHDTAR$\Homes\L1000621\Desktop\" + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
+                string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
                 //File.Create(outputFileFullName);
                 File.WriteAllLines(outputFileFullName, FileLines);
                 FileLines.Clear();

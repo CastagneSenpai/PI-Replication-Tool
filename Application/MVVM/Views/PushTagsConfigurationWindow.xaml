@@ -166,23 +166,8 @@
                 Command="{Binding ButtonUpdateTags}">
         </Button>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
-                Content="Exit"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Bottom"
-                Margin="0,0,20,0"
-                Height="25"
-                Width="90"
-                FontFamily="Arial"
-                Foreground="#FFFFFF"
-                Background="#2e86de"
-                Command="{Binding ButtonExit}">
-        </Button>
-
-
-
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="True" ItemsSource="{Binding Attributes}">
+            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="False" ItemsSource="{Binding Attributes}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
