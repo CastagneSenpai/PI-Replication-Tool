@@ -209,6 +209,8 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\check.png" />
+    <Resource Include="Assets\cross.png" />
     <Content Include="Assets\Spinner.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

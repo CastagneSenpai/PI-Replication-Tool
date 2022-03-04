@@ -46,6 +46,21 @@
                        FontSize="12px"
                        VerticalAlignment="Center"/>
 
+                <StackPanel HorizontalAlignment="Left"
+                            Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
+
+                    <Button Width="50" Height="40" 
+                        Content="&lt;"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#FFFFFF"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        FontSize="15"
+                        Click="BackButton_Click"/>
+                </StackPanel>
+
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
 
@@ -111,14 +126,17 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" 
+            <Button Grid.Row="0" 
                    Content="Connection"
                    HorizontalContentAlignment="Center"
                    VerticalAlignment="Center"
                    FontWeight="Medium"
-                   Foreground="White"
+                   Foreground="white"
                    Background="#2e86de"
-                   Margin="0,20,0,0"/>
+                   FontSize="12px"
+                   Margin="0,0,0,0"
+                   Height="25"
+                   Command="{Binding ConnectionMenuButton}"/>
             <!--<ListBox Grid.Row="0"
                       ItemsSource="{Binding ConnectionMenuButton}" 
                       Background="Transparent"
@@ -131,7 +149,10 @@
                    VerticalAlignment="Center"
                    FontWeight="Medium"
                    Foreground="white"
-                   Margin="0,20,0,0"
+                   Background="#2e86de"
+                   FontSize="12px"
+                   Margin="0,0,0,0"
+                   Height="25"
                    Command="{Binding LoadTagsAttributesMenuButton}"/>
             <!--<ListBox Grid.Row="1"
                       ItemsSource="{Binding LoadTagsAttributesMenuButton}" 
@@ -144,7 +165,9 @@
                     VerticalAlignment="Center"
                     FontWeight="Medium"
                     Foreground="white"
-                    Margin="0,20,0,0"
+                    Background="#2e86de"
+                    Height="25"
+                    FontSize="12px"
                     Command="{Binding PushTagsAttributesMenuButton}"/>
             <!--<ListBox ItemsSource="{Binding PushTagsAttributes}" 
                       Background="Transparent"

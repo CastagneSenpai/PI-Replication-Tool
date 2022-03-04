@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Commands;
+using Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -38,6 +39,20 @@ namespace ViewModels
             {
                 this._pipointgridformat = value;
                 OnPropertyChanged(nameof(PIPointGridFormat));
+            }
+        }
+
+        private string _destinationServer;
+        public string DestinationServer
+        {
+            get
+            {
+                return _destinationServer;
+            }
+            set
+            {
+                _destinationServer = ReplicationManager.PIConnectionManager.PITargetServerName;
+                OnPropertyChanged(nameof(DestinationServer));
             }
         }
     }

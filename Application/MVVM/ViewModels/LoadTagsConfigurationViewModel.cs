@@ -112,5 +112,9 @@ namespace ViewModels
             }
             _collectionViewSource.Source = _collectionTags;
         }
+
+        private string destinationServer;
+
+        public string DestinationServer { get => destinationServer; set => SetProperty(ref destinationServer, value); }
     }
 }

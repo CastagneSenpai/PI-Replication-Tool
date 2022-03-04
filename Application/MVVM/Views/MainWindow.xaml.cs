@@ -48,6 +48,11 @@ namespace Views
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
 
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
 
         //private void LogText(string message)
         //{
