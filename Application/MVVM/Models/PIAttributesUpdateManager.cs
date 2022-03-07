@@ -79,15 +79,15 @@ namespace Models
                 }
             }
 
-            // Count how many space is available for numerical and digital point source liste
-            long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(ps =>
+            // Count how many space is available for numerical and digital Pointsources list
+            long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
             {
-                return int.Parse(ConfigurationManager.AppSettings["NumericalMaxPointCountAllowed"]) - ps.PointCount;
+                return int.Parse(ConfigurationManager.AppSettings["NumericalMaxPointCountAllowed"]) - v_PS.PointCount;
             });
 
-            long v_AvailableDigitalPointSpace = this.PointSources_Digital.Sum(ps =>
+            long v_AvailableDigitalPointSpace = this.PointSources_Digital.Sum(v_PS =>
             {
-                return int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]) - ps.PointCount;
+                return int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]) - v_PS.PointCount;
             });
 
             // return true if there is enought space for the replication, else return false
