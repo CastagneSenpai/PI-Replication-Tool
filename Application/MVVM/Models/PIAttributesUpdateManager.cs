@@ -38,8 +38,6 @@ namespace Models
         // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
-            // string v_DigitalPointSource = "", v_NumericalPointSource = "";
-            // this.FindPointSourcesToUse(p_PISourceServer, p_PITargetServer, ref v_DigitalPointSource, ref v_NumericalPointSource);
             if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
             {
                 // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
@@ -54,15 +52,15 @@ namespace Models
 
         private bool IsThereEnoughtPointSourcesAvailable(PIServer p_PITargetServer)
         {
-            int v_NbNumerical = 0, v_NbDigital = 0;
+            int v_NbNumericalTagsToReplicate = 0, v_NbDigitalTagsToReplicate = 0;
 
             // Count how many digital & numerical tags have to be replicated
             foreach (IDictionary<string, object> v_AttributesTag in AttributesTagsList)
             {
                 if ((string)v_AttributesTag["pointtype"] == "digital" || (string)v_AttributesTag["pointtype"] == "string")
-                    v_NbDigital++;
+                    v_NbDigitalTagsToReplicate++;
                 else
-                    v_NbNumerical++;
+                    v_NbNumericalTagsToReplicate++;
             }
 
             // Update local variables PointSources_Numerical & PointSources_Digital using the PointSources list
@@ -91,10 +89,21 @@ namespace Models
             });
 
             // return true if there is enought space for the replication, else return false
-            if (v_AvailableNumericalPointSpace >= v_NbNumerical && v_AvailableDigitalPointSpace >= v_NbDigital)
+            if (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate)
+            {
+                this.DistributeLoadOnPointSources(v_NbNumericalTagsToReplicate, v_NbDigitalTagsToReplicate);
                 return true;
+            }
             else
                 return false;
+        }
+
+        private void DistributeLoadOnPointSources(int v_NbNumericalTagsToReplicate, int v_NbDigitalTagsToReplicate)
+        {
+            for(int i = 0; i < v_NbNumericalTagsToReplicate; i++)
+            {
+                // TODO : Pour chaque point source numérique, définir combien de tags vont aller dessus
+            }
         }
 
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
