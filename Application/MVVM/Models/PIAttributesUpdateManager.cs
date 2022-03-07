@@ -2,6 +2,7 @@
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace Models
 {
@@ -15,7 +16,7 @@ namespace Models
         }
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
-            List<PIPoint> v_PIPointList = new List<PIPoint>();            
+            List<PIPoint> v_PIPointList = new List<PIPoint>();
 
             foreach (string piTagNames in p_PITagNames)
             {
@@ -27,10 +28,6 @@ namespace Models
             {
                 AttributesTagsList.Add(v_PIPoint.GetAttributes());
             }
-        }
-        public void Clear()
-        {
-            AttributesTagsList.Clear();
         }
         // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
@@ -48,8 +45,17 @@ namespace Models
                 this.UpdatePointSourceAttributes(ref p_TagAttributes, p_DigitalPointSource, p_NumericalPointSource);
                 this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
-                this.VerifyTypicalValues(ref p_TagAttributes);
-                this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
+
+                // Actions on digital tags
+                if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
+                {
+                    this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
+                }
+                // Action on numerical tags
+                else 
+                {
+                    this.VerifyTypicalValues(ref p_TagAttributes);
+                }
             }
             catch (Exception e)
             {
@@ -100,8 +106,8 @@ namespace Models
         {
             try
             {
-                p_TagAttributes["datasecurity"] = Constants.PISecurityConfiguration;
-                p_TagAttributes["ptsecurity"] = Constants.PISecurityConfiguration;
+                p_TagAttributes["datasecurity"] = ConfigurationManager.AppSettings["PISecurityConfiguration"];
+                p_TagAttributes["ptsecurity"] = ConfigurationManager.AppSettings["PISecurityConfiguration"];
             }
             catch (Exception e)
             {
@@ -206,6 +212,7 @@ namespace Models
                 Logger.Warn($"The PI server {p_PISourceServer} does not contain an alias with the trigramme of site, which cause the application to not retrieve the Point sources to use.");
             }
         }
+        // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
         public string GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             string v_Trigramme = "";
@@ -219,6 +226,10 @@ namespace Models
                 }
             }
             return v_Trigramme;
+        }
+        public void Clear()
+        {
+            AttributesTagsList.Clear();
         }
     }
 }

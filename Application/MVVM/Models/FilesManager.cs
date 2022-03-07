@@ -1,6 +1,7 @@
 ﻿using NLog;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Windows;
 
@@ -17,7 +18,7 @@ namespace Models
             {
                 int counter = 0;
                 //foreach (string line in File.ReadLines(@"C:\Users\WL1000621\Desktop\input.txt"))
-                foreach (string line in File.ReadLines(Constants.InputPath + Constants.InputFileName))
+                foreach (string line in File.ReadLines(ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"]))
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
@@ -42,7 +43,7 @@ namespace Models
                 string header = "";
                 foreach (string attributesName in p_AttributesValueList[0].Keys)
                 {
-                    header += attributesName + Constants.fieldSeparator;
+                    header += attributesName + ConfigurationManager.AppSettings["fieldSeparator"];
                 }
                 FileLines.Add(header);
 
@@ -52,15 +53,16 @@ namespace Models
                     string currentLine = "";
                     foreach (object attribute in currentTag.Values)
                     {
-                        currentLine += attribute.ToString() + Constants.fieldSeparator;
+                        currentLine += attribute.ToString() + ConfigurationManager.AppSettings["fieldSeparator"];
                     }
                     FileLines.Add(currentLine);
                 }
 
                 // Write lines in output file
                 //TODO : différencier si source ou target file (pour le moment, source uniquement)
+
                 //string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
+                string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + ConfigurationManager.AppSettings["OutputFileName_SourceTags"] + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
                 //File.Create(outputFileFullName);
                 File.WriteAllLines(outputFileFullName, FileLines);
                 FileLines.Clear();
