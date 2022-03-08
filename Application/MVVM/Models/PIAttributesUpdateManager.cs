@@ -38,7 +38,6 @@ namespace Models
                 AttributesTagsList.Add(v_PIPoint.GetAttributes());
             }
         }
-        // Main method of PIAttributeUpdateManager, called to update the AttributesTagsList before pushing to target server
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
             if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
