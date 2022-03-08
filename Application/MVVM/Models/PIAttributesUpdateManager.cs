@@ -2,6 +2,7 @@
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 
@@ -12,9 +13,11 @@ namespace Models
         // ATTRIBUTES
         static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
         public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
-        public ICollection<PIPointSource> PointSources_Digital { get; set; }
-        public ICollection<PIPointSource> PointSources_Numerical { get; set; }
-        public string Trigram { get; set; }
+        public ICollection<PIPointSource> PointSources_Digital { get; set; } = new Collection<PIPointSource>();
+        public ICollection<PIPointSource> PointSources_Numerical { get; set; } = new Collection<PIPointSource>();
+        Dictionary<string, long> NumericalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
+        Dictionary<string, long> DigitalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
+        public string Trigram { get; set; } = "";
 
         // CONSTRUCTOR
         public PIAttributesUpdateManager() { }
@@ -49,63 +52,6 @@ namespace Models
             }
 
         }
-
-        private bool IsThereEnoughtPointSourcesAvailable(PIServer p_PITargetServer)
-        {
-            int v_NbNumericalTagsToReplicate = 0, v_NbDigitalTagsToReplicate = 0;
-
-            // Count how many digital & numerical tags have to be replicated
-            foreach (IDictionary<string, object> v_AttributesTag in AttributesTagsList)
-            {
-                if ((string)v_AttributesTag["pointtype"] == "digital" || (string)v_AttributesTag["pointtype"] == "string")
-                    v_NbDigitalTagsToReplicate++;
-                else
-                    v_NbNumericalTagsToReplicate++;
-            }
-
-            // Update local variables PointSources_Numerical & PointSources_Digital using the PointSources list
-            foreach (PIPointSource v_PS in p_PITargetServer.PointSources)
-            {
-                if (v_PS.Name.Contains(this.Trigram) && v_PS.Name.Contains("N0"))
-                {
-                    this.PointSources_Numerical.Add(v_PS);
-                }
-
-                else if (v_PS.Name.Contains(this.Trigram) && v_PS.Name.Contains("D0"))
-                {
-                    this.PointSources_Digital.Add(v_PS);
-                }
-            }
-
-            // Count how many space is available for numerical and digital Pointsources list
-            long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
-            {
-                return int.Parse(ConfigurationManager.AppSettings["NumericalMaxPointCountAllowed"]) - v_PS.PointCount;
-            });
-
-            long v_AvailableDigitalPointSpace = this.PointSources_Digital.Sum(v_PS =>
-            {
-                return int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]) - v_PS.PointCount;
-            });
-
-            // return true if there is enought space for the replication, else return false
-            if (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate)
-            {
-                this.DistributeLoadOnPointSources(v_NbNumericalTagsToReplicate, v_NbDigitalTagsToReplicate);
-                return true;
-            }
-            else
-                return false;
-        }
-
-        private void DistributeLoadOnPointSources(int v_NbNumericalTagsToReplicate, int v_NbDigitalTagsToReplicate)
-        {
-            for(int i = 0; i < v_NbNumericalTagsToReplicate; i++)
-            {
-                // TODO : Pour chaque point source numérique, définir combien de tags vont aller dessus
-            }
-        }
-
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
             try
@@ -134,20 +80,33 @@ namespace Models
         {
             try
             {
-                //if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
-                //{
-                //    p_TagAttributes["pointsource"] = p_DigitalPointSource;
-                //}
-                //else
-                //{
-                //    p_TagAttributes["pointsource"] = p_NumericalPointSource;
-                //}
+                if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
+                {
+                    // Get the PointSource and available space pair
+                    var v_PointSource = GetPointSourceForCurrentTag(this.DigitalPSAndRemainingSpace);
+
+                    // Set the PointSource
+                    p_TagAttributes["pointsource"] = v_PointSource.Key;
+
+                    // -1 free space for this PointSource
+                    this.DigitalPSAndRemainingSpace[v_PointSource.Key] -= 1;
+                }
+                else
+                {
+                    var v_PointSource = GetPointSourceForCurrentTag(this.NumericalPSAndRemainingSpace);
+                    
+                    // Set the PointSource
+                    p_TagAttributes["pointsource"] = v_PointSource.Key;
+
+                    // -1 free space for this PointSource
+                    this.NumericalPSAndRemainingSpace[v_PointSource.Key] -= 1;
+                }
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating PointSource attribute. {e.Message}");
             }
-        }
+        } 
         private void UpdateCompressionExceptionAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
@@ -230,62 +189,68 @@ namespace Models
                 Logger.Error($"Error updating TagName and Instrumenttag attributes. {e.Message}");
             }
         }
-        //private void FindPointSourcesToUse(PIServer p_PISourceServer, PIServer p_PITargetServer, ref string p_DigitalPointSource, ref string p_NumericalPointSource)
-        //{
-        //    long? v_CurrentDigitalPointCount = null, v_CurrentNumericalPointCount = null;
-        //    string v_Trigramme = this.GetTrigrammeFromPIServer(p_PISourceServer);
+        private bool IsThereEnoughtPointSourcesAvailable(PIServer p_PITargetServer)
+        {
+            int v_NbNumericalTagsToReplicate = 0, v_NbDigitalTagsToReplicate = 0;
 
-        //    if (v_Trigramme != null)
-        //    {
-        //        try
-        //        {
-        //            // Get the PointSource of PI Target Server
-        //            ICollection<PIPointSource> v_AllPointSources = p_PITargetServer.PointSources;
+            // Count how many digital & numerical tags have to be replicated
+            foreach (IDictionary<string, object> v_AttributesTag in AttributesTagsList)
+            {
+                if ((string)v_AttributesTag["pointtype"] == "digital" || (string)v_AttributesTag["pointtype"] == "string")
+                    v_NbDigitalTagsToReplicate++;
+                else
+                    v_NbNumericalTagsToReplicate++;
+            }
 
-        //            foreach (PIPointSource v_ps in v_AllPointSources)
-        //            {
-        //                // Select the PointSource which contains the trigramme - Remove the others
-        //                if (!v_ps.Name.Contains(v_Trigramme))
-        //                {
-        //                    v_AllPointSources.Remove(v_ps);
-        //                }
-        //            }
+            // Update collection PointSources_Numerical & PointSources_Digital using the Trigram and the PIPointSources list
+            foreach (PIPointSource v_PS in p_PITargetServer.PointSources)
+            {
+                if (v_PS.Name.Contains(this.Trigram) && v_PS.Name.Contains("N0"))
+                {
+                    this.PointSources_Numerical.Add(v_PS);
+                }
 
-        //            foreach (PIPointSource v_ps in v_AllPointSources)
-        //            {
-        //                // Select the PointSource N & D with minimal PointCount
-        //                if (v_ps.Name.Contains("D0"))
-        //                {
-        //                    if (v_CurrentDigitalPointCount is null || v_CurrentDigitalPointCount > v_ps.PointCount)
-        //                    {
-        //                        p_DigitalPointSource = v_ps.Name;
-        //                        v_CurrentDigitalPointCount = v_ps.PointCount;
-        //                    }
-        //                }
-        //                else if (v_ps.Name.Contains("N0"))
-        //                {
-        //                    if (v_CurrentNumericalPointCount is null || v_CurrentNumericalPointCount > v_ps.PointCount)
-        //                    {
-        //                        p_NumericalPointSource = v_ps.Name;
-        //                        v_CurrentNumericalPointCount = v_ps.PointCount;
-        //                    }
-        //                }
-        //                else { } // do nothing and go for the next PointSource }
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            Logger.Error($"Error selecting the point sources to use from PI target server point source list. {e.Message}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Logger.Warn($"The PI server {p_PISourceServer} does not contain an alias with the trigramme of site, which cause the application to not retrieve the Point sources to use.");
-        //    }
-        //}
+                else if (v_PS.Name.Contains(this.Trigram) && v_PS.Name.Contains("D0"))
+                {
+                    this.PointSources_Digital.Add(v_PS);
+                }
+            }
 
-        // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
-        public void GetTrigrammeFromPIServer(PIServer p_PIServer)
+            // Count how many space is available for numerical and digital PIPointSources list
+            // >> Update NumericalPSAndRemainingSpace/DigitalPSAndRemainingSpace attributes
+            long v_NumericalMaxPointCountAllowed = int.Parse(ConfigurationManager.AppSettings["NumericalMaxPointCountAllowed"]);
+            long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
+            {
+                long v_RemainingSpace = v_NumericalMaxPointCountAllowed - v_PS.PointCount;
+                this.NumericalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
+                return v_RemainingSpace;
+            });
+
+            long DigitalMaxPointCountAllowed = int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]);
+            long v_AvailableDigitalPointSpace = this.PointSources_Digital.Sum(v_PS =>
+            {
+                long v_RemainingSpace = DigitalMaxPointCountAllowed - v_PS.PointCount;
+                this.DigitalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
+                return v_RemainingSpace;
+            });
+
+            if (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        private KeyValuePair<string, long> GetPointSourceForCurrentTag(Dictionary<string, long> p_PSAndRemainingSpace)
+        {
+            KeyValuePair<string, long> v_SelectedPointSource = p_PSAndRemainingSpace.First();
+            foreach (KeyValuePair<string, long> v_CurrentPointSource in p_PSAndRemainingSpace)
+            {
+                if (v_CurrentPointSource.Value > v_SelectedPointSource.Value) v_SelectedPointSource = v_CurrentPointSource;
+            }
+            return v_SelectedPointSource;
+        }
+        public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
         {
             // TODO : Use a config/csv file instead of alias method
             foreach (string v_AliasServer in p_PIServer.AliasNames)
@@ -300,6 +265,10 @@ namespace Models
         public void Clear()
         {
             AttributesTagsList.Clear();
+            PointSources_Digital.Clear();
+            PointSources_Numerical.Clear();
+            NumericalPSAndRemainingSpace.Clear();
+            DigitalPSAndRemainingSpace.Clear();
         }
     }
 }
