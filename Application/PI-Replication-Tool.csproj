@@ -99,11 +99,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\NLogMemorityTarget.cs" />
-    <Compile Include="Core\TotalEnergiesInfra.cs" />
+    <Compile Include="Resources\Core\NLogMemorityTarget.cs" />
+    <Compile Include="Resources\Core\TotalEnergiesInfra.cs" />
     <Compile Include="MVVM\Models\DataGridCollection.cs" />
     <Compile Include="MVVM\Models\PIPointGridFormat.cs" />
-    <Compile Include="Stores\NavigationStore.cs" />
+    <Compile Include="Resources\Stores\NavigationStore.cs" />
     <Page Include="MVVM\Themes\ConnectionCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,13 +116,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\AsyncCommand.cs" />
-    <Compile Include="Core\EventArgs.cs" />
-    <Compile Include="Core\EventRaiser.cs" />
-    <Compile Include="Core\IErrorHandler.cs" />
-    <Compile Include="Core\Mediator.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Core\TaskUtilities.cs" />
+    <Compile Include="Resources\Commands\AsyncCommand.cs" />
+    <Compile Include="Resources\Core\EventArgs.cs" />
+    <Compile Include="Resources\Core\EventRaiser.cs" />
+    <Compile Include="Resources\Core\IErrorHandler.cs" />
+    <Compile Include="Resources\Core\Mediator.cs" />
+    <Compile Include="Resources\Commands\RelayCommand.cs" />
+    <Compile Include="Resources\Core\TaskUtilities.cs" />
     <Compile Include="MVVM\Models\Constants.cs" />
     <Compile Include="MVVM\Models\FilesManager.cs" />
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
@@ -200,8 +200,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\CGI.png" />
-    <Resource Include="Assets\TotalEnergies.png" />
+    <Resource Include="Resources\Assets\CGI.png" />
+    <Resource Include="Resources\Assets\TotalEnergies.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Nlog.config.xml">
@@ -209,9 +209,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\check.png" />
-    <Resource Include="Assets\cross.png" />
-    <Content Include="Assets\Spinner.svg" />
+    <Resource Include="Resources\Assets\check.png" />
+    <Resource Include="Resources\Assets\cross.png" />
+    <Content Include="Resources\Assets\Spinner.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.4.3.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.4.3.0\build\MaterialDesignThemes.targets')" />

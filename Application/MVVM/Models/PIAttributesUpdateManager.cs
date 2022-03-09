@@ -25,6 +25,7 @@ namespace Models
         // METHODS
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
+            this.Clear();
             List<PIPoint> v_PIPointList = new List<PIPoint>();
 
             foreach (string piTagNames in p_PITagNames)
@@ -251,23 +252,20 @@ namespace Models
         }
         public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
         {
-            // TODO : Use a config/csv file instead of alias method
-            foreach (string v_AliasServer in p_PIServer.AliasNames)
+            this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
+            if(this.Trigram == "Trigram_")
             {
-                if (v_AliasServer.Contains("PI-DA-"))
-                {
-                    // Cut the Alias server name to get the trigramme (Example : PI-DA-LAD-AO >> LAD)
-                    Trigram = v_AliasServer.Substring(6, 3);
-                }
+                throw new Exception("PI server name does not exist is configuration file.");
             }
         }
         public void Clear()
         {
-            AttributesTagsList.Clear();
-            PointSources_Digital.Clear();
-            PointSources_Numerical.Clear();
-            NumericalPSAndRemainingSpace.Clear();
-            DigitalPSAndRemainingSpace.Clear();
+            this.AttributesTagsList.Clear();
+            this.PointSources_Digital.Clear();
+            this.PointSources_Numerical.Clear();
+            this.NumericalPSAndRemainingSpace.Clear();
+            this.DigitalPSAndRemainingSpace.Clear();
+            this.Trigram = "";
         }
     }
 }

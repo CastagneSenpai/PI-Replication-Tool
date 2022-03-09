@@ -73,7 +73,6 @@ namespace ViewModels
             List<string> v_TagsNameList = new List<string>();
             FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
 
-            ReplicationManager.PIAttributesUpdateManager.Clear();
             _collectionTags.Clear();
 
             ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
