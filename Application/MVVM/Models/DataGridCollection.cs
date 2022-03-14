@@ -2,12 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 
-namespace PI_Replication_Tool.MVVM.Models
+namespace Models
 {
     public class DataGridCollection
     {
-        internal readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
-        internal readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
+        internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();
+        internal readonly ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
 
         public DataGridCollection()
         {

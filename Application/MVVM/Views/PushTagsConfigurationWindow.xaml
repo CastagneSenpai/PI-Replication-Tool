@@ -140,11 +140,11 @@
             Content="Create or Update" IsChecked="False" FontSize="14px" />
         </StackPanel>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="2"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Update Tags"
                 HorizontalAlignment="Left" 
-                VerticalAlignment="Bottom"
-                Margin="0,0,20,0"
+                VerticalAlignment="Top"
+                Margin="0,40,0,0"
                 Height="25"
                 Width="90"
                 FontFamily="Arial"
@@ -153,7 +153,7 @@
                 Command="{Binding ButtonUpdateTags}">
         </Button>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="2"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Push"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"

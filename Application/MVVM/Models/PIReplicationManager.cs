@@ -1,6 +1,4 @@
-﻿using PI_Replication_Tool.MVVM.Models;
-
-namespace Models
+﻿namespace Models
 {
     public sealed class PIReplicationManager
     {

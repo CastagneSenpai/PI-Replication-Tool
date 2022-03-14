@@ -33,7 +33,7 @@
     <target 
       xsi:type="File"
       name="logfile"  
-      fileName="E:\PIReplicationTool\Logs\${shortdate}_logfile.txt" 
+      fileName="C:\PIReplicationTool\Logs\${shortdate}_logfile.txt" 
       layout="${longdate}|${level:uppercase=true}|${logger}|${threadid}|${message}|${exception:format=tostring}" />
     
     <target 

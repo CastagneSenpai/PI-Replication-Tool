@@ -10,12 +10,42 @@ namespace ViewModels
     {
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
-        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection._collectionViewSource;
-        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection._collectionTags;
+        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
+        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
+
+        private string _destinationServer;
+        public string DestinationServer
+        {
+            get
+            {
+                return _destinationServer;
+            }
+            set
+            {
+                _destinationServer = ReplicationManager.PIConnectionManager.PITargetServerName;
+                OnPropertyChanged(nameof(DestinationServer));
+            }
+        }
+
+        private readonly RelayCommand _buttonUpdateTags;
+        public RelayCommand ButtonUpdateTags => _buttonUpdateTags;
+
+        //private readonly RelayCommand _buttonPushTags;
+        //public RelayCommand ButtonPushTags => _buttonPushTags;
 
         public PushTagsConfigurationViewModel()
         {
+            DestinationServer = ReplicationManager.PIConnectionManager.PITargetServerName;
 
+            _buttonUpdateTags = new RelayCommand(
+                o => this.ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
+                    ReplicationManager.PIConnectionManager.PISourceServer,
+                    ReplicationManager.PIConnectionManager.PITargetServer),
+                o => true);
+
+            //_buttonPushTags = new RelayCommand(
+            //    o => 
+            //    o => true);
         }
 
         public ICollectionView Attributes
@@ -42,18 +72,6 @@ namespace ViewModels
             }
         }
 
-        private string _destinationServer;
-        public string DestinationServer
-        {
-            get
-            {
-                return _destinationServer;
-            }
-            set
-            {
-                _destinationServer = ReplicationManager.PIConnectionManager.PITargetServerName;
-                OnPropertyChanged(nameof(DestinationServer));
-            }
-        }
+
     }
 }
