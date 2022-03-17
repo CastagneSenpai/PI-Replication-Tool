@@ -41,6 +41,7 @@ namespace Models
         }
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
+            this.GetTrigrammeFromPIServer(p_PISourceServer);
             if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
             {
                 // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
@@ -60,7 +61,7 @@ namespace Models
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
 
                 // Actions on digital tags
-                if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
+                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
                 }
@@ -79,7 +80,7 @@ namespace Models
         {
             try
             {
-                if ((string)p_TagAttributes["pointtype"] == "digital" || (string)p_TagAttributes["pointtype"] == "string")
+                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     // Get the PointSource and available space pair
                     var v_PointSource = GetPointSourceForCurrentTag(this.DigitalPSAndRemainingSpace);
@@ -195,7 +196,7 @@ namespace Models
             // Count how many digital & numerical tags have to be replicated
             foreach (IDictionary<string, object> v_AttributesTag in AttributesTagsList)
             {
-                if ((string)v_AttributesTag["pointtype"] == "digital" || (string)v_AttributesTag["pointtype"] == "string")
+                if (v_AttributesTag["pointtype"].ToString() == "digital" || v_AttributesTag["pointtype"].ToString() == "string")
                     v_NbDigitalTagsToReplicate++;
                 else
                     v_NbNumericalTagsToReplicate++;
@@ -221,6 +222,7 @@ namespace Models
             long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
             {
                 long v_RemainingSpace = v_NumericalMaxPointCountAllowed - v_PS.PointCount;
+                // TODO: Clear la liste dans le cas où on clique 2 fois sur le bouton update
                 this.NumericalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
                 return v_RemainingSpace;
             });
