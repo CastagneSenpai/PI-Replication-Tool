@@ -14,8 +14,11 @@ namespace ViewModels
         //private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
         //private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
 
-        private readonly CollectionViewSource _collectionViewSource = ReplicationManager.DataGridCollection.CollectionViewSource;
-        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = ReplicationManager.DataGridCollection.CollectionTags;
+        //private readonly CollectionViewSource _collectionViewSource = ReplicationManager.DataGridCollection.CollectionViewSource;
+        //private readonly ObservableCollection<PIPointGridFormat> _collectionTags = ReplicationManager.DataGridCollection.CollectionTags;
+
+        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
+        private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
 
         public ICollectionView Attributes
         {

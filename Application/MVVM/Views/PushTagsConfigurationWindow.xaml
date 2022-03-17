@@ -107,7 +107,7 @@
     </UserControl.Resources>
 
     <UserControl.DataContext>
-        <Viewmodel:LoadTagsConfigurationViewModel/>
+        <Viewmodel:PushTagsConfigurationViewModel/>
     </UserControl.DataContext>
 
     <Grid>
@@ -163,7 +163,7 @@
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2f3640"
-                Command="{Binding ButtonUpdateTags}">
+                Command="{Binding ButtonPushTags}">
         </Button>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">

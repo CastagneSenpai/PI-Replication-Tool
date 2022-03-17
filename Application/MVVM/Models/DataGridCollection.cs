@@ -1,5 +1,4 @@
-﻿using Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
 
 namespace Models
