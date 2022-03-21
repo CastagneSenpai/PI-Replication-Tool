@@ -268,5 +268,9 @@ namespace Models
             this.DigitalPSAndRemainingSpace.Clear();
             this.Trigram = "";
         }
+
+        public void SetAttributes()
+        {
+        }
     }
 }
