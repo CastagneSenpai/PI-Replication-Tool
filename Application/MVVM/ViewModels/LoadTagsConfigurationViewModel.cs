@@ -11,12 +11,6 @@ namespace ViewModels
     {
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
-        //private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
-        //private readonly ObservableCollection<PIPointGridFormat> _collectionTags = new ObservableCollection<PIPointGridFormat>();
-
-        //private readonly CollectionViewSource _collectionViewSource = ReplicationManager.DataGridCollection.CollectionViewSource;
-        //private readonly ObservableCollection<PIPointGridFormat> _collectionTags = ReplicationManager.DataGridCollection.CollectionTags;
-
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
 
@@ -58,6 +52,13 @@ namespace ViewModels
             }
         }
 
+        private string destinationServer;
+        public string DestinationServer
+        {
+            get => destinationServer;
+            set => SetProperty(ref destinationServer, value);
+        }
+
         private readonly RelayCommand _buttonLoadTags;
         public RelayCommand ButtonLoadTags => _buttonLoadTags;
 
@@ -65,9 +66,7 @@ namespace ViewModels
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
             _buttonLoadTags = new RelayCommand(
-                o => LoadAttributes(),
-                o => true);
-
+                o => LoadAttributes());
         }
 
         void LoadAttributes()
@@ -79,43 +78,10 @@ namespace ViewModels
 
             ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
-            Populate();
+            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
             OnPropertyChanged("Attributes");
 
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList);
         }
-
-        private void Populate()
-        {
-            foreach (var pipoint in ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
-            {
-                _collectionTags.Add(new PIPointGridFormat(
-                    pipoint["tag"] as string,
-                    pipoint["instrumenttag"] as string,
-                    pipoint["pointtype"] as string,
-                    pipoint["pointsource"] as string,
-                    int.Parse(pipoint["location1"].ToString()),
-                    float.Parse(pipoint["zero"].ToString()),
-                    float.Parse(pipoint["typicalvalue"].ToString()),
-                    float.Parse(pipoint["span"].ToString()),
-                    int.Parse(pipoint["compressing"].ToString()),
-                    float.Parse(pipoint["compdev"].ToString()),
-                    float.Parse(pipoint["compdevpercent"].ToString()),
-                    float.Parse(pipoint["compmin"].ToString()),
-                    float.Parse(pipoint["excDev"].ToString()),
-                    float.Parse(pipoint["excMin"].ToString()),
-                    float.Parse(pipoint["excMax"].ToString()),
-                    float.Parse(pipoint["excdevpercent"].ToString()),
-                    float.Parse(pipoint["compdevpercent"].ToString()),
-                    pipoint["datasecurity"].ToString(),
-                    pipoint["ptsecurity"].ToString()
-                    ));
-            }
-            _collectionViewSource.Source = _collectionTags;
-        }
-
-        private string destinationServer;
-
-        public string DestinationServer { get => destinationServer; set => SetProperty(ref destinationServer, value); }
     }
 }

@@ -128,7 +128,7 @@
         <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
           <Bold>Destination Server :</Bold>
         </TextBlock>
-        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding DestinationServer, Mode=TwoWay}">
+        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="186,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding DestinationServer, Mode=TwoWay}">
         </TextBlock>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
