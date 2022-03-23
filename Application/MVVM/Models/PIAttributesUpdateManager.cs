@@ -30,8 +30,15 @@ namespace Models
 
             foreach (string piTagNames in p_PITagNames)
             {
-                var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
-                v_PIPointList.Add(v_PIPoint);
+                try
+                {
+                    var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
+                    v_PIPointList.Add(v_PIPoint);
+                }
+                catch
+                {
+                    Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
+                }
             }
 
             foreach (var v_PIPoint in v_PIPointList)
@@ -59,14 +66,10 @@ namespace Models
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
                 this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
+                this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
-                // Actions on digital tags
-                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
-                {
-                    this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
-                }
-                // Action on numerical tags
-                else
+                // Actions on Numerical tags only
+                if (!(p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string"))
                 {
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
@@ -94,7 +97,7 @@ namespace Models
                 else
                 {
                     var v_PointSource = GetPointSourceForCurrentTag(this.NumericalPSAndRemainingSpace);
-                    
+
                     // Set the PointSource
                     p_TagAttributes["pointsource"] = v_PointSource.Key;
 
@@ -106,7 +109,7 @@ namespace Models
             {
                 Logger.Error($"Error updating PointSource attribute. {e.Message}");
             }
-        } 
+        }
         private void UpdateCompressionExceptionAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
@@ -191,6 +194,12 @@ namespace Models
         }
         private bool IsThereEnoughtPointSourcesAvailable(PIServer p_PITargetServer)
         {
+            // Clear PIAttributesUpdateManager lists in case of multiple click on <Update> button (keep AttributesTagsList only)
+            this.PointSources_Digital.Clear();
+            this.PointSources_Numerical.Clear();
+            this.NumericalPSAndRemainingSpace.Clear();
+            this.DigitalPSAndRemainingSpace.Clear();
+
             int v_NbNumericalTagsToReplicate = 0, v_NbDigitalTagsToReplicate = 0;
 
             // Count how many digital & numerical tags have to be replicated
@@ -227,10 +236,11 @@ namespace Models
                 return v_RemainingSpace;
             });
 
-            long DigitalMaxPointCountAllowed = int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]);
+
+            long v_DigitalMaxPointCountAllowed = int.Parse(ConfigurationManager.AppSettings["DigitalMaxPointCountAllowed"]);
             long v_AvailableDigitalPointSpace = this.PointSources_Digital.Sum(v_PS =>
             {
-                long v_RemainingSpace = DigitalMaxPointCountAllowed - v_PS.PointCount;
+                long v_RemainingSpace = v_DigitalMaxPointCountAllowed - v_PS.PointCount;
                 this.DigitalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
                 return v_RemainingSpace;
             });
@@ -254,7 +264,7 @@ namespace Models
         public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
         {
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
-            if(this.Trigram == "Trigram_")
+            if (this.Trigram == "Trigram_")
             {
                 throw new Exception("PI server name does not exist is configuration file.");
             }

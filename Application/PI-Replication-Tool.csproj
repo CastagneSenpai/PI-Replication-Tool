@@ -123,7 +123,6 @@
     <Compile Include="Resources\Core\Mediator.cs" />
     <Compile Include="Resources\Commands\RelayCommand.cs" />
     <Compile Include="Resources\Core\TaskUtilities.cs" />
-    <Compile Include="MVVM\Models\Constants.cs" />
     <Compile Include="MVVM\Models\FilesManager.cs" />
     <Compile Include="MVVM\Models\PIAttributesUpdateManager.cs" />
     <Compile Include="MVVM\Models\PIConnectionManager.cs" />
