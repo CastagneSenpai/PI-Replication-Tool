@@ -99,6 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\Models\Constants.cs" />
     <Compile Include="Resources\Core\NLogMemorityTarget.cs" />
     <Compile Include="Resources\Core\TotalEnergiesInfra.cs" />
     <Compile Include="MVVM\Models\DataGridCollection.cs" />
