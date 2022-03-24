@@ -33,14 +33,14 @@ namespace ViewModels
         }
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
-        
+
         private string _sourceKOStatus = "Hidden";
         private string _sourceOKStatus = "Hidden";
         private string _sourceSpinnerStatus = "Hidden";
 
         private string _targetKOStatus = "hidden";
         private string _targetOKStatus = "hidden";
-        private string _targetSpinnerStatus = "hidden";
+        private string _targetSpinnerStatus = "Hidden";
 
         public string SourceKOStatus
         {
@@ -76,7 +76,7 @@ namespace ViewModels
                 SetProperty(ref _targetKOStatus, value);
                 //OnPropertyChanged(nameof(SourceKOStatus));
             }
-            get => _sourceKOStatus;
+            get => _targetKOStatus;
         }
         public string TargetOKStatus
         {
@@ -85,7 +85,7 @@ namespace ViewModels
                 SetProperty(ref _targetOKStatus, value);
                 //OnPropertyChanged(nameof(SourceOKStatus));
             }
-            get => _sourceOKStatus;
+            get => _targetOKStatus;
         }
         public string TargetSpinnerStatus
         {
@@ -94,7 +94,7 @@ namespace ViewModels
                 SetProperty(ref _targetSpinnerStatus, value);
                 //OnPropertyChanged(nameof(SourceSpinnerStatus));
             }
-            get => _sourceSpinnerStatus;
+            get => _targetSpinnerStatus;
         }
 
 
