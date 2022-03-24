@@ -7,16 +7,21 @@ namespace ViewModels
 {
     public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        #region Fields
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
 
+        #region PrivateAttributes
         private string _selectedSourceServer;
         private string _selectedTargetServer;
+        private string _sourceKOStatus = "Hidden";
+        private string _sourceOKStatus = "Hidden";
+        private string _sourceSpinnerStatus = "Hidden";
+        private string _targetKOStatus = "hidden";
+        private string _targetOKStatus = "hidden";
+        private string _targetSpinnerStatus = "Hidden";
+        private readonly AsyncCommand _buttonConnectSourceServer;
+        private readonly AsyncCommand _buttonConnectTargetServer;
         #endregion
-
-        #region Properties
-        public PIServers ListSourceServer { get; set; }
-        public PIServers ListTargetServer { get; set; }
+        #region BindingAttributes
         public string SelectedSourceServer
         {
             get => _selectedSourceServer;
@@ -37,12 +42,62 @@ namespace ViewModels
                 _buttonConnectTargetServer.RaiseCanExecuteChanged();
             }
         }
-        #endregion
-
-        #region Commands
-        private readonly AsyncCommand _buttonConnectSourceServer;
-        private readonly AsyncCommand _buttonConnectTargetServer;
-
+        public PIServers ListSourceServer { get; set; }
+        public PIServers ListTargetServer { get; set; }
+        public string SourceKOStatus
+        {
+            set
+            {
+                SetProperty(ref _sourceKOStatus, value);
+                //OnPropertyChanged(nameof(SourceKOStatus));
+            }
+            get => _sourceKOStatus;
+        }
+        public string SourceOKStatus
+        {
+            set
+            {
+                SetProperty(ref _sourceOKStatus, value);
+                //OnPropertyChanged(nameof(SourceOKStatus));
+            }
+            get => _sourceOKStatus;
+        }
+        public string SourceSpinnerStatus
+        {
+            set
+            {
+                SetProperty(ref _sourceSpinnerStatus, value);
+                //OnPropertyChanged(nameof(SourceSpinnerStatus));
+            }
+            get => _sourceSpinnerStatus;
+        }
+        public string TargetKOStatus
+        {
+            set
+            {
+                SetProperty(ref _targetKOStatus, value);
+                //OnPropertyChanged(nameof(SourceKOStatus));
+            }
+            get => _targetKOStatus;
+        }
+        public string TargetOKStatus
+        {
+            set
+            {
+                SetProperty(ref _targetOKStatus, value);
+                //OnPropertyChanged(nameof(SourceOKStatus));
+            }
+            get => _targetOKStatus;
+        }
+        public string TargetSpinnerStatus
+        {
+            set
+            {
+                SetProperty(ref _targetSpinnerStatus, value);
+                //OnPropertyChanged(nameof(SourceSpinnerStatus));
+            }
+            get => _targetSpinnerStatus;
+        }
         public IAsyncCommand ButtonConnectSourceServer => _buttonConnectSourceServer;
         public IAsyncCommand ButtonConnectTargetServer => _buttonConnectTargetServer;
         #endregion
@@ -62,7 +117,18 @@ namespace ViewModels
         #region Methods
         private async Task ConnectPISourceServerAsync()
         {
-            await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedSourceServer);
+            
+            SourceKOStatus = "Hidden";
+            SourceOKStatus = "Hidden";
+            SourceSpinnerStatus = "Visible";
+
+            bool status = await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedSourceServer);
+            SourceSpinnerStatus = "Hidden";
+
+            if (status)
+                SourceOKStatus = "Visible";
+            else
+                SourceKOStatus = "Visible";
         }
 
         private bool CanConnectOnSourceServer()
@@ -72,7 +138,17 @@ namespace ViewModels
 
         private async Task ConnectPITargetServerAsync()
         {
-            await PIReplicationManager.PIConnectionManager.ConnectToPITargetServerAsync(SelectedTargetServer);
+            TargetKOStatus = "Hidden";
+            TargetOKStatus = "Hidden";
+            TargetSpinnerStatus = "Visible";
+
+            bool status = await PIReplicationManager.PIConnectionManager.ConnectToPITargetServerAsync(SelectedTargetServer);
+            TargetSpinnerStatus = "Hidden";
+
+            if (status)
+                TargetOKStatus = "Visible";
+            else
+                TargetKOStatus = "Visible";
         }
 
         private bool CanConnectOnTargetServer()
