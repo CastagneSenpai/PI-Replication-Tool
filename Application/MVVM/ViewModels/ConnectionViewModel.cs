@@ -9,8 +9,19 @@ namespace ViewModels
     {
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
 
+        #region PrivateAttributes
         private string _selectedSourceServer;
         private string _selectedTargetServer;
+        private string _sourceKOStatus = "Hidden";
+        private string _sourceOKStatus = "Hidden";
+        private string _sourceSpinnerStatus = "Hidden";
+        private string _targetKOStatus = "hidden";
+        private string _targetOKStatus = "hidden";
+        private string _targetSpinnerStatus = "Hidden";
+        private readonly AsyncCommand _buttonConnectSourceServer;
+        private readonly AsyncCommand _buttonConnectTargetServer;
+        #endregion
+        #region BindingAttributes
         public string SelectedSourceServer
         {
             set
@@ -33,15 +44,6 @@ namespace ViewModels
         }
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
-
-        private string _sourceKOStatus = "Hidden";
-        private string _sourceOKStatus = "Hidden";
-        private string _sourceSpinnerStatus = "Hidden";
-
-        private string _targetKOStatus = "hidden";
-        private string _targetOKStatus = "hidden";
-        private string _targetSpinnerStatus = "Hidden";
-
         public string SourceKOStatus
         {
             set
@@ -96,12 +98,9 @@ namespace ViewModels
             }
             get => _targetSpinnerStatus;
         }
-
-
-        private readonly AsyncCommand _buttonConnectSourceServer;
-        private readonly AsyncCommand _buttonConnectTargetServer;
         public IAsyncCommand ButtonConnectSourceServer => _buttonConnectSourceServer;
         public IAsyncCommand ButtonConnectTargetServer => _buttonConnectTargetServer;
+        #endregion
 
         // CONSTRUCTEUR
         public ConnectionViewModel()
