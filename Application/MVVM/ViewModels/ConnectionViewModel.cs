@@ -7,40 +7,47 @@ namespace ViewModels
 {
     public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        private string _selectedSourceServer;
-        private string _selectedTargetServer;
-        private readonly AsyncCommand _buttonConnectSourceServer;
-        private readonly AsyncCommand _buttonConnectTargetServer;
-
+        #region Fields
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
 
+        private string _selectedSourceServer;
+        private string _selectedTargetServer;
+        #endregion
+
+        #region Properties
         public PIServers ListSourceServer { get; set; }
         public PIServers ListTargetServer { get; set; }
         public string SelectedSourceServer
         {
+            get => _selectedSourceServer;
             set
             {
                 SetProperty(ref _selectedSourceServer, value);
                 OnPropertyChanged(nameof(SelectedSourceServer));
                 _buttonConnectSourceServer.RaiseCanExecuteChanged();
             }
-            get => _selectedSourceServer;
         }
         public string SelectedTargetServer
         {
+            get => _selectedTargetServer;
             set
             {
                 SetProperty(ref _selectedTargetServer, value);
                 OnPropertyChanged(nameof(SelectedTargetServer));
                 _buttonConnectTargetServer.RaiseCanExecuteChanged();
             }
-            get => _selectedTargetServer;
         }
+        #endregion
+
+        #region Commands
+        private readonly AsyncCommand _buttonConnectSourceServer;
+        private readonly AsyncCommand _buttonConnectTargetServer;
 
         public IAsyncCommand ButtonConnectSourceServer => _buttonConnectSourceServer;
         public IAsyncCommand ButtonConnectTargetServer => _buttonConnectTargetServer;
+        #endregion
 
-        // CONSTRUCTEUR
+        #region Constructor
         public ConnectionViewModel()
         {
             var PILocalServers = PIServers.GetPIServers();
@@ -50,7 +57,9 @@ namespace ViewModels
             _buttonConnectSourceServer = new AsyncCommand(ConnectPISourceServerAsync, CanConnectOnSourceServer);
             _buttonConnectTargetServer = new AsyncCommand(ConnectPITargetServerAsync, CanConnectOnTargetServer);
         }
+        #endregion
 
+        #region Methods
         private async Task ConnectPISourceServerAsync()
         {
             await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedSourceServer);
@@ -70,5 +79,6 @@ namespace ViewModels
         {
             return !string.IsNullOrEmpty(SelectedTargetServer);
         }
+        #endregion
     }
 }

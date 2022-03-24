@@ -5,14 +5,16 @@ namespace Models
 {
     public class DataGridCollection
     {
+        #region Fields
         internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();
         internal readonly ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
+        #endregion
 
-        public DataGridCollection()
-        {
+        #region Constructors
+        public DataGridCollection() { }
+        #endregion
 
-        }
-
+        #region
         internal void PopulateGrid()
         {
             foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
@@ -52,6 +54,7 @@ namespace Models
                     pipoint["instrumenttag"] as string,
                     pipoint["pointtype"] as string,
                     pipoint["pointsource"] as string,
+                    // TODO: Supprimer Location1 de la grid du pushview ?
                     int.Parse(pipoint["location1"].ToString()),
                     float.Parse(pipoint["zero"].ToString()),
                     float.Parse(pipoint["typicalvalue"].ToString()),
@@ -71,6 +74,7 @@ namespace Models
             }
             CollectionViewSource.Source = CollectionTags;
         }
+        #endregion
     }
 }
 

@@ -9,11 +9,19 @@ namespace ViewModels
 {
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
+        #region Fields
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
+        
+        private PIPointGridFormat _pipointgridformat = null;
+        
+        private string _sourceServer;
+        private string _destinationServer;
+        #endregion
 
+        #region Properties
         public ICollectionView Attributes
         {
             get
@@ -27,24 +35,19 @@ namespace ViewModels
             }
         }
 
-        private PIPointGridFormat _pipointgridformat = null;
         public PIPointGridFormat PIPointGridFormat
         {
             get => this._pipointgridformat;
             set
             {
-                this._pipointgridformat = value;
+                _pipointgridformat = value;
                 OnPropertyChanged(nameof(PIPointGridFormat));
             }
         }
 
-        private string _sourceServer;
         public string SourceServer
         {
-            get
-            {
-                return _sourceServer;
-            }
+            get => _sourceServer;
             set
             {
                 _sourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
@@ -52,23 +55,28 @@ namespace ViewModels
             }
         }
 
-        private string destinationServer;
         public string DestinationServer
         {
-            get => destinationServer;
-            set => SetProperty(ref destinationServer, value);
+            get => _destinationServer;
+            set => SetProperty(ref _destinationServer, value);
         }
+        #endregion
 
+        #region RelayCommands
         private readonly RelayCommand _buttonLoadTags;
         public RelayCommand ButtonLoadTags => _buttonLoadTags;
+        #endregion
 
+        #region Constructor
         public LoadTagsConfigurationViewModel()
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
             _buttonLoadTags = new RelayCommand(
                 o => LoadAttributes());
         }
+        #endregion
 
+        #region Methods
         void LoadAttributes()
         {
             List<string> v_TagsNameList = new List<string>();
@@ -83,5 +91,6 @@ namespace ViewModels
 
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList);
         }
+        #endregion
     }
 }

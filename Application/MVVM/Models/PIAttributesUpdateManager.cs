@@ -1,4 +1,5 @@
 ﻿using NLog;
+using OSIsoft.AF;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Models
 {
     public sealed class PIAttributesUpdateManager
     {
-        // ATTRIBUTES
+        #region Properties
         static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
         public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
         public ICollection<PIPointSource> PointSources_Digital { get; set; } = new Collection<PIPointSource>();
@@ -18,11 +19,13 @@ namespace Models
         Dictionary<string, long> NumericalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
         Dictionary<string, long> DigitalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
         public string Trigram { get; set; } = "";
+        #endregion
 
-        // CONSTRUCTOR
+        #region Constructor
         public PIAttributesUpdateManager() { }
+        #endregion
 
-        // METHODS
+        #region Methods
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
             this.Clear();
@@ -30,6 +33,9 @@ namespace Models
 
             foreach (string piTagNames in p_PITagNames)
             {
+                // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
+                // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
+
                 var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
                 v_PIPointList.Add(v_PIPoint);
             }
@@ -94,7 +100,7 @@ namespace Models
                 else
                 {
                     var v_PointSource = GetPointSourceForCurrentTag(this.NumericalPSAndRemainingSpace);
-                    
+
                     // Set the PointSource
                     p_TagAttributes["pointsource"] = v_PointSource.Key;
 
@@ -106,7 +112,7 @@ namespace Models
             {
                 Logger.Error($"Error updating PointSource attribute. {e.Message}");
             }
-        } 
+        }
         private void UpdateCompressionExceptionAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
@@ -254,7 +260,7 @@ namespace Models
         public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
         {
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
-            if(this.Trigram == "Trigram_")
+            if (this.Trigram == "Trigram_")
             {
                 throw new Exception("PI server name does not exist is configuration file.");
             }
@@ -268,9 +274,45 @@ namespace Models
             this.DigitalPSAndRemainingSpace.Clear();
             this.Trigram = "";
         }
-
-        public void SetAttributes()
+        public void CreateAndPushTags(PIServer targetServer)
         {
+            IDictionary<string, IDictionary<string, object>> listeDeTags = new Dictionary<string, IDictionary<string, object>>();
+            AttributesTagsList.ForEach(p_tag =>
+            {
+                listeDeTags.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+            });
+
+            try
+            {
+                AFListResults<string, PIPoint> retour = targetServer.CreatePIPoints(listeDeTags);
+            }
+            catch (AggregateException)
+            {
+                // NLOG
+                throw new Exception();
+            }
+            catch (PIException)
+            {
+                // NLOG
+                throw new Exception();
+            }
         }
+
+        public string GetTagname(IDictionary<string, object> listeAttributs)
+        {
+            return listeAttributs[PICommonPointAttributes.Tag].ToString();
+        }
+
+        public IDictionary<string, object> GetCustomAttributes(IDictionary<string, object> p_Attributes)
+        {
+            //IDictionary<string, object> v_tempList = new Dictionary<string, object>(p_Attributes);
+            Dictionary<string, object> p_Common_Attributes = p_Attributes
+                .Where(attributs => Constants.CommonAttribute.Any(commonAttributes => commonAttributes == attributs.Key))
+                .ToDictionary(k => k.Key, v => v.Value);
+
+            return p_Common_Attributes;
+        }
+        #endregion
     }
 }
+
