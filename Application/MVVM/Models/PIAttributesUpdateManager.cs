@@ -175,6 +175,7 @@ namespace Models
         {
             try
             {
+                // TODO : externaliser dans le fichier config
                 // Update TagName if source server is TEPNL, TEPUK or TEPGB
                 if (this.Trigram == "NLD")
                 {
@@ -236,7 +237,6 @@ namespace Models
             long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
             {
                 long v_RemainingSpace = v_NumericalMaxPointCountAllowed - v_PS.PointCount;
-                // TODO: Clear la liste dans le cas où on clique 2 fois sur le bouton update
                 this.NumericalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
                 return v_RemainingSpace;
             });

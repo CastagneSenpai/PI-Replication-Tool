@@ -119,10 +119,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="225*"/>
-            <ColumnDefinition Width="225*"/>
-            <ColumnDefinition Width="225"/>
-            <ColumnDefinition Width="225"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
@@ -131,7 +130,7 @@
         <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="186,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding DestinationServer, Mode=TwoWay}">
         </TextBlock>
 
-        <StackPanel Grid.Row="1" Grid.Column="1">
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left">
             <RadioButton x:Name="cb1"  Margin="5,0,0,0" HorizontalAlignment="Left" 
             Content="Create Only" IsChecked="True" FontSize="14px"/>
             <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" 
@@ -140,11 +139,11 @@
             Content="Create or Update" IsChecked="False" FontSize="14px" />
         </StackPanel>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="2"
                 Content="Update Tags"
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top"
-                Margin="0,40,0,0"
+                HorizontalAlignment="left" 
+                VerticalAlignment="Bottom"
+                Margin="40,0,0,0"
                 Height="25"
                 Width="90"
                 FontFamily="Arial"
@@ -155,15 +154,28 @@
 
         <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Push"
-                HorizontalAlignment="Right" 
+                HorizontalAlignment="center" 
                 VerticalAlignment="Bottom"
-                Margin="0,0,20,0"
+                Margin="0,0,0,0"
                 Height="25"
                 Width="90"
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2f3640"
                 Command="{Binding ButtonPushTags}">
+        </Button>
+
+        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
+                Content="Refresh"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom"
+                Margin="0,0,40,0"
+                Height="25"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2f3640"
+                Command="{Binding ButtonRefresh}">
         </Button>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
@@ -188,6 +200,24 @@
                     <DataGridTextColumn Header="DataSecurity" Binding="{Binding DataSecurity}" />
                     <DataGridTextColumn Header="PtSecurity" Binding="{Binding PtSecurity}" />
                 </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RowStatus}" Value="PtCreated">
+                                <Setter Property="Background" Value="#EAEDA5">
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RowStatus}" Value="OK">
+                                <Setter Property="Background" Value="#A5EBA6">
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RowStatus}" Value="KO">
+                                <Setter Property="Background" Value="#EFA6A6">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
             </DataGrid>
         </Grid>
     </Grid>

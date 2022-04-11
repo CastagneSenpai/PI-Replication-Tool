@@ -54,12 +54,6 @@ namespace ViewModels
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
-
-        public string DestinationServer
-        {
-            get => _destinationServer;
-            set => SetProperty(ref _destinationServer, value);
-        }
         #endregion
 
         #region RelayCommands

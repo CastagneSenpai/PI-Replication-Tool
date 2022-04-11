@@ -1,5 +1,6 @@
 ﻿using Commands;
 using Models;
+using System;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -14,9 +15,20 @@ namespace ViewModels
         private PIPointGridFormat _pipointgridformat = null;
 
         private string _destinationServer;
+
+        private string _rowStatus = "PtCreated";
         #endregion
 
         #region Properties
+        public string RowStatus
+        {
+            get { return _rowStatus; }
+            set
+            {
+                _rowStatus = value;
+                OnPropertyChanged(nameof(RowStatus));
+            }
+        }
         public ICollectionView Attributes
         {
             get
@@ -57,8 +69,10 @@ namespace ViewModels
         #region RelayCommands
         private readonly RelayCommand _buttonUpdateTags;
         private readonly RelayCommand _buttonPushTags;
+        private readonly RelayCommand _buttonRefresh;
         public RelayCommand ButtonUpdateTags => _buttonUpdateTags;
         public RelayCommand ButtonPushTags => _buttonPushTags;
+        public RelayCommand ButtonRefresh => _buttonRefresh;
         #endregion
 
         #region Constructor
@@ -70,7 +84,9 @@ namespace ViewModels
                 o => UpdateTagsAttributes());
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
-            // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
+                // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
+            _buttonRefresh = new RelayCommand(
+                o => UpdateRowsUsingCurrentValues());
         }
         #endregion
 
@@ -89,6 +105,12 @@ namespace ViewModels
         {
             PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
                 PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+        }
+
+        public void UpdateRowsUsingCurrentValues()
+        {
+            //PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(
+            //    )
         }
         #endregion
     }
