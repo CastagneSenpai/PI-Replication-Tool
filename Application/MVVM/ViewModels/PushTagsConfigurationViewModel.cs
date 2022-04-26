@@ -109,8 +109,8 @@ namespace ViewModels
 
         public void UpdateRowsUsingCurrentValues()
         {
-            //PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(
-            //    )
+            RowStatus = "OK";
+            OnPropertyChanged(nameof(RowStatus));
         }
         #endregion
     }

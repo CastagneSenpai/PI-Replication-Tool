@@ -18,7 +18,6 @@ namespace ViewModels
         private PIPointGridFormat _pipointgridformat = null;
         
         private string _sourceServer;
-        private string _destinationServer;
         #endregion
 
         #region Properties
