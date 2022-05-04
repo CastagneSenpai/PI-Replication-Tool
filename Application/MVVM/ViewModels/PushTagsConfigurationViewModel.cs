@@ -103,6 +103,7 @@ namespace ViewModels
 
         public void PushTagsAttributes()
         {
+            FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
             PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
                 PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
         }

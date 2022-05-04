@@ -31,7 +31,8 @@ namespace Models
             }
         }
 
-        public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList)
+
+        public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList, BackupType p_BackupType)
         {
             try
             {
@@ -59,11 +60,15 @@ namespace Models
                 }
 
                 // Write lines in output file
-                //TODO : différencier si source ou target file (pour le moment, source uniquement)
+                string OutputFileName;
+                if (p_BackupType == BackupType.SourceServerBackup)
+                    OutputFileName = ConfigurationManager.AppSettings["OutputFileName_SourceTags"];
+                else
+                    OutputFileName = ConfigurationManager.AppSettings["OutputFileName_TargetTags"]; ;
 
-                //string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + ConfigurationManager.AppSettings["OutputFileName_SourceTags"] + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                //File.Create(outputFileFullName);
+                string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + OutputFileName + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
+
+                File.Create(outputFileFullName);
                 File.WriteAllLines(outputFileFullName, FileLines);
                 FileLines.Clear();
             }
@@ -73,5 +78,12 @@ namespace Models
                 Logger.Error($"Error writing tag attributes list to output file. {e.Message}");
             }
         }
+    }
+
+    // Define if the backup file which contains tags configuration is before or after the replication
+    public enum BackupType
+    {
+        SourceServerBackup = 0,
+        TargetServerBackup = 1
     }
 }
