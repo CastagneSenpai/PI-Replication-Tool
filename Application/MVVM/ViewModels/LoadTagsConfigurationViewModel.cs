@@ -82,7 +82,7 @@ namespace ViewModels
             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
             OnPropertyChanged("Attributes");
 
-            FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList);
+            FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
         }
         #endregion Methods
     }
