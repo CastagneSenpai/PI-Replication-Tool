@@ -2,6 +2,31 @@
 {
     public class PIPointGridFormat
     {
+        #region Properties
+        public string Name { get; set; }
+        public string InstrumentTag { get; set; }
+        public string PointType { get; set; }
+        public string PointSource { get; set; }
+        public int Location1 { get; set; }
+        public float Zero { get; set; }
+        public float TypicalValue { get; set; }
+        public float Span { get; set; }
+        public int Compressing { get; set; }
+        public float CompDev { get; set; }
+        public float CompDevPercent { get; set; }
+        public float CompMin { get; set; }
+        public float ExcDev { get; set; }
+        public float ExcMin { get; set; }
+        public float ExcMax { get; set; }
+        public float ExcDevPercent { get; set; }
+        public string DataSecurity { get; set; }
+        public string PtSecurity { get; set; }
+        public Constants.TagStatus? Status { get; set; }
+        public string CurrentTimestamp { get; set; }
+        public string CurrentValue { get; set; }
+        #endregion Properties
+
+        #region Constructors
         public PIPointGridFormat(string name, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
         {
             Name = name;
@@ -22,25 +47,33 @@
             ExcDevPercent = excDevPercent;
             DataSecurity = dataSecurity;
             PtSecurity = ptSecurity;
+            Status = null;
         }
 
-        public string Name { get; set; }
-        public string InstrumentTag { get; set; }
-        public string PointType { get; set; }
-        public string PointSource { get; set; }
-        public int Location1 { get; set; }
-        public float Zero { get; set; }
-        public float TypicalValue { get; set; }
-        public float Span { get; set; }
-        public int Compressing { get; set; }
-        public float CompDev { get; set; }
-        public float CompDevPercent { get; set; }
-        public float CompMin { get; set; }
-        public float ExcDev { get; set; }
-        public float ExcMin { get; set; }
-        public float ExcMax { get; set; }
-        public float ExcDevPercent { get; set; }
-        public string DataSecurity { get; set; }
-        public string PtSecurity { get; set; }
+        public PIPointGridFormat(string name, string currentTimestamp, string currentValue, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity, Constants.TagStatus status)
+        {
+            Name = name;
+            CurrentTimestamp = currentTimestamp;
+            CurrentValue = currentValue;
+            InstrumentTag = instrumentTag;
+            PointType = pointType;
+            PointSource = pointSource;
+            Location1 = location1;
+            Zero = zero;
+            TypicalValue = typicalValue;
+            Span = span;
+            Compressing = compressing;
+            CompDev = compDev;
+            CompDevPercent = compDevPercent;
+            CompMin = compMin;
+            ExcDev = excDev;
+            ExcMin = excMin;
+            ExcMax = excMax;
+            ExcDevPercent = excDevPercent;
+            DataSecurity = dataSecurity;
+            PtSecurity = ptSecurity;
+            Status = status;
+        }
+        #endregion Constructors
     }
 }

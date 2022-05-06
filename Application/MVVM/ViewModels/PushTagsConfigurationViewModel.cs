@@ -1,6 +1,5 @@
 ﻿using Commands;
 using Models;
-using System;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -15,20 +14,9 @@ namespace ViewModels
         private PIPointGridFormat _pipointgridformat = null;
 
         private string _destinationServer;
-
-        private string _rowStatus = "PtCreated";
         #endregion
 
         #region Properties
-        public string RowStatus
-        {
-            get { return _rowStatus; }
-            set
-            {
-                _rowStatus = value;
-                OnPropertyChanged(nameof(RowStatus));
-            }
-        }
         public ICollectionView Attributes
         {
             get
@@ -84,7 +72,7 @@ namespace ViewModels
                 o => UpdateTagsAttributes());
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
-                // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
+            // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
             _buttonRefresh = new RelayCommand(
                 o => UpdateRowsUsingCurrentValues());
         }
@@ -109,8 +97,14 @@ namespace ViewModels
 
         public void UpdateRowsUsingCurrentValues()
         {
-            //PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(
-            //    )
+            PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags.Clear();
+            var v_tagList = PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList;
+            v_tagList.ForEach(v_AttributesTags =>
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_AttributesTags);
+                OnPropertyChanged(nameof(Attributes));
+            });
+
         }
         #endregion
     }

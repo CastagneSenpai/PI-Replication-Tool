@@ -104,7 +104,6 @@
     <Compile Include="Resources\Core\TotalEnergiesInfra.cs" />
     <Compile Include="MVVM\Models\DataGridCollection.cs" />
     <Compile Include="MVVM\Models\PIPointGridFormat.cs" />
-    <Compile Include="Resources\Stores\NavigationStore.cs" />
     <Page Include="MVVM\Themes\ConnectionCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

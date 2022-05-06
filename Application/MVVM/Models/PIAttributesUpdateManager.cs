@@ -1,5 +1,6 @@
 ﻿using NLog;
 using OSIsoft.AF;
+using OSIsoft.AF.Asset;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace Models
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
-                if (!(p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string"))
+                if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
                 {
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
@@ -306,22 +307,39 @@ namespace Models
                 throw new Exception();
             }
         }
-
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
             return listeAttributs[PICommonPointAttributes.Tag].ToString();
         }
-
         public IDictionary<string, object> GetCustomAttributes(IDictionary<string, object> p_Attributes)
         {
-            //IDictionary<string, object> v_tempList = new Dictionary<string, object>(p_Attributes);
             Dictionary<string, object> p_Common_Attributes = p_Attributes
                 .Where(attributs => Constants.CommonAttribute.Any(commonAttributes => commonAttributes == attributs.Key))
                 .ToDictionary(k => k.Key, v => v.Value);
 
             return p_Common_Attributes;
         }
-        #endregion
-    }
-}
+        public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
+        {
+            string v_Tagname = GetTagname(p_TagAttributes);
+            PIPoint v_Tag;
+            var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out v_Tag);
+            AFValue v_PIvalue = v_Tag.CurrentValue();
 
+            if (v_TagFound)
+            {
+                if (v_PIvalue.IsGood)
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                }
+                else
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.PtCreated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                }
+            }
+            else
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, v_PIvalue.Value, v_PIvalue.Timestamp);
+        }
+    }
+    #endregion Methods
+}
