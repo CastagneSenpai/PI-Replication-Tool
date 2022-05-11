@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Viewmodel="clr-namespace:ViewModels"
+        xmlns:Model="clr-namespace:Models"
         mc:Ignorable="d"
         Height="Auto" Width="Auto"
         Background="#FFFFFF">
@@ -179,9 +180,12 @@
         </Button>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="False" ItemsSource="{Binding Attributes}">
+            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="False" 
+                      ItemsSource="{Binding Attributes}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Current Timestamp" Binding="{Binding CurrentTimestamp}" />
+                    <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
                     <DataGridTextColumn Header="PointType" Binding="{Binding PointType}" />
                     <DataGridTextColumn Header="PointSource" Binding="{Binding PointSource}" />
@@ -203,17 +207,17 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RowStatus}" Value="PtCreated">
-                                <Setter Property="Background" Value="#EAEDA5">
-                                </Setter>
+                            <DataTrigger Binding="{Binding Status}"
+                                         Value="{x:Static Model:Constants+TagStatus.PtCreated}">
+                                <Setter Property="Background" Value="#EAEDA5" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RowStatus}" Value="OK">
-                                <Setter Property="Background" Value="#A5EBA6">
-                                </Setter>
+                            <DataTrigger Binding="{Binding Status}"
+                                         Value="{x:Static Model:Constants+TagStatus.Replicated}">
+                                <Setter Property="Background" Value="#A5EBA6" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RowStatus}" Value="KO">
-                                <Setter Property="Background" Value="#EFA6A6">
-                                </Setter>
+                            <DataTrigger Binding="{Binding Status}" 
+                                         Value="{x:Static Model:Constants+TagStatus.Error}">
+                                <Setter Property="Background" Value="#EFA6A6"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

@@ -16,7 +16,7 @@ namespace ViewModels
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
         
         private PIPointGridFormat _pipointgridformat = null;
-        
+
         private string _sourceServer;
         #endregion
 
@@ -84,6 +84,6 @@ namespace ViewModels
 
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
         }
-        #endregion
+        #endregion Methods
     }
 }
