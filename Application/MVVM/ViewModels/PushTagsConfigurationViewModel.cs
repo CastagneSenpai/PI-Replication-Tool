@@ -105,7 +105,6 @@ namespace ViewModels
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_AttributesTags);
                 OnPropertyChanged(nameof(Attributes));
             });
-
         }
         #endregion
     }

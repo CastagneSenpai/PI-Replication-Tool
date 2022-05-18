@@ -5,30 +5,23 @@ namespace Models
 {
     public class PISiteBaseManager
     {
-        public IEnumerable<PIPoint> LoadAllPIPointsWithNoEmpty(PIServer p_PIServer)
+        public IEnumerable<PIPoint> LoadAllPIPointsWithNoEmptyInstrumentTag(PIServer p_PIServer)
         {
             string query = "Name:=* AND instrumenttag:<>''";
             return PIPoint.FindPIPoints(p_PIServer, query, false);
-            //PIPointList myPIPointList = new PIPointList(yolo);
-            //return new PIPointList(yolo);
         }
 
-        public PIPointList FilterExistingTags(IEnumerable<PIPoint> p_PIPointList, PIServer p_PIServer)
+        public void FilterExistingTags(PIPoint p_PIPoint, ref PIPointList p_PIPointList, PIServer p_PIServer)
         {
-            PIPointList list = new PIPointList(p_PIPointList);
-
-            foreach (var v_Point in p_PIPointList)
+            PIPoint v_ResultPIPoint = null;
+            if (PIPoint.TryFindPIPoint(p_PIServer, p_PIPoint.Name, out v_ResultPIPoint))
             {
-                if (PIPoint.TryFindPIPoint(p_PIServer, v_Point.Name, out _))
+                if (!p_PIPointList.Remove(v_ResultPIPoint))
                 {
-                    if (!list.Remove(v_Point))
-                    {
-                        // NLOG
-                    }
+                    // NLOG
                 }
             }
-            list.LoadAttributes();
-            return list;
+            //p_PIPointList.LoadAttributes();
         }
     }
 }

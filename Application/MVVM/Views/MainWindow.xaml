@@ -177,9 +177,9 @@
         </Grid>
 
         <!-- Bottom Bar -->
-        <Border Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="4" Background="#d1d8e0" BorderBrush="Black">
+        <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" Background="#d1d8e0" BorderBrush="Black">
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Grid.Row="3" Grid.Column="2"
                 Content="Next"
                 HorizontalAlignment="Right" 
@@ -193,7 +193,7 @@
                 Command="{Binding ButtonNextView}">
                 </Button>
 
-                <RichTextBox x:Name="logwindow" Width="782" />
+                <!--<RichTextBox x:Name="logwindow" Width="782" />-->
             </StackPanel>
         </Border>
 

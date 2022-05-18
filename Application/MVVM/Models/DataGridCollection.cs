@@ -78,6 +78,14 @@ namespace Models
                 AddToCollection(pipoint);
             }
             CollectionViewSource.Source = CollectionTags;
+            CollectionViewSource.View.Refresh();
+        }
+
+        internal void PopulateGridLineByLine(IDictionary<string, object> toto)
+        {
+            AddToCollection(toto);
+
+            CollectionViewSource.Source = CollectionTags;
         }
 
         internal void UpdateGrid()

@@ -82,33 +82,35 @@ namespace ViewModels
         {
             _collectionTags.Clear();
             List<string> v_TagsNameList = new List<string>();
+            PIPointList v_FilteredPIPointList = new PIPointList();
 
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            
+                PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
+                OnPropertyChanged("Attributes");
             }
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
                 // TODO : Call la méthode de mise à jour des tags site to base
                 // On charge la liste des tags avec un instruments tags non vide depuis le serveur source
-                List<PIPoint> list = new List<PIPoint>(ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmpty(ReplicationManager.PIConnectionManager.PISourceServer));
+                List<PIPoint> v_AllPIPointsWithNoEmptyInstrumentTag = new List<PIPoint>(
+                    ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmptyInstrumentTag(ReplicationManager.PIConnectionManager.PISourceServer));
                 // On retire les tags qui existe sur le serveur destination
-                ReplicationManager.PISiteBaseManager.FilterExistingTags(list, ReplicationManager.PIConnectionManager.PITargetServer);
-                //ReplicationManager.PIAttributesUpdateManager.AttributesTagsList;
-                foreach (var v_PIPoint in list)
+                v_FilteredPIPointList = new PIPointList(v_AllPIPointsWithNoEmptyInstrumentTag);
+                foreach (var v_PIPoint in v_AllPIPointsWithNoEmptyInstrumentTag)
                 {
-                    ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_PIPoint.GetAttributes());
+                    ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_FilteredPIPointList, ReplicationManager.PIConnectionManager.PITargetServer);
+                    var v_TagAttributes = v_PIPoint.GetAttributes();
+                    ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                    ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                    ReplicationManager.DataGridCollection.CollectionViewSource.View.Refresh();
                 }
             }
-
-            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
-            OnPropertyChanged("Attributes");
-
             // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
             //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
-
-            PIReplicationManager.Logger.Info("Ca marche !");
         }
         #endregion
     }
