@@ -3,6 +3,7 @@ using Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -14,13 +15,27 @@ namespace ViewModels
 
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
-        
+
         private PIPointGridFormat _pipointgridformat = null;
 
         private string _sourceServer;
+        private int _choiceRadiotButton;
         #endregion
 
         #region Properties
+
+        public int ChoiceRadioButton
+        {
+            get
+            {
+                return _choiceRadiotButton;
+            }
+            set
+            {
+                _choiceRadiotButton = value;
+            }
+        }
+
         public ICollectionView Attributes
         {
             get
@@ -82,7 +97,10 @@ namespace ViewModels
             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
             OnPropertyChanged("Attributes");
 
-            FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+            // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
+            //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+
+            PIReplicationManager.Logger.Info("Ca marche !");
         }
         #endregion Methods
     }

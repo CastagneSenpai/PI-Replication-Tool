@@ -63,6 +63,9 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>packages\NLog.4.7.14\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="NLog.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>packages\NLog.Windows.Forms.4.5.0\lib\net35\NLog.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="OSIsoft.AF.UI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6238be57836698e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\PIPC\AF\PublicAssemblies\4.0\OSIsoft.AF.UI.dll</HintPath>
@@ -99,8 +102,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helper\WpfRichTextBoxRowColoringRule.cs" />
+    <Compile Include="Helper\WpfRichTextBoxTarget.cs" />
+    <Compile Include="Helper\WpfRichTextBoxWordColoringRule.cs" />
     <Compile Include="MVVM\Models\Constants.cs" />
-    <Compile Include="Resources\Core\NLogMemorityTarget.cs" />
+    <Compile Include="MVVM\Models\PISiteBaseManager.cs" />
+    <Compile Include="Resources\Core\NLogMemoryTarget.cs" />
     <Compile Include="Resources\Core\TotalEnergiesInfra.cs" />
     <Compile Include="MVVM\Models\DataGridCollection.cs" />
     <Compile Include="MVVM\Models\PIPointGridFormat.cs" />
@@ -177,6 +184,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -203,13 +213,14 @@
     <Resource Include="Resources\Assets\TotalEnergies.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Nlog.config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <None Include="Nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Assets\check.png" />
     <Resource Include="Resources\Assets\cross.png" />
+    <Resource Include="Helper\README_NLog_WpfRichTextBox.txt" />
     <Content Include="Resources\Assets\Spinner.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

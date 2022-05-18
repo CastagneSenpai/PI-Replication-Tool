@@ -2,14 +2,15 @@
 using Models;
 using OSIsoft.AF.PI;
 using System.Threading.Tasks;
+using NLog;
 
 namespace ViewModels
 {
     public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
+        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;        
 
-        #region PrivateAttributes
+        #region Fields
         private string _selectedSourceServer;
         private string _selectedTargetServer;
         private string _sourceKOStatus = "Hidden";
@@ -21,7 +22,8 @@ namespace ViewModels
         private readonly AsyncCommand _buttonConnectSourceServer;
         private readonly AsyncCommand _buttonConnectTargetServer;
         #endregion
-        #region BindingAttributes
+
+        #region Properties
         public string SelectedSourceServer
         {
             get => _selectedSourceServer;

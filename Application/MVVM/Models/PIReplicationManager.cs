@@ -1,4 +1,7 @@
-﻿namespace Models
+﻿using NLog;
+using PI_Replication_Tool.Helper;
+
+namespace Models
 {
     public sealed class PIReplicationManager
     {
@@ -28,5 +31,9 @@
         public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
         public DataGridCollection DataGridCollection = new DataGridCollection();
+
+        //public static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     }
 }

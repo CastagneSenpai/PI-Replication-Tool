@@ -134,7 +134,7 @@
 
         <StackPanel Grid.Row="1" Grid.Column="2">
             <RadioButton x:Name="cb1" Margin="5,0,0,0" HorizontalAlignment="Left" 
-            Content="Load with local input file" IsChecked="True" FontSize="14px"/>
+            Content="Load with local input file" IsChecked="{Binding Path=ChoiceRadioButton}" FontSize="14px" />
 
             <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" 
             Content="Load all tags not replicated" IsChecked="False" FontSize="14px" />

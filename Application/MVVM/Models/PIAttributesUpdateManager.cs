@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Windows;
 
 namespace Models
 {
@@ -39,7 +40,15 @@ namespace Models
                     // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
                     // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
                     var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
-                    v_PIPointList.Add(v_PIPoint);
+                    if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
+                    {
+                        // NLOG
+                        MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name.ToString()}");
+                    }
+                    else // Numerical tag
+                    {
+                        v_PIPointList.Add(v_PIPoint);
+                    }
                 }
                 catch
                 {
@@ -322,8 +331,9 @@ namespace Models
         public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
         {
             string v_Tagname = GetTagname(p_TagAttributes);
-            PIPoint v_Tag;
-            var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out v_Tag);
+            var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
+
+            // TODO TryCatch
             AFValue v_PIvalue = v_Tag.CurrentValue();
 
             if (v_TagFound)
