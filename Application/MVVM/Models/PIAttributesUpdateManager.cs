@@ -79,13 +79,14 @@ namespace Models
             try
             {
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
-                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
+                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes); // all compression parameters except "Compressing"
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
                 if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
                 {
+                    p_TagAttributes["compressing"] = 0;
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
             }
@@ -129,8 +130,7 @@ namespace Models
         {
             try
             {
-                // Put compression & exception parameter to 0
-                p_TagAttributes["compressing"] = 0;
+                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag isn't digital or string
                 p_TagAttributes["compdev"] = 0;
                 p_TagAttributes["compmin"] = 0;
                 p_TagAttributes["compmax"] = 0;

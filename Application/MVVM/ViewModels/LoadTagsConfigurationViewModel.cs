@@ -3,7 +3,7 @@ using Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -19,23 +19,12 @@ namespace ViewModels
         private PIPointGridFormat _pipointgridformat = null;
 
         private string _sourceServer;
-        private int _choiceRadiotButton;
+
+        //private bool _optionInputFile;
+        //private bool _optionMissingSiteToBase;
         #endregion
 
         #region Properties
-
-        public int ChoiceRadioButton
-        {
-            get
-            {
-                return _choiceRadiotButton;
-            }
-            set
-            {
-                _choiceRadiotButton = value;
-            }
-        }
-
         public ICollectionView Attributes
         {
             get
@@ -68,6 +57,10 @@ namespace ViewModels
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
+
+        public bool OptionInputFile { get; set; }
+
+        public bool OptionMissingSiteToBase { get; set; }
         #endregion
 
         #region RelayCommands
@@ -87,12 +80,18 @@ namespace ViewModels
         #region Methods
         void LoadAttributes()
         {
-            List<string> v_TagsNameList = new List<string>();
-            FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
-
             _collectionTags.Clear();
+            List<string> v_TagsNameList = new List<string>();
 
-            ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            if (OptionInputFile & !OptionMissingSiteToBase)
+            {
+                FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+                ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            }
+            else if (!OptionInputFile & OptionMissingSiteToBase)
+            {
+                // TODO : Call la méthode de mise à jour des tags site to base
+            }
 
             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
             OnPropertyChanged("Attributes");
@@ -102,6 +101,6 @@ namespace ViewModels
 
             PIReplicationManager.Logger.Info("Ca marche !");
         }
-        #endregion Methods
+        #endregion
     }
 }
