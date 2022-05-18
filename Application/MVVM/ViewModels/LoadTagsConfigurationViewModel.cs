@@ -1,9 +1,9 @@
 ﻿using Commands;
 using Models;
+using OSIsoft.AF.PI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -91,6 +91,15 @@ namespace ViewModels
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
                 // TODO : Call la méthode de mise à jour des tags site to base
+                // On charge la liste des tags avec un instruments tags non vide depuis le serveur source
+                List<PIPoint> list = new List<PIPoint>(ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmpty(ReplicationManager.PIConnectionManager.PISourceServer));
+                // On retire les tags qui existe sur le serveur destination
+                ReplicationManager.PISiteBaseManager.FilterExistingTags(list, ReplicationManager.PIConnectionManager.PITargetServer);
+                //ReplicationManager.PIAttributesUpdateManager.AttributesTagsList;
+                foreach (var v_PIPoint in list)
+                {
+                    ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_PIPoint.GetAttributes());
+                }
             }
 
             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();

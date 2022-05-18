@@ -5,10 +5,8 @@ namespace Models
 {
     public class PISiteBaseManager
     {
-        readonly PIReplicationManager PIReplicationManager = new PIReplicationManager();
         public IEnumerable<PIPoint> LoadAllPIPointsWithNoEmpty(PIServer p_PIServer)
         {
-            PIReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Clear();
             string query = "Name:=* AND instrumenttag:<>''";
             return PIPoint.FindPIPoints(p_PIServer, query, false);
             //PIPointList myPIPointList = new PIPointList(yolo);

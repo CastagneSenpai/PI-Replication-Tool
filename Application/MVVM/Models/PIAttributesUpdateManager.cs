@@ -43,7 +43,7 @@ namespace Models
                     if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
                     {
                         // NLOG
-                        MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name.ToString()}");
+                        MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name}");
                     }
                     else // Numerical tag
                     {

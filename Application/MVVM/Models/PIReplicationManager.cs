@@ -30,6 +30,7 @@ namespace Models
 
         public PIConnectionManager PIConnectionManager = new PIConnectionManager();
         public PIAttributesUpdateManager PIAttributesUpdateManager = new PIAttributesUpdateManager();
+        public PISiteBaseManager PISiteBaseManager = new PISiteBaseManager();
         public DataGridCollection DataGridCollection = new DataGridCollection();
 
         //public static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
