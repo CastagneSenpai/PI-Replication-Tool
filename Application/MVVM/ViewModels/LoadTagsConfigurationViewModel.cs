@@ -58,7 +58,7 @@ namespace ViewModels
             }
         }
 
-        public bool OptionInputFile { get; set; }
+        public bool OptionInputFile { get; set; } = true;
 
         public bool OptionMissingSiteToBase { get; set; }
         #endregion
