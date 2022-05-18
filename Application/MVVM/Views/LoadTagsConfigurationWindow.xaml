@@ -113,8 +113,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="68*" />
         </Grid.RowDefinitions>
 
@@ -133,13 +133,15 @@
 
 
         <StackPanel Grid.Row="1" Grid.Column="2">
-            <RadioButton x:Name="cb1" Margin="5,0,0,0" HorizontalAlignment="Left" 
-            Content="Load with local input file" IsChecked="True" FontSize="14px"/>
+            <Label FontWeight="Bold">Loading mode ?</Label>
 
-            <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" 
-            Content="Load all tags not replicated" IsChecked="False" FontSize="14px" />
+            <RadioButton x:Name="cb1" GroupName="LoadingMode" IsChecked="{Binding OptionInputFile}" Margin="5,0,0,0" HorizontalAlignment="Left" 
+                Content="Tags from local input file" FontSize="14px"/>
+
+            <RadioButton x:Name="cb2" GroupName="LoadingMode" IsChecked="{Binding OptionMissingSiteToBase}" Margin="5,0,0,0" HorizontalAlignment="Left" 
+                Content="Missing tags from site to Base" FontSize="14px" />
         </StackPanel>
-        
+
 
         <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Load Tags"

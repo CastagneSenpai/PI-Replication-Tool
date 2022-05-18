@@ -3,6 +3,7 @@ using Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -14,10 +15,13 @@ namespace ViewModels
 
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
-        
+
         private PIPointGridFormat _pipointgridformat = null;
 
         private string _sourceServer;
+
+        //private bool _optionInputFile;
+        //private bool _optionMissingSiteToBase;
         #endregion
 
         #region Properties
@@ -53,6 +57,10 @@ namespace ViewModels
                 OnPropertyChanged(nameof(SourceServer));
             }
         }
+
+        public bool OptionInputFile { get; set; }
+
+        public bool OptionMissingSiteToBase { get; set; }
         #endregion
 
         #region RelayCommands
@@ -72,18 +80,24 @@ namespace ViewModels
         #region Methods
         void LoadAttributes()
         {
-            List<string> v_TagsNameList = new List<string>();
-            FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
-
             _collectionTags.Clear();
+            List<string> v_TagsNameList = new List<string>();
 
-            ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            if (OptionInputFile & !OptionMissingSiteToBase)
+            {
+                FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+                ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+            }
+            else if (!OptionInputFile & OptionMissingSiteToBase)
+            {
+                // TODO : Call la méthode de mise à jour des tags site to base
+            }
 
             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
             OnPropertyChanged("Attributes");
 
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
         }
-        #endregion Methods
+        #endregion
     }
 }
