@@ -112,7 +112,8 @@
                        Foreground="#2d3436"
                        FontWeight="Light"
                        FontSize="15px"
-                       Margin="20,0,0,0"/>
+                       Margin="20,0,0,0"
+                   Visibility="Hidden"/>
         </Border>
 
         <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
