@@ -4,6 +4,7 @@ using OSIsoft.AF.PI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -73,45 +74,60 @@ namespace ViewModels
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
             _buttonLoadTags = new RelayCommand(
-                o => LoadAttributes());
+                async o => await LoadAttributes());
         }
         #endregion
 
         #region Methods
-        void LoadAttributes()
+        public async Task LoadAttributes()
         {
             _collectionTags.Clear();
             List<string> v_TagsNameList = new List<string>();
-            PIPointList v_FilteredPIPointList = new PIPointList();
+            //PIPointList v_FilteredPIPointList = new PIPointList();
+            //PIPoint v_PIPointOut = null;
 
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
-            
+
                 PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
-                OnPropertyChanged("Attributes");
+                
+                // Test line by line
+                //foreach (var tag in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+                //{
+                //    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(tag);
+                //    OnPropertyChanged("Attributes");
+                //}
             }
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
                 // TODO : Call la méthode de mise à jour des tags site to base
                 // On charge la liste des tags avec un instruments tags non vide depuis le serveur source
-                List<PIPoint> v_AllPIPointsWithNoEmptyInstrumentTag = new List<PIPoint>(
-                    ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmptyInstrumentTag(ReplicationManager.PIConnectionManager.PISourceServer));
-                // On retire les tags qui existe sur le serveur destination
-                v_FilteredPIPointList = new PIPointList(v_AllPIPointsWithNoEmptyInstrumentTag);
-                foreach (var v_PIPoint in v_AllPIPointsWithNoEmptyInstrumentTag)
-                {
-                    ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_FilteredPIPointList, ReplicationManager.PIConnectionManager.PITargetServer);
-                    var v_TagAttributes = v_PIPoint.GetAttributes();
-                    ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                    ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                    ReplicationManager.DataGridCollection.CollectionViewSource.View.Refresh();
-                }
+                //    List<PIPoint> v_AllPIPointsWithNoEmptyInstrumentTag = new List<PIPoint>(
+                //        ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmptyInstrumentTag(ReplicationManager.PIConnectionManager.PISourceServer));
+                //    // On retire les tags qui existe sur le serveur destination
+                //    v_FilteredPIPointList = new PIPointList(v_AllPIPointsWithNoEmptyInstrumentTag);
+                //    foreach (var v_PIPoint in v_AllPIPointsWithNoEmptyInstrumentTag)
+                //    {
+                //        bool found = ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_PIPointOut, ref v_FilteredPIPointList, ReplicationManager.PIConnectionManager.PITargetServer);
+                //        if (!found)
+                //        {
+                //            var v_TagAttributes = v_PIPointOut.GetAttributes();
+                //            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                //            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                //            OnPropertyChanged("Attributes");
+                //            //OnPropertyChanged(nameof(Attributes));
+                //        }
+                //    }
+                //}
+                await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);                
+                //OnPropertyChanged(nameof(Attributes));
+
+                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
+                //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
             }
-            // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
-            //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+            #endregion
         }
-        #endregion
     }
 }

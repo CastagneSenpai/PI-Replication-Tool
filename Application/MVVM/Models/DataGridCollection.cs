@@ -78,7 +78,7 @@ namespace Models
                 AddToCollection(pipoint);
             }
             CollectionViewSource.Source = CollectionTags;
-            CollectionViewSource.View.Refresh();
+            //CollectionViewSource.View.Refresh();
         }
 
         internal void PopulateGridLineByLine(IDictionary<string, object> toto)
@@ -86,6 +86,7 @@ namespace Models
             AddToCollection(toto);
 
             CollectionViewSource.Source = CollectionTags;
+            //CollectionViewSource.View.Refresh();
         }
 
         internal void UpdateGrid()
@@ -103,7 +104,7 @@ namespace Models
             AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
             CollectionViewSource.Source = CollectionTags;
         }
-        #endregion Methods
+        #endregion
     }
 }
 
