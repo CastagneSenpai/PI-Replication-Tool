@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -61,6 +62,8 @@ namespace ViewModels
         public bool OptionInputFile { get; set; } = true;
 
         public bool OptionMissingSiteToBase { get; set; }
+
+        public string OptionLocalInputFileContent { get; set; } = "Tags from local input file (" + ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"] + ")";
         #endregion
 
         #region RelayCommands
