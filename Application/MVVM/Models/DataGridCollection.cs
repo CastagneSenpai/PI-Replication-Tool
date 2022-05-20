@@ -73,20 +73,17 @@ namespace Models
         }
         internal void PopulateGrid()
         {
-            foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+            foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
-                AddToCollection(pipoint);
+                AddToCollection(v_PIPoint);
             }
             CollectionViewSource.Source = CollectionTags;
-            //CollectionViewSource.View.Refresh();
         }
 
         internal void PopulateGridLineByLine(IDictionary<string, object> toto)
         {
             AddToCollection(toto);
-
             CollectionViewSource.Source = CollectionTags;
-            //CollectionViewSource.View.Refresh();
         }
 
         internal void UpdateGrid()
