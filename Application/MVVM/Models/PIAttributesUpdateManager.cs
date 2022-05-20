@@ -71,7 +71,9 @@ namespace Models
             }
             else
             {
-                throw new Exception("Not enought PointSources available for this replication, please create more PItoPI interfaces before continue");
+                string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue";
+                Console.WriteLine(v_Message);
+                throw new Exception(v_Message);
             }
         }
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)

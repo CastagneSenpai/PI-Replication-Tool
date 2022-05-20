@@ -29,7 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -119,8 +119,7 @@
         <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
 
         <!-- Menu Left Panel -->
-        <Grid Background="#dfe6e9"
-              Grid.Row="2" Grid.RowSpan="3">
+        <Grid Background="#dfe6e9"  Grid.Row="1" Grid.RowSpan="3" Margin="0,20,0,-50">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />

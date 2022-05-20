@@ -1,6 +1,8 @@
 ﻿using Commands;
 using Models;
+using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -81,12 +83,22 @@ namespace ViewModels
         #region Methods
         public void UpdateTagsAttributes()
         {
-            ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
+            try
+            {
+                ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
                 ReplicationManager.PIConnectionManager.PISourceServer,
                 ReplicationManager.PIConnectionManager.PITargetServer);
 
-            PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
-            OnPropertyChanged(nameof(Attributes));
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
+                OnPropertyChanged(nameof(Attributes));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+                // TODO : NLog
+                Environment.Exit(1);
+            }
+            
         }
 
         public void PushTagsAttributes()
