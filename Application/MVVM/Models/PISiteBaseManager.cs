@@ -1,44 +1,63 @@
 ﻿using OSIsoft.AF.PI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using ViewModels;
 
 namespace Models
 {
-    public class PISiteBaseManager
+    public class PISiteBaseManager : Window
     {
+        //public IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag;
+        //List<PIPoint> v_FilteredPIPointList;
 
         public async Task LoadDeltaTagsAttributesAsync(LoadTagsConfigurationViewModel p_LoadViewModel)
         {
-            var v_AllPIPointsWithNoEmptyInstrumentTag = LoadAllPIPointsWithNoEmptyInstrumentTag();
-            PIPointList v_FilteredPIPointList = new PIPointList(v_AllPIPointsWithNoEmptyInstrumentTag);
+            var AllPIPointsWithNoEmptyInstrumentTag = await LoadAllPIPointsWithNoEmptyInstrumentTagAsync();
+
             await Task.Run(() =>
             {
+                PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
+                //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
                 PIPoint v_ResultPIPoint = null;
 
-                foreach (var v_PIPoint in v_AllPIPointsWithNoEmptyInstrumentTag)
+                foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
                 {
-                    bool found = FilterExistingTags(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
-                    if (!found)
+                    bool v_Found = FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
+                    if (!v_Found)
                     {
-                        var v_TagAttributes = v_ResultPIPoint.GetAttributes();
-                        PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                        p_LoadViewModel.OnPropertyChanged("Attributes");
+                        try
+                        {
+                            var v_TagAttributes = v_ResultPIPoint.GetAttributes();
+                            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+
+                            Dispatcher.Invoke(() => { 
+                                p_LoadViewModel.OnPropertyChanged("Attributes"); 
+                            },DispatcherPriority.ContextIdle);
+                            //Collection.CollectionViewSource.View.Refresh();
+                            //p_LoadViewModel.OnPropertyChanged("Attributes");
+                        }
+                        catch (System.Exception)
+                        {
+                            // NLOG
+                        }
                     }
                 }
             });
         }
 
-        public IEnumerable<PIPoint> LoadAllPIPointsWithNoEmptyInstrumentTag()
+        public async Task<IEnumerable<PIPoint>> LoadAllPIPointsWithNoEmptyInstrumentTagAsync()
         {
             string query = "Name:=* AND instrumenttag:<>''";
-            return PIPoint.FindPIPoints(PIReplicationManager.ReplicationManager.PIConnectionManager.PISourceServer, query, false);
+            return await PIPoint.FindPIPointsAsync(PIReplicationManager.ReplicationManager.PIConnectionManager.PISourceServer, query, false);
         }
 
-        public bool FilterExistingTags(PIPoint p_PIPoint, ref PIPoint v_ResultPIPoint, ref PIPointList p_PIPointList)
+        public bool FilterExistingTagsAsync(PIPoint p_PIPoint, ref PIPoint v_ResultPIPoint, ref PIPointList p_PIPointList)
         {
             //PIPoint v_ResultPIPoint = null;
+            //return niketamere(v_ResultPIPoint, p_PIPointList);
             if (PIPoint.TryFindPIPoint(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, p_PIPoint.Name, out v_ResultPIPoint))
             {
                 return p_PIPointList.Remove(p_PIPoint);

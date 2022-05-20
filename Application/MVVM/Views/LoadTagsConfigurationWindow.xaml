@@ -139,7 +139,7 @@
                 Content="{Binding OptionLocalInputFileContent}" FontSize="14px"/>
 
             <RadioButton x:Name="cb2" GroupName="LoadingMode" IsChecked="{Binding OptionMissingSiteToBase}" Margin="5,0,0,0" HorizontalAlignment="Left" 
-                Content="Missing tags from site to Base" FontSize="14px" />
+                Content="Missing tags from site to base" FontSize="14px" />
         </StackPanel>
 
 

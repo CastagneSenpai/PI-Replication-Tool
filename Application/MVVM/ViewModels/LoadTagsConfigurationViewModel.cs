@@ -1,6 +1,5 @@
 ﻿using Commands;
 using Models;
-using OSIsoft.AF.PI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -68,21 +67,20 @@ namespace ViewModels
         #endregion
 
         #region RelayCommands
-        private readonly RelayCommand _buttonLoadTags;
-        public RelayCommand ButtonLoadTags => _buttonLoadTags;
+        private readonly AsyncCommand _buttonLoadTags;
+        public IAsyncCommand ButtonLoadTags => _buttonLoadTags;
         #endregion
 
         #region Constructor
         public LoadTagsConfigurationViewModel()
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
-            _buttonLoadTags = new RelayCommand(
-                async o => await LoadAttributes());
+            _buttonLoadTags = new AsyncCommand(LoadAttributesAsync);
         }
         #endregion
 
         #region Methods
-        public async Task LoadAttributes()
+        public async Task LoadAttributesAsync()
         {
             _collectionTags.Clear();
             List<string> v_TagsNameList = new List<string>();
@@ -95,7 +93,8 @@ namespace ViewModels
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
                 PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
-                
+                OnPropertyChanged("Attributes");
+
                 // Test line by line
                 //foreach (var tag in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
                 //{
@@ -124,13 +123,13 @@ namespace ViewModels
                 //        }
                 //    }
                 //}
-                await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);                
+                await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);
                 //OnPropertyChanged(nameof(Attributes));
 
                 // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
                 //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
             }
-            #endregion
         }
+        #endregion
     }
 }
