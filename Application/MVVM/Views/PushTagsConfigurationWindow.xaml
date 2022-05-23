@@ -110,13 +110,12 @@
     <UserControl.DataContext>
         <Viewmodel:PushTagsConfigurationViewModel/>
     </UserControl.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="85"/>
-            <RowDefinition Height="65"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="0"/>
-            <RowDefinition Height="150*" />
+            <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -140,41 +139,50 @@
             Content="Create or Update" IsChecked="False" FontSize="14px" />
         </StackPanel>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="0"
+        <Border Grid.Row="1" Grid.Column="0" Background="GhostWhite" BorderBrush="Gainsboro" Margin="20,0" BorderThickness="1">
+            <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="0"
                 Content="Update Tags"
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Height="25"
                 Width="90"
+                Margin="0,20"
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2f3640"
                 Command="{Binding ButtonUpdateTags}">
-        </Button>
+            </Button>
+        </Border>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="1"
+        <Border Grid.Row="1" Grid.Column="1" Background="GhostWhite" BorderBrush="Gainsboro" Margin="20,0" BorderThickness="1">
+            <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="1"
                 Content="Push"
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Height="25"
                 Width="90"
                 FontFamily="Arial"
+                Margin="0,20"
                 Foreground="#FFFFFF"
                 Background="#2f3640"
                 Command="{Binding ButtonPushTags}">
-        </Button>
+            </Button>
+        </Border>
 
-        <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
+        <Border Grid.Row="1" Grid.Column="2" Background="GhostWhite" BorderBrush="Gainsboro" Margin="20,0" BorderThickness="1">
+            <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="2"
                 Content="Refresh"
                 HorizontalAlignment="Center" 
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="0,20"
                 Height="25"
                 Width="90"
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2f3640"
                 Command="{Binding ButtonRefresh}">
-        </Button>
+            </Button>
+        </Border>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
             <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="False" 
