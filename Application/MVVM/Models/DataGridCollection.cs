@@ -9,7 +9,7 @@ namespace Models
     {
         #region Fields
         internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();
-        internal readonly ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
+        internal ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
         #endregion
 
         #region Constructors
@@ -77,13 +77,13 @@ namespace Models
             {
                 AddToCollection(v_PIPoint);
             }
-            CollectionViewSource.Source = CollectionTags;
+            //CollectionViewSource.Source = CollectionTags;
         }
 
         internal void PopulateGridLineByLine(IDictionary<string, object> toto)
         {
             AddToCollection(toto);
-            CollectionViewSource.Source = CollectionTags;
+            //CollectionViewSource.Source = CollectionTags;
         }
 
         internal void UpdateGrid()
@@ -93,13 +93,13 @@ namespace Models
             {
                 AddToCollection(pipoint);
             }
-            CollectionViewSource.Source = CollectionTags;
+            //CollectionViewSource.Source = CollectionTags;
         }
 
         internal void UpdateGridStatus(IDictionary<string, object> pipoint, Constants.TagStatus status, object p_CurrentValue, AFTime p_CurrentTimestamp)
         {
             AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
-            CollectionViewSource.Source = CollectionTags;
+            //CollectionViewSource.Source = CollectionTags;
         }
         #endregion
     }

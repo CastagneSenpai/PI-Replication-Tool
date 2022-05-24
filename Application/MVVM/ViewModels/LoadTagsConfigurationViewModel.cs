@@ -1,10 +1,12 @@
 ﻿using Commands;
 using Models;
+using OSIsoft.AF.PI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Configuration;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -26,16 +28,28 @@ namespace ViewModels
         #endregion
 
         #region Properties
-        public ICollectionView Attributes
+        //public ICollectionView Attributes
+        //{
+        //    get
+        //    {
+        //        if (_collectionViewSource.View != null)
+        //        {
+        //            _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
+        //            return _collectionViewSource?.View;
+        //        }
+        //        return null;
+        //    }
+        //}
+        public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
             {
-                if (_collectionViewSource.View != null)
-                {
-                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
-                    return _collectionViewSource?.View;
-                }
-                return null;
+                return PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
+            }
+            set
+            {
+                SetProperty(ref PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags, value);
+                OnPropertyChanged(nameof(Attributes));
             }
         }
 
@@ -92,8 +106,12 @@ namespace ViewModels
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
-                PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
-                OnPropertyChanged("Attributes");
+                foreach(var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_PIPoint);
+                }
+                //PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
+                //OnPropertyChanged("Attributes");
 
                 // Test line by line
                 //foreach (var tag in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
@@ -123,11 +141,63 @@ namespace ViewModels
                 //        }
                 //    }
                 //}
-                await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);
-                //OnPropertyChanged(nameof(Attributes));
+                //await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);
+                IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
 
-                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
-                //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+                PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
+                //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
+
+                // TODO gerer le cas list null
+                PIPoint v_ResultPIPoint = null;
+
+                await Task.Run(() =>
+                {
+                    foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
+                    {
+                        bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
+                        if (!v_Found)
+                        {
+                            try
+                            {
+                                IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
+                                if (v_PIPoint.PointType.Equals(PIPointType.Digital))
+                                {
+
+                                }
+                                else
+                                {
+                                    PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                                    Application.Current.Dispatcher.Invoke((Action)delegate
+                                    {
+                                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                                    });
+                                    //Dispatcher.CurrentDispatcher.Invoke(() =>
+                                    //{
+                                    //    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                                    //}, DispatcherPriority.ContextIdle);
+                                }
+                                //_collectionViewSource.View.Refresh();
+                                //OnPropertyChanged("Attributes");
+
+
+                                //p_LoadViewModel.OnPropertyChanged("Attributes");
+                                //Dispatcher.CurrentDispatcher.Invoke(() =>
+                                //{
+                                //    OnPropertyChanged(nameof(Attributes));
+                                //}, DispatcherPriority.ContextIdle);
+
+                                //Application.Current.Dispatcher.Invoke(() => { OnPropertyChanged("Attributes"); }, DispatcherPriority.ContextIdle);
+
+                                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
+                                //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+                            }
+                            catch (System.Exception)
+                            {
+                                // NLOG
+                            }
+                        }
+                    }
+                });
             }
         }
         #endregion

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
-using ViewModels;
 
 namespace Models
 {
@@ -12,40 +10,42 @@ namespace Models
         //public IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag;
         //List<PIPoint> v_FilteredPIPointList;
 
-        public async Task LoadDeltaTagsAttributesAsync(LoadTagsConfigurationViewModel p_LoadViewModel)
+        //public async Task LoadDeltaTagsAttributesAsync(LoadTagsConfigurationViewModel p_LoadViewModel)
+        public async Task<IEnumerable<PIPoint>> LoadDeltaTagsAttributesAsync()
         {
-            var AllPIPointsWithNoEmptyInstrumentTag = await LoadAllPIPointsWithNoEmptyInstrumentTagAsync();
+            //IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await LoadAllPIPointsWithNoEmptyInstrumentTagAsync();
+            return await LoadAllPIPointsWithNoEmptyInstrumentTagAsync();
+            //await Task.Run(() =>
+            //{
+            //    PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
+            //    //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
+            //    PIPoint v_ResultPIPoint = null;
 
-            await Task.Run(() =>
-            {
-                PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
-                //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
-                PIPoint v_ResultPIPoint = null;
-
-                foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
-                {
-                    bool v_Found = FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
-                    if (!v_Found)
-                    {
-                        try
-                        {
-                            var v_TagAttributes = v_ResultPIPoint.GetAttributes();
-                            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-
-                            Dispatcher.Invoke(() => { 
-                                p_LoadViewModel.OnPropertyChanged("Attributes"); 
-                            },DispatcherPriority.ContextIdle);
-                            //Collection.CollectionViewSource.View.Refresh();
-                            //p_LoadViewModel.OnPropertyChanged("Attributes");
-                        }
-                        catch (System.Exception)
-                        {
-                            // NLOG
-                        }
-                    }
-                }
-            });
+            //    foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
+            //    {
+            //        bool v_Found = FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
+            //        if (!v_Found)
+            //        {
+            //            try
+            //            {
+            //                IDictionary<string, object> v_TagAttributes = v_ResultPIPoint.GetAttributes();
+            //                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+            //                PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+            //                p_LoadViewModel.OnPropertyChanged("Attributes");
+            //                //Dispatcher.Invoke(() => { 
+            //                //    p_LoadViewModel.OnPropertyChanged("Attributes"); 
+            //                //},DispatcherPriority.ContextIdle);
+            //                //Application.Current.Dispatcher.Invoke(() => { p_LoadViewModel.OnPropertyChanged("Attributes"); }, DispatcherPriority.ContextIdle);
+            //                //Collection.CollectionViewSource.View.Refresh();
+            //                //p_LoadViewModel.OnPropertyChanged("Attributes");
+            //            }
+            //            catch (System.Exception)
+            //            {
+            //                // NLOG
+            //            }
+            //        }
+            //    }
+            //});
         }
 
         public async Task<IEnumerable<PIPoint>> LoadAllPIPointsWithNoEmptyInstrumentTagAsync()

@@ -1,5 +1,6 @@
 ﻿using Commands;
 using Models;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 
@@ -17,16 +18,29 @@ namespace ViewModels
         #endregion
 
         #region Properties
-        public ICollectionView Attributes
+        //public ICollectionView Attributes
+        //{
+        //    get
+        //    {
+        //        if (_collectionViewSource.View != null)
+        //        {
+        //            _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
+        //            return _collectionViewSource?.View;
+        //        }
+        //        return null;
+        //    }
+        //}
+
+        public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
             {
-                if (_collectionViewSource.View != null)
-                {
-                    _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
-                    return _collectionViewSource?.View;
-                }
-                return null;
+                return PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
+            }
+            set
+            {
+                SetProperty(ref PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags, value);
+                OnPropertyChanged(nameof(Attributes));
             }
         }
 
