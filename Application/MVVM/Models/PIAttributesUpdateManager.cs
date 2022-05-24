@@ -318,7 +318,6 @@ namespace Models
                 throw new Exception();
             }
         }
-
         public void UpdateAndPushTags(PIServer targetServer)
         {
             AttributesTagsList.ForEach(p_tag =>
@@ -339,7 +338,6 @@ namespace Models
                 }
             });
         }
-
         public void CreateOrUpdateAndPushTags(PIServer targetServer)
         {
             IDictionary<string, IDictionary<string, object>> v_TagsToCreate = new Dictionary<string, IDictionary<string, object>>();
@@ -376,7 +374,6 @@ namespace Models
 
             });
         }
-
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
             return listeAttributs[PICommonPointAttributes.Tag].ToString();
