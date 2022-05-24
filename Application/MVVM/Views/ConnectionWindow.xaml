@@ -164,62 +164,64 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
+
+            <RowDefinition Height="80"/>
             <RowDefinition Height="15*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="22*"/>
+            <RowDefinition Height="15*"/>
             <RowDefinition Height="45*"/>
 
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*"/>
-            <ColumnDefinition Width="90*"/>
-            <ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="30*"/>
         </Grid.ColumnDefinitions>
 
         <Label HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Grid.Column="1"
-               Grid.Row="0"
+               Grid.Row="1"
                Content="Source server :"
                Foreground="#2d3436"
                FontWeight="Bold"
                FontSize="15px"
                Margin="0,0,0,0"/>
 
-        <ComboBox Grid.Row="1" Grid.Column="1" 
+        <ComboBox Grid.Row="2" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  x:Name="listSourceServer" 
                  ItemsSource="{Binding ListSourceServer}" 
                  SelectedItem="{Binding SelectedSourceServer}" 
                  VerticalAlignment="Top" 
-                 Width="450"        
+                 Width="350"        
                  RenderTransformOrigin="0.5,0.5"/>
 
         <Label HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Grid.Column="1"
-               Grid.Row="2"
+               Grid.Row="3"
                Content="Target server :"
                Foreground="#2d3436"
                FontWeight="Bold"
                FontSize="15px"
                Margin="0,0,0,0"/>
 
-        <ComboBox Grid.Row ="3" Grid.Column="1" 
+        <ComboBox Grid.Row ="4" Grid.Column="1" 
                   x:Name="listTargetServer" 
                   ItemsSource="{Binding ListTargetServer}" 
                   SelectedItem="{Binding SelectedTargetServer}" 
                   HorizontalAlignment="Left" 
                   VerticalAlignment="Top" 
-                  Width="450" 
+                  Width="350" 
                   RenderTransformOrigin="0.5,0.5"
                   SelectedValuePath=""/>
 
         <Button 
                 x:Name="btn_connect_source"
-                Grid.Row="1" Grid.Column="2"
+                Grid.Row="2" Grid.Column="2"
                 Content="Connect"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top"
@@ -231,11 +233,11 @@
                 Command="{Binding ButtonConnectSourceServer}">
         </Button>
 
-        <Image Width="25" Height="25" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Cross.png" Visibility="{Binding SourceKOStatus}"  />
-        <Image Width="25" Height="25" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Check.png" Visibility="{Binding SourceOKStatus}"  />
-        <Control Style="{StaticResource BusyAnimationStyle}" Width="35" Margin="0,0,10,0" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding SourceSpinnerStatus}"/>
+        <Image Width="25" Height="25" Grid.Row="2" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Cross.png" Visibility="{Binding SourceKOStatus}"  />
+        <Image Width="25" Height="25" Grid.Row="2" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Check.png" Visibility="{Binding SourceOKStatus}"  />
+        <Control Style="{StaticResource BusyAnimationStyle}" Width="35" Margin="0,0,10,0" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding SourceSpinnerStatus}"/>
 
-        <Button Grid.Row="3" Grid.Column="2"
+        <Button Grid.Row="4" Grid.Column="2"
                 Content="Connect"
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top"
@@ -247,9 +249,9 @@
                 Command="{Binding ButtonConnectTargetServer}">
         </Button>
 
-        <Image Height="25" Width="25" Grid.Row="3" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Cross.png" Visibility="{Binding TargetKOStatus}"/>
-        <Image Height="25" Width="25" Grid.Row="3" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Check.png" Visibility="{Binding TargetOKStatus}"/>
-        <Control Style="{StaticResource BusyAnimationStyle}" Width="35" Margin="0,0,10,0"  Grid.Column="3" Grid.Row="3" HorizontalAlignment="Left"  VerticalAlignment="Top" Visibility="{Binding TargetSpinnerStatus}" />
+        <Image Height="25" Width="25" Grid.Row="4" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Cross.png" Visibility="{Binding TargetKOStatus}"/>
+        <Image Height="25" Width="25" Grid.Row="4" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Left" Source="/Resources/Assets/Check.png" Visibility="{Binding TargetOKStatus}"/>
+        <Control Style="{StaticResource BusyAnimationStyle}" Width="35" Margin="0,0,10,0"  Grid.Column="3" Grid.Row="4" HorizontalAlignment="Left"  VerticalAlignment="Top" Visibility="{Binding TargetSpinnerStatus}" />
 
     </Grid>
 </UserControl>

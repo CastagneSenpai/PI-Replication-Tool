@@ -1,7 +1,9 @@
 ﻿using Commands;
 using Models;
 using System.Collections.ObjectModel;
+using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ViewModels
@@ -66,6 +68,9 @@ namespace ViewModels
                 OnPropertyChanged(nameof(DestinationServer));
             }
         }
+        public bool OptionCreateOnly { get; set; } = true;
+        public bool OptionUpdateOnly { get; set; }
+        public bool OptionCreateOrUpdate { get; set; }
         #endregion
 
         #region RelayCommands
@@ -84,8 +89,10 @@ namespace ViewModels
 
             _buttonUpdateTags = new RelayCommand(
                 o => UpdateTagsAttributes());
+
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
+
             // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
             _buttonRefresh = new RelayCommand(
                 o => UpdateRowsUsingCurrentValues());
@@ -95,19 +102,43 @@ namespace ViewModels
         #region Methods
         public void UpdateTagsAttributes()
         {
-            ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
-                ReplicationManager.PIConnectionManager.PISourceServer,
-                ReplicationManager.PIConnectionManager.PITargetServer);
+            try
+            {
+                ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
+                    ReplicationManager.PIConnectionManager.PISourceServer,
+                    ReplicationManager.PIConnectionManager.PITargetServer);
 
-            PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
-            OnPropertyChanged(nameof(Attributes));
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
+                    OnPropertyChanged(nameof(Attributes));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+                // TODO : NLog
+                Environment.Exit(1);
+            }
+            
         }
 
         public void PushTagsAttributes()
         {
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
-            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
-                PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+
+            if (OptionCreateOnly)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
+            else if (OptionUpdateOnly)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.UpdateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
+            else if (OptionCreateOrUpdate)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateOrUpdateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
         }
 
         public void UpdateRowsUsingCurrentValues()
