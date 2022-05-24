@@ -318,6 +318,65 @@ namespace Models
                 throw new Exception();
             }
         }
+
+        public void UpdateAndPushTags(PIServer targetServer)
+        {
+            AttributesTagsList.ForEach(p_tag =>
+            {
+                try
+                {
+                    PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(targetServer, GetTagname(p_tag));
+                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    v_CurrentPIPoint.SaveAttributes();
+                }
+                catch (AggregateException)
+                {
+                    throw new Exception();
+                }
+                catch (PIException)
+                {
+                    Logger.Warn("Tag" + GetTagname(p_tag) + " not found in " + targetServer + " : It cannot be updated because UpdateOnly Mode was check.");
+                }
+            });
+        }
+
+        public void CreateOrUpdateAndPushTags(PIServer targetServer)
+        {
+            IDictionary<string, IDictionary<string, object>> v_TagsToCreate = new Dictionary<string, IDictionary<string, object>>();
+            AttributesTagsList.ForEach(p_tag =>
+            {
+                PIPoint v_CurrentPIPoint;
+
+                if (PIPoint.TryFindPIPoint(targetServer, GetTagname(p_tag), out v_CurrentPIPoint))
+                {
+                    // Tag exist on target server : Update it with new configuration
+                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    v_CurrentPIPoint.SaveAttributes();
+                }
+                else
+                {
+                    // Tag does not exist : Add it to the list of creation tags.
+                    v_TagsToCreate.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                }
+
+                try
+                {
+                    AFListResults<string, PIPoint> p_Retour = targetServer.CreatePIPoints(v_TagsToCreate);
+                }
+                catch (AggregateException)
+                {
+                    // NLOG
+                    throw new Exception();
+                }
+                catch (PIException)
+                {
+                    // NLOG
+                    throw new Exception();
+                }
+
+            });
+        }
+
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
             return listeAttributs[PICommonPointAttributes.Tag].ToString();

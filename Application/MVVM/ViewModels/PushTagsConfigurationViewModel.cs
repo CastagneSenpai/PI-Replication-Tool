@@ -75,8 +75,10 @@ namespace ViewModels
 
             _buttonUpdateTags = new RelayCommand(
                 o => UpdateTagsAttributes());
+
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
+
             // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
             _buttonRefresh = new RelayCommand(
                 o => UpdateRowsUsingCurrentValues());
@@ -89,11 +91,11 @@ namespace ViewModels
             try
             {
                 ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
-                ReplicationManager.PIConnectionManager.PISourceServer,
-                ReplicationManager.PIConnectionManager.PITargetServer);
+                    ReplicationManager.PIConnectionManager.PISourceServer,
+                    ReplicationManager.PIConnectionManager.PITargetServer);
 
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
-                OnPropertyChanged(nameof(Attributes));
+                    OnPropertyChanged(nameof(Attributes));
             }
             catch (Exception exc)
             {
@@ -107,8 +109,22 @@ namespace ViewModels
         public void PushTagsAttributes()
         {
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
-            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
-                PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+
+            if (OptionCreateOnly)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
+            else if (OptionUpdateOnly)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.UpdateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
+            else if (OptionCreateOrUpdate)
+            {
+                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateOrUpdateAndPushTags(
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+            }
         }
 
         public void UpdateRowsUsingCurrentValues()

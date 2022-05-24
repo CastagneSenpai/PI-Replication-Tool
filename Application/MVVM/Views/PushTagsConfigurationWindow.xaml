@@ -155,7 +155,7 @@
                 </Button>
             </StackPanel>
         </Border>
-        <Border Grid.Row="1" Grid.Column="1" Background="GhostWhite" BorderBrush="Gainsboro" Margin="20,0" BorderThickness="1">
+        <Border Grid.Row="1" Grid.Column="1" Visibility="Visible" Background="GhostWhite" BorderBrush="Gainsboro" Margin="20,0" BorderThickness="1">
             <StackPanel Margin="0,5,0,0">
                 <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16px">
                     <Bold>Step 2</Bold>
