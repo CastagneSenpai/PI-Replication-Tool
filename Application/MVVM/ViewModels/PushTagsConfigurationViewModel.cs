@@ -54,6 +54,9 @@ namespace ViewModels
                 OnPropertyChanged(nameof(DestinationServer));
             }
         }
+        public bool OptionCreateOnly { get; set; } = true;
+        public bool OptionUpdateOnly { get; set; }
+        public bool OptionCreateOrUpdate { get; set; }
         #endregion
 
         #region RelayCommands

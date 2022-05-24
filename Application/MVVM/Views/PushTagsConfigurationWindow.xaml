@@ -169,12 +169,12 @@
                     <LineBreak/>
                 </TextBlock>
                 <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">
-                    <RadioButton x:Name="cb1"  Margin="5,0,0,0" HorizontalAlignment="Left" 
-                        Content="Create Only" IsChecked="True" FontSize="14px"/>
-                    <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" 
-                        Content="Update Only" IsChecked="False" FontSize="14px" />
-                    <RadioButton x:Name="cb3" Margin="5,0,0,0" HorizontalAlignment="Left" 
-                        Content="Create or Update" IsChecked="False" FontSize="14px" />
+                    <RadioButton x:Name="cb1"  Margin="5,0,0,0" HorizontalAlignment="Left" GroupName="PushingMode" IsChecked="{Binding OptionCreateOnly}" 
+                        Content="Create Only" FontSize="14px"/>
+                    <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" GroupName="PushingMode" IsChecked="{Binding OptionUpdateOnly}" 
+                        Content="Update Only" FontSize="14px" />
+                    <RadioButton x:Name="cb3" Margin="5,0,0,0" HorizontalAlignment="Left" GroupName="PushingMode" IsChecked="{Binding OptionCreateOrUpdate}" 
+                        Content="Create or Update" FontSize="14px" />
                 </StackPanel>
                 <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="1"
                 Content="Push"
