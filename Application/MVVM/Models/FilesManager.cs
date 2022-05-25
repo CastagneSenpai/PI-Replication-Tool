@@ -70,7 +70,7 @@ namespace Models
 
                     string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + OutputFileName + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
 
-                    File.Create(outputFileFullName);
+                    // To remove because it lock the file : File.Create(outputFileFullName);
                     File.WriteAllLines(outputFileFullName, FileLines);
                     FileLines.Clear();
                 }
