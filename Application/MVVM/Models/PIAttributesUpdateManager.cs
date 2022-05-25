@@ -390,12 +390,11 @@ namespace Models
         {
             string v_Tagname = GetTagname(p_TagAttributes);
             var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
-
-            // TODO TryCatch
-            AFValue v_PIvalue = v_Tag.CurrentValue();
+            AFValue v_PIvalue = null;
 
             if (v_TagFound)
             {
+                v_PIvalue = v_Tag.CurrentValue();
                 if (v_PIvalue.IsGood)
                 {
                     PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
@@ -406,7 +405,9 @@ namespace Models
                 }
             }
             else
-                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, v_PIvalue.Value, v_PIvalue.Timestamp);
+            {
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, null, OSIsoft.AF.Time.AFTime.MaxValue.LocalTime);
+            }
         }
     }
     #endregion Methods
