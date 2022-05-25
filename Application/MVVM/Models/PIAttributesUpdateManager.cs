@@ -101,6 +101,7 @@ namespace Models
         {
             try
             {
+                p_TagAttributes["location1"] = 0;
                 if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     // Get the PointSource and available space pair
@@ -278,7 +279,7 @@ namespace Models
             }
             return v_SelectedPointSource;
         }
-        public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
+        public void GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
             if (this.Trigram == "Trigram_")
