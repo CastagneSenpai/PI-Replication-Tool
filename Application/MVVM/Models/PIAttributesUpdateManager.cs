@@ -406,7 +406,7 @@ namespace Models
             }
             else
             {
-                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, null, OSIsoft.AF.Time.AFTime.MaxValue.LocalTime);
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No value found", OSIsoft.AF.Time.AFTime.Now);
             }
         }
     }

@@ -22,29 +22,29 @@ namespace Models
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
             {
                 CollectionTags.Add(new PIPointGridFormat(
-                    p_Tag["tag"] as string,
-                    p_CurrentTimestamp.ToString(),
-                    p_CurrentValue.ToString(),
-                    p_Tag["instrumenttag"] as string,
-                    p_Tag["pointtype"] as string,
-                    p_Tag["pointsource"] as string,
-                    int.Parse(p_Tag["location1"].ToString()),
-                    float.Parse(p_Tag["zero"].ToString()),
-                    float.Parse(p_Tag["typicalvalue"].ToString()),
-                    float.Parse(p_Tag["span"].ToString()),
-                    int.Parse(p_Tag["compressing"].ToString()),
-                    float.Parse(p_Tag["compdev"].ToString()),
-                    float.Parse(p_Tag["compmin"].ToString()),
-                    float.Parse(p_Tag["compdevpercent"].ToString()),
-                    float.Parse(p_Tag["excDev"].ToString()),
-                    float.Parse(p_Tag["excMin"].ToString()),
-                    float.Parse(p_Tag["excMax"].ToString()),
-                    float.Parse(p_Tag["excdevpercent"].ToString()),
-                    float.Parse(p_Tag["compdevpercent"].ToString()),
-                    p_Tag["datasecurity"].ToString(),
-                    p_Tag["ptsecurity"].ToString(),
-                    status.Value
-                ));
+                p_Tag["tag"] as string,
+                p_CurrentTimestamp.ToString(),
+                p_CurrentValue.ToString(),
+                p_Tag["instrumenttag"] as string,
+                p_Tag["pointtype"] as string,
+                p_Tag["pointsource"] as string,
+                int.Parse(p_Tag["location1"].ToString()),
+                float.Parse(p_Tag["zero"].ToString()),
+                float.Parse(p_Tag["typicalvalue"].ToString()),
+                float.Parse(p_Tag["span"].ToString()),
+                int.Parse(p_Tag["compressing"].ToString()),
+                float.Parse(p_Tag["compdev"].ToString()),
+                float.Parse(p_Tag["compmin"].ToString()),
+                float.Parse(p_Tag["compdevpercent"].ToString()),
+                float.Parse(p_Tag["excDev"].ToString()),
+                float.Parse(p_Tag["excMin"].ToString()),
+                float.Parse(p_Tag["excMax"].ToString()),
+                float.Parse(p_Tag["excdevpercent"].ToString()),
+                float.Parse(p_Tag["compdevpercent"].ToString()),
+                p_Tag["datasecurity"].ToString(),
+                p_Tag["ptsecurity"].ToString(),
+                status.Value
+            ));
             }
             else
             {
