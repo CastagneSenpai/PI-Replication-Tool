@@ -106,10 +106,16 @@ namespace ViewModels
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
-                foreach(var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+                await Task.Run(() =>
                 {
-                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_PIPoint);
-                }
+                    foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+                    {
+                        Application.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_PIPoint);
+                        });
+                    }
+                });
                 //PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
                 //OnPropertyChanged("Attributes");
 
@@ -162,7 +168,7 @@ namespace ViewModels
                                 IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
                                 if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                                 {
-
+                                    // NLOG
                                 }
                                 else
                                 {
