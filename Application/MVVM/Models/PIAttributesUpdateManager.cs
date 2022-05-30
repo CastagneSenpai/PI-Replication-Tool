@@ -25,7 +25,7 @@ namespace Models
         public PIAttributesUpdateManager() { }
         #endregion
 
-        #region Methods
+             #region Methods
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
             this.Clear();
@@ -67,24 +67,28 @@ namespace Models
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
             try
-            {
+            {   
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
-                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
-                if (!(p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string"))
+                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
+                {
+                    this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
+                }
+                else
                 {
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
+
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating tag {p_TagAttributes["tag"]} attributes. {e.Message}");
             }
         }
-        private void UpdatePointSourceAttributes(ref IDictionary<string, object> p_TagAttributes)
+        public void UpdatePointSourceAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
             try
             {
@@ -103,7 +107,7 @@ namespace Models
                 {
                     var v_PointSource = GetPointSourceForCurrentTag(this.NumericalPSAndRemainingSpace);
 
-                    // Set the PointSource
+                    // Set the PointSource              
                     p_TagAttributes["pointsource"] = v_PointSource.Key;
 
                     // -1 free space for this PointSource
@@ -125,7 +129,6 @@ namespace Models
                 p_TagAttributes["compmin"] = 0;
                 p_TagAttributes["compmax"] = 0;
                 p_TagAttributes["compdevpercent"] = 0;
-
                 p_TagAttributes["excdev"] = 0;
                 p_TagAttributes["excmin"] = 0;
                 p_TagAttributes["excmax"] = 0;
@@ -250,12 +253,7 @@ namespace Models
                 return v_RemainingSpace;
             });
 
-            if (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate)
-            {
-                return true;
-            }
-            else
-                return false;
+            return (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate);
         }
         private KeyValuePair<string, long> GetPointSourceForCurrentTag(Dictionary<string, long> p_PSAndRemainingSpace)
         {
