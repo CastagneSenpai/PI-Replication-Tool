@@ -27,7 +27,7 @@ namespace Models
         public PIAttributesUpdateManager() { }
         #endregion
 
-             #region Methods
+        #region Methods
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
             this.Clear();
@@ -81,23 +81,15 @@ namespace Models
             try
             {   
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
-<<<<<<< HEAD
-=======
-                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes); // all compression parameters except "Compressing"
->>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
-<<<<<<< HEAD
                 if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
                 }
                 else
-=======
-                if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
->>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
                 {
                     p_TagAttributes["compressing"] = 0;
                     this.VerifyTypicalValues(ref p_TagAttributes);
