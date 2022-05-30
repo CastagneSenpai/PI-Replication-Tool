@@ -5,7 +5,11 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PI-Replication-Tool", "PI-Replication-Tool.csproj", "{0D7F8424-129F-41E3-B207-AF36356F9B4A}"
 EndProject
+<<<<<<< HEAD
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PI-Replication-Tool.Tests", "..\PI-Replication-Tool.Tests\PI-Replication-Tool.Tests.csproj", "{26CBF615-5D12-4653-A608-04872FD7FD9A}"
+=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "..\TestConsole\TestConsole.csproj", "{24E03C26-2523-4F8B-8AB5-32ED9BC5558C}"
+>>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +21,17 @@ Global
 		{0D7F8424-129F-41E3-B207-AF36356F9B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D7F8424-129F-41E3-B207-AF36356F9B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D7F8424-129F-41E3-B207-AF36356F9B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+		{26CBF615-5D12-4653-A608-04872FD7FD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CBF615-5D12-4653-A608-04872FD7FD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CBF615-5D12-4653-A608-04872FD7FD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CBF615-5D12-4653-A608-04872FD7FD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{24E03C26-2523-4F8B-8AB5-32ED9BC5558C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24E03C26-2523-4F8B-8AB5-32ED9BC5558C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24E03C26-2523-4F8B-8AB5-32ED9BC5558C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24E03C26-2523-4F8B-8AB5-32ED9BC5558C}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
