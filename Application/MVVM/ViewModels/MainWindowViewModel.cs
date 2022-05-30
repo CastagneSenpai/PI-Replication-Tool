@@ -1,6 +1,7 @@
 ﻿using Commands;
 using Core;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace ViewModels
     public class MainWindowViewModel : BaseViewModel, IPageViewModel
     {
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
 
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
@@ -132,6 +134,8 @@ namespace ViewModels
         }
         public MainWindowViewModel()
         {
+            Logger.Info("PI Replication Tool is starting...");
+
             // Add available pages and set page
             PageViewModels.Add(new ConnectionViewModel());
             PageViewModels.Add(new LoadTagsConfigurationViewModel());
@@ -142,6 +146,8 @@ namespace ViewModels
             Mediator.Instance.Subscribe("GoToConnectionScreen", OnGoConnectionScreen);
             Mediator.Instance.Subscribe("GoToLoadTagConfigurationScreen", OnGoLoadTagConfigurationScreen);
             Mediator.Instance.Subscribe("GoToPushTagConfigurationScreen", OnGoPushTagConfigurationScreen);
+
+            Logger.Info("PI Replication Tool interface is loaded.");
         }
     }
 }
