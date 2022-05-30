@@ -79,22 +79,17 @@ namespace Models
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
             try
-            {   
+            {
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
-                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
+                if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
                 {
                     this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
-                }
-                else
-                {
-                    p_TagAttributes["compressing"] = 0;
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
-
             }
             catch (Exception e)
             {
@@ -137,7 +132,8 @@ namespace Models
         {
             try
             {
-                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag isn't digital or string
+                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag is numerical
+                p_TagAttributes["compressing"] = 0;
                 p_TagAttributes["compdev"] = 0;
                 p_TagAttributes["compmin"] = 0;
                 p_TagAttributes["compmax"] = 0;
