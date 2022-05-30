@@ -14,6 +14,7 @@ namespace Models
         //TextFieldParser 
         public static void ParseInputFileToTagsList(ref List<string> p_TagsList)
         {
+            Logger.Info($"Call method FileManager.ParseInputFileToTagsList.");
             try
             {
                 int counter = 0;
@@ -29,11 +30,13 @@ namespace Models
             {
                 Logger.Error($"Error parsing input file to a tag list. {e.Message}");
             }
+            Logger.Info($"End method FileManager.ParseInputFileToTagsList.");
         }
 
 
         public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList, BackupType p_BackupType)
         {
+            Logger.Info($"Call method FileManager.CreateTagsOutputFile.");
             try
             {
                 if(p_AttributesValueList.Count>0)
@@ -81,6 +84,7 @@ namespace Models
                 MessageBox.Show(e.Message + e.StackTrace);
                 Logger.Error($"Error writing tag attributes list to output file. {e.Message}");
             }
+            Logger.Info($"End method FileManager.CreateTagsOutputFile.");
         }
     }
 

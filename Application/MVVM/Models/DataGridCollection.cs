@@ -1,4 +1,5 @@
-﻿using OSIsoft.AF.Time;
+﻿using NLog;
+using OSIsoft.AF.Time;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
@@ -7,6 +8,8 @@ namespace Models
 {
     public class DataGridCollection
     {
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+
         #region Fields
         internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();
         internal ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
@@ -19,6 +22,7 @@ namespace Models
         #region Methods
         internal void AddToCollection(IDictionary<string, object> p_Tag, Constants.TagStatus? status = null, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null)
         {
+            Logger.Debug($"Call method DataGridCollection.AddToCollection.");
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
             {
                 CollectionTags.Add(new PIPointGridFormat(
@@ -70,36 +74,41 @@ namespace Models
                         p_Tag["ptsecurity"].ToString()
                         ));
             }
+            Logger.Debug($"End method DataGridCollection.AddToCollection.");
         }
         internal void PopulateGrid()
         {
+            Logger.Debug($"Call method DataGridCollection.PopulateGrid.");
             foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 AddToCollection(v_PIPoint);
             }
-            //CollectionViewSource.Source = CollectionTags;
+            Logger.Debug($"End method DataGridCollection.PopulateGrid.");
         }
 
-        internal void PopulateGridLineByLine(IDictionary<string, object> toto)
+        internal void PopulateGridLineByLine(IDictionary<string, object> p_Dictionary)
         {
-            AddToCollection(toto);
-            //CollectionViewSource.Source = CollectionTags;
+            Logger.Debug($"Call method DataGridCollection.PopulateGridLineByLine.");
+            AddToCollection(p_Dictionary);
+            Logger.Debug($"End method DataGridCollection.PopulateGridLineByLine.");
         }
 
         internal void UpdateGrid()
         {
+            Logger.Debug($"Call method DataGridCollection.UpdateGrid.");
             CollectionTags.Clear();
             foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 AddToCollection(pipoint);
             }
-            //CollectionViewSource.Source = CollectionTags;
+            Logger.Debug($"End method DataGridCollection.UpdateGrid.");
         }
 
         internal void UpdateGridStatus(IDictionary<string, object> pipoint, Constants.TagStatus status, object p_CurrentValue, AFTime p_CurrentTimestamp)
         {
+            Logger.Debug($"Call method DataGridCollection.UpdateGridStatus.");
             AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
-            //CollectionViewSource.Source = CollectionTags;
+            Logger.Debug($"End method DataGridCollection.UpdateGridStatus.");
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using Commands;
 using Models;
+using NLog;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
@@ -14,17 +15,11 @@ namespace ViewModels
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
         #region Fields
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
-
-        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
-
         private PIPointGridFormat _pipointgridformat = null;
-
         private string _sourceServer;
-
-        //private bool _optionInputFile;
-        //private bool _optionMissingSiteToBase;
         #endregion
 
         #region Properties
@@ -96,10 +91,10 @@ namespace ViewModels
         #region Methods
         public async Task LoadAttributesAsync()
         {
+            Logger.Info("Call method LoadTagsConfigurationViewModel.LoadAttributesAsync");
+
             _collectionTags.Clear();
             List<string> v_TagsNameList = new List<string>();
-            //PIPointList v_FilteredPIPointList = new PIPointList();
-            //PIPoint v_PIPointOut = null;
 
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
@@ -116,42 +111,11 @@ namespace ViewModels
                         });
                     }
                 });
-                //PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGrid();
-                //OnPropertyChanged("Attributes");
-
-                // Test line by line
-                //foreach (var tag in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
-                //{
-                //    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(tag);
-                //    OnPropertyChanged("Attributes");
-                //}
             }
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
-                // TODO : Call la méthode de mise à jour des tags site to base
-                // On charge la liste des tags avec un instruments tags non vide depuis le serveur source
-                //    List<PIPoint> v_AllPIPointsWithNoEmptyInstrumentTag = new List<PIPoint>(
-                //        ReplicationManager.PISiteBaseManager.LoadAllPIPointsWithNoEmptyInstrumentTag(ReplicationManager.PIConnectionManager.PISourceServer));
-                //    // On retire les tags qui existe sur le serveur destination
-                //    v_FilteredPIPointList = new PIPointList(v_AllPIPointsWithNoEmptyInstrumentTag);
-                //    foreach (var v_PIPoint in v_AllPIPointsWithNoEmptyInstrumentTag)
-                //    {
-                //        bool found = ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_PIPointOut, ref v_FilteredPIPointList, ReplicationManager.PIConnectionManager.PITargetServer);
-                //        if (!found)
-                //        {
-                //            var v_TagAttributes = v_PIPointOut.GetAttributes();
-                //            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                //            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                //            OnPropertyChanged("Attributes");
-                //            //OnPropertyChanged(nameof(Attributes));
-                //        }
-                //    }
-                //}
-                //await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync(this);
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
-
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
-                //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
 
                 // TODO gerer le cas list null
                 PIPoint v_ResultPIPoint = null;
@@ -176,26 +140,8 @@ namespace ViewModels
                                     Application.Current.Dispatcher.Invoke((Action)delegate
                                     {
                                         PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                                    });
-                                    //Dispatcher.CurrentDispatcher.Invoke(() =>
-                                    //{
-                                    //    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                                    //}, DispatcherPriority.ContextIdle);
-                                }
-                                //_collectionViewSource.View.Refresh();
-                                //OnPropertyChanged("Attributes");
-
-
-                                //p_LoadViewModel.OnPropertyChanged("Attributes");
-                                //Dispatcher.CurrentDispatcher.Invoke(() =>
-                                //{
-                                //    OnPropertyChanged(nameof(Attributes));
-                                //}, DispatcherPriority.ContextIdle);
-
-                                //Application.Current.Dispatcher.Invoke(() => { OnPropertyChanged("Attributes"); }, DispatcherPriority.ContextIdle);
-
-                                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
-                                //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+                                    });                                    
+                                }                                
                             }
                             catch (System.Exception)
                             {
@@ -205,6 +151,7 @@ namespace ViewModels
                     }
                 });
             }
+            Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }
         #endregion
     }

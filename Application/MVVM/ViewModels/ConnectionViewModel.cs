@@ -8,9 +8,12 @@ namespace ViewModels
 {
     public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;        
+        
 
         #region Fields
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
+
         private string _selectedSourceServer;
         private string _selectedTargetServer;
         private string _sourceKOStatus = "Hidden";
@@ -119,18 +122,19 @@ namespace ViewModels
         #region Methods
         private async Task ConnectPISourceServerAsync()
         {
-            
-            SourceKOStatus = "Hidden";
-            SourceOKStatus = "Hidden";
-            SourceSpinnerStatus = "Visible";
+            Logger.Info("Call method ConnectionViewModel.ConnectPISourceServerAsync");
+            this.SourceKOStatus = "Hidden";
+            this.SourceOKStatus = "Hidden";
+            this.SourceSpinnerStatus = "Visible";
 
             bool status = await PIReplicationManager.PIConnectionManager.ConnectToPISourceServerAsync(SelectedSourceServer);
-            SourceSpinnerStatus = "Hidden";
+            this.SourceSpinnerStatus = "Hidden";
 
             if (status)
-                SourceOKStatus = "Visible";
+                this.SourceOKStatus = "Visible";
             else
-                SourceKOStatus = "Visible";
+                this.SourceKOStatus = "Visible";
+            Logger.Info("End method ConnectionViewModel.ConnectPISourceServerAsync");
         }
 
         private bool CanConnectOnSourceServer()
@@ -140,17 +144,21 @@ namespace ViewModels
 
         private async Task ConnectPITargetServerAsync()
         {
-            TargetKOStatus = "Hidden";
-            TargetOKStatus = "Hidden";
-            TargetSpinnerStatus = "Visible";
+            Logger.Info("Call method ConnectionViewModel.ConnectPITargetServerAsync");
+
+            this.TargetKOStatus = "Hidden";
+            this.TargetOKStatus = "Hidden";
+            this.TargetSpinnerStatus = "Visible";
 
             bool status = await PIReplicationManager.PIConnectionManager.ConnectToPITargetServerAsync(SelectedTargetServer);
-            TargetSpinnerStatus = "Hidden";
+            this.TargetSpinnerStatus = "Hidden";
 
             if (status)
-                TargetOKStatus = "Visible";
+                this.TargetOKStatus = "Visible";
             else
-                TargetKOStatus = "Visible";
+                this.TargetKOStatus = "Visible";
+
+            Logger.Info("Call method ConnectionViewModel.ConnectPITargetServerAsync");
         }
 
         private bool CanConnectOnTargetServer()

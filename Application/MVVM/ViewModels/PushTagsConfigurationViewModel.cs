@@ -5,12 +5,14 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using NLog;
 
 namespace ViewModels
 {
     public class PushTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
         #region Fields
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
@@ -20,19 +22,6 @@ namespace ViewModels
         #endregion
 
         #region Properties
-        //public ICollectionView Attributes
-        //{
-        //    get
-        //    {
-        //        if (_collectionViewSource.View != null)
-        //        {
-        //            _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
-        //            return _collectionViewSource?.View;
-        //        }
-        //        return null;
-        //    }
-        //}
-
         public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
@@ -102,6 +91,7 @@ namespace ViewModels
         #region Methods
         public void UpdateTagsAttributes()
         {
+            Logger.Info("Call method PushTagsConfigurationViewModel.UpdateTagsAttributes");
             try
             {
                 ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
@@ -113,11 +103,11 @@ namespace ViewModels
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
-                // TODO : NLog
-                Environment.Exit(1);
+                string p_ErrorMsg = $"Error with method PushTagsConfigurationViewModel.UpdateTagsAttributes. {exc.Message}";
+                Logger.Error(p_ErrorMsg);
+                throw new Exception(p_ErrorMsg);
             }
-            
+            Logger.Info("End method PushTagsConfigurationViewModel.UpdateTagsAttributes");
         }
 
         public void PushTagsAttributes()
