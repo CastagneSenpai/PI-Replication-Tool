@@ -31,41 +31,50 @@ namespace Models
             }
         }
 
-        public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList)
+
+        public static void CreateTagsOutputFile(List<IDictionary<string, object>> p_AttributesValueList, BackupType p_BackupType)
         {
             try
             {
-                // Create list<string> object to store the content of the file
-                List<string> FileLines = new List<string>();
-                FileLines.Clear();
-
-                // Add header of the file using key names
-                string header = "";
-                foreach (string attributesName in p_AttributesValueList[0].Keys)
+                if(p_AttributesValueList.Count>0)
                 {
-                    header += attributesName + ConfigurationManager.AppSettings["fieldSeparator"];
-                }
-                FileLines.Add(header);
+                    // Create list<string> object to store the content of the file
+                    List<string> FileLines = new List<string>();
+                    FileLines.Clear();
 
-                // Format each tags attributes in one line - string format with separator ";"
-                foreach (IDictionary<string, object> currentTag in p_AttributesValueList)
-                {
-                    string currentLine = "";
-                    foreach (object attribute in currentTag.Values)
+                    // Add header of the file using key names
+                    string header = "";
+                    foreach (string attributesName in p_AttributesValueList[0].Keys)
                     {
-                        currentLine += attribute.ToString() + ConfigurationManager.AppSettings["fieldSeparator"];
+                        header += attributesName + ConfigurationManager.AppSettings["fieldSeparator"];
                     }
-                    FileLines.Add(currentLine);
+                    FileLines.Add(header);
+
+                    // Format each tags attributes in one line - string format with separator ";"
+                    foreach (IDictionary<string, object> currentTag in p_AttributesValueList)
+                    {
+                        string currentLine = "";
+                        foreach (object attribute in currentTag.Values)
+                        {
+                            currentLine += attribute.ToString() + ConfigurationManager.AppSettings["fieldSeparator"];
+                        }
+                        FileLines.Add(currentLine);
+                    }
+
+                    // Write lines in output file
+                    string OutputFileName;
+                    if (p_BackupType == BackupType.SourceServerBackup)
+                        OutputFileName = ConfigurationManager.AppSettings["OutputFileName_SourceTags"];
+                    else
+                        OutputFileName = ConfigurationManager.AppSettings["OutputFileName_TargetTags"]; ;
+
+                    string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + OutputFileName + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
+
+                    // To remove because it lock the file : File.Create(outputFileFullName);
+                    File.WriteAllLines(outputFileFullName, FileLines);
+                    FileLines.Clear();
                 }
-
-                // Write lines in output file
-                //TODO : différencier si source ou target file (pour le moment, source uniquement)
-
-                //string outputFileFullName = Constants.OutputPath + Constants.OutputFileName_SourceTags + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                string outputFileFullName = ConfigurationManager.AppSettings["OutputPath"] + ConfigurationManager.AppSettings["OutputFileName_SourceTags"] + "_" + DateTime.Now.ToString("yyyy-MM-ddThh-mm-ss") + ".csv";
-                //File.Create(outputFileFullName);
-                File.WriteAllLines(outputFileFullName, FileLines);
-                FileLines.Clear();
+                
             }
             catch (Exception e)
             {
@@ -73,5 +82,12 @@ namespace Models
                 Logger.Error($"Error writing tag attributes list to output file. {e.Message}");
             }
         }
+    }
+
+    // Define if the backup file which contains tags configuration is before or after the replication
+    public enum BackupType
+    {
+        SourceServerBackup = 0,
+        TargetServerBackup = 1
     }
 }

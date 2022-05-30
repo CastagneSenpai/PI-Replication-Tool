@@ -1,4 +1,5 @@
 ﻿<Window x:Class="Views.MainWindow"
+        x:Name="WelcomeScreen"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -28,7 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -111,18 +112,18 @@
                        Foreground="#2d3436"
                        FontWeight="Light"
                        FontSize="15px"
-                       Margin="20,0,0,0"/>
+                       Margin="20,0,0,0"
+                   Visibility="Hidden"/>
         </Border>
 
         <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
 
         <!-- Menu Left Panel -->
-        <Grid Background="#dfe6e9"
-              Grid.Row="2" Grid.RowSpan="3">
+        <Grid Background="#dfe6e9"  Grid.Row="1" Grid.RowSpan="3" Margin="0,20,0,-50">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="70" />
+                <RowDefinition Height="70" />
+                <RowDefinition Height="90" />
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -134,7 +135,7 @@
                    Foreground="white"
                    Background="#2e86de"
                    FontSize="12px"
-                   Margin="0,0,0,0"
+                   Margin="0,-20,0,0"
                    Height="25"
                    Command="{Binding ConnectionMenuButton}"/>
             <!--<ListBox Grid.Row="0"
@@ -178,21 +179,8 @@
         <!-- Bottom Bar -->
         <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="4" Background="#d1d8e0" BorderBrush="Black">
 
-            <!--<StackPanel Orientation="Horizontal">-->
-            <!--<TextBox x:Name="logwindow" Text="{Binding LogTextUpdate, Mode=TwoWay }">
-                    
-                    -->
-            <!--<RichTextBox.Resources>
-
-                    </RichTextBox.Resources>
-                    <FlowDocument>
-                        <Paragraph FontSize="36">Hello, world!</Paragraph>
-                        <Paragraph FontStyle="Italic" TextAlignment="Left" FontSize="14" Foreground="Gray">Thanks to the RichTextBox control, this FlowDocument is completely editable!</Paragraph>
-                    </FlowDocument>-->
-            <!--
-                </TextBox>-->
-
-            <Button Grid.Row="3" Grid.Column="2"
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Grid.Row="3" Grid.Column="2"
                 Content="Next"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Center"
@@ -203,8 +191,10 @@
                 Foreground="#FFFFFF"
                 Background="#2e86de"
                 Command="{Binding ButtonNextView}">
-            </Button>
-            <!--</StackPanel>-->
+                </Button>
+
+                <!--<RichTextBox x:Name="logwindow" Width="782" />-->
+            </StackPanel>
         </Border>
 
         <!-- Content -->

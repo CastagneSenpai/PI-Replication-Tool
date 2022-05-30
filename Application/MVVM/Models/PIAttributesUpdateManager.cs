@@ -1,11 +1,13 @@
 ﻿using NLog;
 using OSIsoft.AF;
+using OSIsoft.AF.Asset;
 using OSIsoft.AF.PI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Windows;
 
 namespace Models
 {
@@ -38,7 +40,15 @@ namespace Models
                     // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
                     // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
                     var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
-                    v_PIPointList.Add(v_PIPoint);
+                    if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
+                    {
+                        // NLOG
+                        MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name}");
+                    }
+                    else // Numerical tag
+                    {
+                        v_PIPointList.Add(v_PIPoint);
+                    }
                 }
                 catch
                 {
@@ -61,7 +71,9 @@ namespace Models
             }
             else
             {
-                throw new Exception("Not enought PointSources available for this replication, please create more PItoPI interfaces before continue");
+                string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue";
+                Console.WriteLine(v_Message);
+                throw new Exception(v_Message);
             }
         }
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
@@ -69,16 +81,25 @@ namespace Models
             try
             {   
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
+<<<<<<< HEAD
+=======
+                this.UpdateCompressionExceptionAttributes(ref p_TagAttributes); // all compression parameters except "Compressing"
+>>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
 
                 // Actions on Numerical tags only
+<<<<<<< HEAD
                 if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
                 }
                 else
+=======
+                if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
+>>>>>>> f323d22c0e37b7cf2030939d805141b231eefe2f
                 {
+                    p_TagAttributes["compressing"] = 0;
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
 
@@ -92,6 +113,7 @@ namespace Models
         {
             try
             {
+                p_TagAttributes["location1"] = 0;
                 if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
                 {
                     // Get the PointSource and available space pair
@@ -123,8 +145,7 @@ namespace Models
         {
             try
             {
-                // Put compression & exception parameter to 0
-                p_TagAttributes["compressing"] = 0;
+                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag isn't digital or string
                 p_TagAttributes["compdev"] = 0;
                 p_TagAttributes["compmin"] = 0;
                 p_TagAttributes["compmax"] = 0;
@@ -178,6 +199,7 @@ namespace Models
         {
             try
             {
+                // TODO : externaliser dans le fichier config
                 // Update TagName if source server is TEPNL, TEPUK or TEPGB
                 if (this.Trigram == "NLD")
                 {
@@ -239,7 +261,6 @@ namespace Models
             long v_AvailableNumericalPointSpace = this.PointSources_Numerical.Sum(v_PS =>
             {
                 long v_RemainingSpace = v_NumericalMaxPointCountAllowed - v_PS.PointCount;
-                // TODO: Clear la liste dans le cas où on clique 2 fois sur le bouton update
                 this.NumericalPSAndRemainingSpace.Add(v_PS.Name, v_RemainingSpace);
                 return v_RemainingSpace;
             });
@@ -264,7 +285,7 @@ namespace Models
             }
             return v_SelectedPointSource;
         }
-        public void GetTrigrammeFromPIServer(PIServer p_PIServer) // TODO : Modifier pour aller chercher le trigramme dans le fichier de config
+        public void GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
             if (this.Trigram == "Trigram_")
@@ -304,22 +325,97 @@ namespace Models
                 throw new Exception();
             }
         }
+        public void UpdateAndPushTags(PIServer targetServer)
+        {
+            AttributesTagsList.ForEach(p_tag =>
+            {
+                try
+                {
+                    PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(targetServer, GetTagname(p_tag));
+                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    v_CurrentPIPoint.SaveAttributes();
+                }
+                catch (AggregateException)
+                {
+                    throw new Exception();
+                }
+                catch (PIException)
+                {
+                    Logger.Warn("Tag" + GetTagname(p_tag) + " not found in " + targetServer + " : It cannot be updated because UpdateOnly Mode was check.");
+                }
+            });
+        }
+        public void CreateOrUpdateAndPushTags(PIServer targetServer)
+        {
+            IDictionary<string, IDictionary<string, object>> v_TagsToCreate = new Dictionary<string, IDictionary<string, object>>();
+            AttributesTagsList.ForEach(p_tag =>
+            {
+                PIPoint v_CurrentPIPoint;
 
+                if (PIPoint.TryFindPIPoint(targetServer, GetTagname(p_tag), out v_CurrentPIPoint))
+                {
+                    // Tag exist on target server : Update it with new configuration
+                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    v_CurrentPIPoint.SaveAttributes();
+                }
+                else
+                {
+                    // Tag does not exist : Add it to the list of creation tags.
+                    v_TagsToCreate.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                }
+
+                try
+                {
+                    AFListResults<string, PIPoint> p_Retour = targetServer.CreatePIPoints(v_TagsToCreate);
+                }
+                catch (AggregateException)
+                {
+                    // NLOG
+                    throw new Exception();
+                }
+                catch (PIException)
+                {
+                    // NLOG
+                    throw new Exception();
+                }
+
+            });
+        }
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
             return listeAttributs[PICommonPointAttributes.Tag].ToString();
         }
-
         public IDictionary<string, object> GetCustomAttributes(IDictionary<string, object> p_Attributes)
         {
-            //IDictionary<string, object> v_tempList = new Dictionary<string, object>(p_Attributes);
             Dictionary<string, object> p_Common_Attributes = p_Attributes
                 .Where(attributs => Constants.CommonAttribute.Any(commonAttributes => commonAttributes == attributs.Key))
                 .ToDictionary(k => k.Key, v => v.Value);
 
             return p_Common_Attributes;
         }
-        #endregion
-    }
-}
+        public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
+        {
+            string v_Tagname = GetTagname(p_TagAttributes);
+            var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
+            AFValue v_PIvalue = null;
 
+            if (v_TagFound)
+            {
+                v_PIvalue = v_Tag.CurrentValue();
+                if (v_PIvalue.IsGood)
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                }
+                else
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.PtCreated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                }
+            }
+            else
+            {
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No value found", OSIsoft.AF.Time.AFTime.Now);
+            }
+        }
+    }
+    #endregion Methods
+}

@@ -112,34 +112,36 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="68*" />
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="150*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="225*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="225*"/>
-            <ColumnDefinition Width="225*"/>
+            <ColumnDefinition Width="2*"/>
+            <!--<ColumnDefinition Width="10*"/>-->
+            <!--<ColumnDefinition Width="225*"/>-->
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px">
+        <TextBlock Name="textBlock1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Grid.Row="0" Grid.Column="0" FontSize="16px">
           <Bold>Source Server :</Bold>
         </TextBlock>
-        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="16px" Text="{Binding SourceServer, Mode=TwoWay}">
+        <TextBlock Name="textBlock2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="150,0,0,0" Grid.Row="0" Grid.Column="0" FontSize="16px" Text="{Binding SourceServer, Mode=TwoWay}">
         </TextBlock>
 
 
-        <StackPanel Grid.Row="1" Grid.Column="2">
-            <RadioButton x:Name="cb1" Margin="5,0,0,0" HorizontalAlignment="Left" 
-            Content="Load with local input files" IsChecked="True" FontSize="14px"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="45,0,0,0" VerticalAlignment="Center">
+            <Label FontWeight="Bold">Loading mode ?</Label>
 
-            <RadioButton x:Name="cb2" Margin="5,0,0,0" HorizontalAlignment="Left" 
-            Content="Load all tags not replicated" IsChecked="False" FontSize="14px" />
+            <RadioButton x:Name="cb1" GroupName="LoadingMode" IsChecked="{Binding OptionInputFile}" Margin="5,0,0,0" HorizontalAlignment="Left" 
+                Content="{Binding OptionLocalInputFileContent}" FontSize="14px"/>
+
+            <RadioButton x:Name="cb2" GroupName="LoadingMode" IsChecked="{Binding OptionMissingSiteToBase}" Margin="5,0,0,0" HorizontalAlignment="Left" 
+                Content="Missing tags from site to base" FontSize="14px" />
         </StackPanel>
-        
+
 
         <Button Style="{DynamicResource RoundedButtonStyle}" Grid.Row="1" Grid.Column="3"
                 Content="Load Tags"

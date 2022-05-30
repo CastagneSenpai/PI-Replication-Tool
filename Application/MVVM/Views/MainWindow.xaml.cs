@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Core;
+using NLog;
 using System.Windows;
 using System.Windows.Input;
-using Core;
-using NLog;
 
 namespace Views
 {
@@ -11,15 +10,10 @@ namespace Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private NlogMemoryTarget _Target;
         public MainWindow()
         {
             InitializeComponent();
 
-            //this.Loaded += (s, e) => {
-            //    _Target = new NlogMemoryTarget("text box output", LogLevel.Trace);
-            //    _Target.Log += log => LogText(log);
-            //};
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
