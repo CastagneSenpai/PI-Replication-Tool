@@ -158,7 +158,7 @@ namespace ViewModels
             else
                 this.TargetKOStatus = "Visible";
 
-            Logger.Info("Call method ConnectionViewModel.ConnectPITargetServerAsync");
+            Logger.Info("End method ConnectionViewModel.ConnectPITargetServerAsync");
         }
 
         private bool CanConnectOnTargetServer()
