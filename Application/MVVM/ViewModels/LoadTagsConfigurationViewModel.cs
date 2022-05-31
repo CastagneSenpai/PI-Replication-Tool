@@ -23,11 +23,45 @@ namespace ViewModels
 
         private string _sourceServer;
 
+        private double _currentProgress = 0;
+        private double _tagProgress = 0;
+        private double _totalProgress = 0;
+
         //private bool _optionInputFile;
         //private bool _optionMissingSiteToBase;
         #endregion
 
         #region Properties
+        public double CurrentProgress
+        {
+            get => _currentProgress;
+            set
+            {
+                _currentProgress = value;
+                OnPropertyChanged(nameof(CurrentProgress));
+            }
+        }
+
+        public double TagProgress
+        {
+            get => _tagProgress;
+            set
+            {
+                _tagProgress = value;
+                OnPropertyChanged(nameof(TagProgress));
+            }
+        }
+
+        public double TotalProgress
+        {
+            get => _totalProgress;
+            set
+            {
+                _totalProgress = value;
+                OnPropertyChanged(nameof(TotalProgress));
+            }
+        }
+
         //public ICollectionView Attributes
         //{
         //    get
@@ -78,7 +112,7 @@ namespace ViewModels
         public bool OptionMissingSiteToBase { get; set; }
 
         public string OptionLocalInputFileContent { get; set; } = "Tags from local input file (" + ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"] + ")";
-        #endregion
+        #endregion"
 
         #region RelayCommands
         private readonly AsyncCommand _buttonLoadTags;
@@ -151,60 +185,99 @@ namespace ViewModels
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
 
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
-                //v_FilteredPIPointList = new List<PIPoint>(AllPIPointsWithNoEmptyInstrumentTag);
 
                 // TODO gerer le cas list null
                 PIPoint v_ResultPIPoint = null;
 
-                await Task.Run(() =>
+                TotalProgress = v_FilteredPIPointList.Count;
+                var progress = new Progress<double>(v_currentPercent =>
                 {
-                    foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
+                    CurrentProgress = (double)v_currentPercent / TotalProgress * 100;
+                });
+
+                await Load(AllPIPointsWithNoEmptyInstrumentTag, v_ResultPIPoint, v_FilteredPIPointList, progress);
+
+                //await Task.Run(() =>
+                //{
+                //    foreach (var v_PIPoint in AllPIPointsWithNoEmptyInstrumentTag)
+                //    {
+                //        bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
+                //        if (!v_Found)
+                //        {
+                //            try
+                //            {
+                //                IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
+                //                if (v_PIPoint.PointType.Equals(PIPointType.Digital))
+                //                {
+                //                    // NLOG
+                //                }
+                //                else
+                //                {
+                //                    PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                //                    Application.Current.Dispatcher.Invoke((Action)delegate
+                //                    {
+                //                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                //                    });
+                //                }
+                //                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
+                //                FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+                //            }
+                //            catch (System.Exception)
+                //            {
+                //                // NLOG
+                //            }
+                //        }
+                //    }
+                //    _completeProgressBar = true;
+                //});
+
+                //await Task.Run(() =>
+                //{
+                //    while (!_completeProgressBar)
+                //    {
+                //        if (_tagProgress != 0 && _totalProgress != 0)
+                //        {
+                //            CurrentProgress = (int)(_tagProgress / _totalProgress) * 100;
+                //        }
+                //    }
+                //});
+            }
+        }
+
+        async Task Load(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
+        {
+            await Task.Run(() =>
+            {
+                foreach (var v_PIPoint in p_AllPIPointsWithNoEmptyInstrumentTag)
+                {
+                    TagProgress++;
+                    bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref p_ResultPIPoint, ref p_FilteredPIPointList);
+                    if (!v_Found)
                     {
-                        bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTagsAsync(v_PIPoint, ref v_ResultPIPoint, ref v_FilteredPIPointList);
-                        if (!v_Found)
+                        try
                         {
-                            try
-                            {
-                                IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
-                                if (v_PIPoint.PointType.Equals(PIPointType.Digital))
-                                {
-                                    // NLOG
-                                }
-                                else
-                                {
-                                    PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                                    Application.Current.Dispatcher.Invoke((Action)delegate
-                                    {
-                                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                                    });
-                                    //Dispatcher.CurrentDispatcher.Invoke(() =>
-                                    //{
-                                    //    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                                    //}, DispatcherPriority.ContextIdle);
-                                }
-                                //_collectionViewSource.View.Refresh();
-                                //OnPropertyChanged("Attributes");
-
-
-                                //p_LoadViewModel.OnPropertyChanged("Attributes");
-                                //Dispatcher.CurrentDispatcher.Invoke(() =>
-                                //{
-                                //    OnPropertyChanged(nameof(Attributes));
-                                //}, DispatcherPriority.ContextIdle);
-
-                                //Application.Current.Dispatcher.Invoke(() => { OnPropertyChanged("Attributes"); }, DispatcherPriority.ContextIdle);
-
-                                // TODO: j'ai commenté temporairement pour la démo. il ya une exception quand je met en input un tag digital ==> pk ?
-                                //FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
-                            }
-                            catch (System.Exception)
+                            IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
+                            if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                             {
                                 // NLOG
                             }
+                            else
+                            {
+                                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                                Application.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                                    p_progress.Report(TagProgress);
+                                });
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            // NLOG
                         }
                     }
-                });
-            }
+                }
+            });
         }
         #endregion
     }
