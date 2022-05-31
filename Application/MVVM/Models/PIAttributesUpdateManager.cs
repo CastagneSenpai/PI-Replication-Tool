@@ -30,6 +30,7 @@ namespace Models
         #region Methods
         public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
         {
+            Logger.Info("Call method PIAttributeUpdateManager.LoadTagsAttributes");
             this.Clear();
             List<PIPoint> v_PIPointList = new List<PIPoint>();
 
@@ -60,9 +61,11 @@ namespace Models
             {
                 AttributesTagsList.Add(v_PIPoint.GetAttributes());
             }
+            Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
         public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
         {
+            Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
             this.GetTrigrammeFromPIServer(p_PISourceServer);
             if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
             {
@@ -75,34 +78,33 @@ namespace Models
                 Console.WriteLine(v_Message);
                 throw new Exception(v_Message);
             }
+            Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
         }
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.UpdateTagAttributes for tag " + p_TagAttributes["tag"]);
             try
-            {   
+            {
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
-
+                
                 // Actions on Numerical tags only
-                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
+                if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
                 {
                     this.UpdateCompressionExceptionAttributes(ref p_TagAttributes);
-                }
-                else
-                {
-                    p_TagAttributes["compressing"] = 0;
                     this.VerifyTypicalValues(ref p_TagAttributes);
                 }
-
             }
             catch (Exception e)
             {
                 Logger.Error($"Error updating tag {p_TagAttributes["tag"]} attributes. {e.Message}");
             }
+            Logger.Debug("End method PIAttributeUpdateManager.UpdateTagAttributes for tag " + p_TagAttributes["tag"]);
         }
         public void UpdatePointSourceAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.UpdatePointSourceAttributes for tag " + p_TagAttributes["tag"]);
             try
             {
                 p_TagAttributes["location1"] = 0;
@@ -130,14 +132,18 @@ namespace Models
             }
             catch (Exception e)
             {
-                Logger.Error($"Error updating PointSource attribute. {e.Message}");
+                Logger.Error($"Error updating PointSource attribute for {p_TagAttributes["tag"]}. {e.Message}");
             }
+
+            Logger.Debug("End method PIAttributeUpdateManager.UpdatePointSourceAttributes for tag " + p_TagAttributes["tag"]);
         }
         private void UpdateCompressionExceptionAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.UpdateCompressionExceptionAttributes for tag " + p_TagAttributes["tag"]);
             try
             {
-                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag isn't digital or string
+                // Put compression & exception parameter to 0; except "Compression" which is only updated if tag is numerical
+                p_TagAttributes["compressing"] = 0;
                 p_TagAttributes["compdev"] = 0;
                 p_TagAttributes["compmin"] = 0;
                 p_TagAttributes["compmax"] = 0;
@@ -146,15 +152,17 @@ namespace Models
                 p_TagAttributes["excmin"] = 0;
                 p_TagAttributes["excmax"] = 0;
                 p_TagAttributes["excdevpercent"] = 0;
-
             }
             catch (Exception e)
             {
-                Logger.Error($"Error updating compression and exception attributes. {e.Message}");
+                Logger.Error($"Error updating compression and exception attributes for tag {p_TagAttributes["tag"]}. {e.Message}");
             }
+
+            Logger.Debug("End method PIAttributeUpdateManager.UpdateCompressionExceptionAttributes for tag " + p_TagAttributes["tag"]);
         }
         private void UpdateSecurityAttributes(ref IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.UpdateSecurityAttributes for tag " + p_TagAttributes["tag"]);
             try
             {
                 p_TagAttributes["datasecurity"] = ConfigurationManager.AppSettings["PISecurityConfiguration"];
@@ -164,9 +172,11 @@ namespace Models
             {
                 Logger.Error($"Error updating security attributes. {e.Message}");
             }
+            Logger.Debug("End method PIAttributeUpdateManager.UpdateSecurityAttributes for tag " + p_TagAttributes["tag"]);
         }
         private void VerifyTypicalValues(ref IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.VerifyTypicalValues for tag " + p_TagAttributes["tag"]);
             try
             {
                 float v_Zero, v_Typicalvalue, v_Span;
@@ -180,15 +190,17 @@ namespace Models
                 {
                     p_TagAttributes["typicalvalue"] = null;
                 }
-
             }
             catch (Exception e)
             {
-                Logger.Error($"Error verifying typicalValue, zero or span attributes. {e.Message}");
+                Logger.Error($"Error verifying typicalValue, zero or span attributes for tag { p_TagAttributes["tag"]}. {e.Message}");
             }
+
+            Logger.Debug("End method PIAttributeUpdateManager.VerifyTypicalValues for tag " + p_TagAttributes["tag"]);
         }
         private void UpdateTagNameAndInstrumentTag(ref IDictionary<string, object> p_TagAttributes, PIServer p_PISourceServer)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.UpdateTagNameAndInstrumentTag for tag " + p_TagAttributes["tag"]);
             try
             {
                 // TODO : externaliser dans le fichier config
@@ -213,9 +225,13 @@ namespace Models
             {
                 Logger.Error($"Error updating TagName and Instrumenttag attributes. {e.Message}");
             }
+
+            Logger.Debug("End method PIAttributeUpdateManager.UpdateTagNameAndInstrumentTag for tag " + p_TagAttributes["tag"]);
         }
         private bool IsThereEnoughtPointSourcesAvailable(PIServer p_PITargetServer)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.IsThereEnoughtPointSourcesAvailable.");
+
             // Clear PIAttributesUpdateManager lists in case of multiple click on <Update> button (keep AttributesTagsList only)
             this.PointSources_Digital.Clear();
             this.PointSources_Numerical.Clear();
@@ -266,6 +282,7 @@ namespace Models
                 return v_RemainingSpace;
             });
 
+            Logger.Debug("End method PIAttributeUpdateManager.IsThereEnoughtPointSourcesAvailable.");
             return (v_AvailableNumericalPointSpace >= v_NbNumericalTagsToReplicate && v_AvailableDigitalPointSpace >= v_NbDigitalTagsToReplicate);
         }
         private KeyValuePair<string, long> GetPointSourceForCurrentTag(Dictionary<string, long> p_PSAndRemainingSpace)
@@ -279,23 +296,28 @@ namespace Models
         }
         public void GetTrigrammeFromPIServer(PIServer p_PIServer)
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.GetTrigrammeFromPIServer.");
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
             if (this.Trigram == "Trigram_")
             {
                 throw new Exception("PI server name does not exist is configuration file.");
             }
+            Logger.Debug("End method PIAttributeUpdateManager.GetTrigrammeFromPIServer.");
         }
         public void Clear()
         {
+            Logger.Debug("Call method PIAttributeUpdateManager.Clear.");
             this.AttributesTagsList.Clear();
             this.PointSources_Digital.Clear();
             this.PointSources_Numerical.Clear();
             this.NumericalPSAndRemainingSpace.Clear();
             this.DigitalPSAndRemainingSpace.Clear();
             this.Trigram = "";
+            Logger.Debug("End method PIAttributeUpdateManager.Clear.");
         }
         public void CreateAndPushTags(PIServer targetServer)
         {
+            Logger.Info($"Call method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> listeDeTags = new Dictionary<string, IDictionary<string, object>>();
             AttributesTagsList.ForEach(p_tag =>
             {
@@ -306,19 +328,22 @@ namespace Models
             {
                 AFListResults<string, PIPoint> retour = targetServer.CreatePIPoints(listeDeTags);
             }
-            catch (AggregateException)
+            catch (AggregateException e)
             {
-                // NLOG
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
-            catch (PIException)
+            catch (PIException e)
             {
-                // NLOG
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
+
+            Logger.Info($"End method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}.");
         }
         public void UpdateAndPushTags(PIServer targetServer)
         {
+            Logger.Info($"Call method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}.");
             AttributesTagsList.ForEach(p_tag =>
             {
                 try
@@ -327,26 +352,29 @@ namespace Models
                     v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
                     v_CurrentPIPoint.SaveAttributes();
                 }
-                catch (AggregateException)
+                catch (AggregateException e)
                 {
+                    Logger.Error($"Error in method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}. {e.Message}");
                     throw new Exception();
                 }
-                catch (PIException)
+                catch (PIException e)
                 {
-                    Logger.Warn("Tag" + GetTagname(p_tag) + " not found in " + targetServer + " : It cannot be updated because UpdateOnly Mode was check.");
+                    Logger.Warn($"Tag {GetTagname(p_tag)} not found in {targetServer.Name} : It cannot be updated because UpdateOnly Mode was check. {e.Message}");
                 }
             });
+            Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}.");
         }
         public void CreateOrUpdateAndPushTags(PIServer targetServer)
         {
+            Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> v_TagsToCreate = new Dictionary<string, IDictionary<string, object>>();
             AttributesTagsList.ForEach(p_tag =>
             {
-                PIPoint v_CurrentPIPoint;
 
-                if (PIPoint.TryFindPIPoint(targetServer, GetTagname(p_tag), out v_CurrentPIPoint))
+                if (PIPoint.TryFindPIPoint(targetServer, GetTagname(p_tag), out PIPoint v_CurrentPIPoint))
                 {
                     // Tag exist on target server : Update it with new configuration
+                    Logger.Debug($"Update tag {GetTagname(p_tag)} in {targetServer}");
                     v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
                     v_CurrentPIPoint.SaveAttributes();
                 }
@@ -358,20 +386,22 @@ namespace Models
 
                 try
                 {
+                    Logger.Debug($"Creating tags which are not created yet in {targetServer}.");
                     AFListResults<string, PIPoint> p_Retour = targetServer.CreatePIPoints(v_TagsToCreate);
                 }
-                catch (AggregateException)
+                catch (AggregateException e)
                 {
-                    // NLOG
+                    Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}. {e.Message}");
                     throw new Exception();
                 }
-                catch (PIException)
+                catch (PIException e)
                 {
-                    // NLOG
+                    Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}. {e.Message}");
                     throw new Exception();
                 }
-
             });
+
+            Logger.Info($"End method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}.");
         }
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
@@ -387,13 +417,13 @@ namespace Models
         }
         public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
         {
+            Logger.Info($"Call method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
             string v_Tagname = GetTagname(p_TagAttributes);
             var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
-            AFValue v_PIvalue = null;
 
             if (v_TagFound)
             {
-                v_PIvalue = v_Tag.CurrentValue();
+                AFValue v_PIvalue = v_Tag.CurrentValue();
                 if (v_PIvalue.IsGood)
                 {
                     PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
@@ -407,6 +437,7 @@ namespace Models
             {
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No value found", OSIsoft.AF.Time.AFTime.Now);
             }
+            Logger.Info($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
         }
     }
     #endregion Methods

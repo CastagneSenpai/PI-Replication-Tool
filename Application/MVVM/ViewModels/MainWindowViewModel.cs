@@ -1,6 +1,7 @@
 ﻿using Commands;
 using Core;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,10 @@ namespace ViewModels
     public class MainWindowViewModel : BaseViewModel, IPageViewModel
     {
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
+        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
 
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;
-
         private ICommand _buttonNextView;
         public ICommand ButtonNextView
         {
@@ -33,7 +34,6 @@ namespace ViewModels
                 ));
             }
         }
-
         private ICommand _connectionMenuButton;
         public ICommand ConnectionMenuButton
         {
@@ -46,7 +46,6 @@ namespace ViewModels
                 ));
             }
         }
-
         private ICommand _loadTagsAttributesMenuButton;
         public ICommand LoadTagsAttributesMenuButton
         {
@@ -59,7 +58,6 @@ namespace ViewModels
                 ));
             }
         }
-
         private ICommand _pushTagsAttributesMenuButton;
         public ICommand PushTagsAttributesMenuButton
         {
@@ -72,7 +70,6 @@ namespace ViewModels
                 ));
             }
         }
-
         public List<IPageViewModel> PageViewModels
         {
             get
@@ -83,7 +80,6 @@ namespace ViewModels
                 return _pageViewModels;
             }
         }
-
         public IPageViewModel CurrentPageViewModel
         {
             get
@@ -96,7 +92,6 @@ namespace ViewModels
                 OnPropertyChanged("CurrentPageViewModel");
             }
         }
-
         private void ChangeViewModel(IPageViewModel viewModel)
         {
             if (!PageViewModels.Contains(viewModel))
@@ -104,7 +99,6 @@ namespace ViewModels
 
             CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
         }
-
         private string GetNextViewModel()
         {
             var index = PageViewModels.FindIndex(vm => vm == CurrentPageViewModel);
@@ -122,30 +116,26 @@ namespace ViewModels
                     return "GoToConnectionScreen";
             }
         }
-
         private void OnGoConnectionScreen(object obj)
         {
             ChangeViewModel(PageViewModels[0]);
         }
-
         private void OnGoLoadTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[1]);
         }
-
         private void OnGoPushTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[2]);
         }
-
-
         public void LogTextUpdate()
         {
             throw new NotImplementedException();
         }
-
         public MainWindowViewModel()
         {
+            Logger.Info("PI Replication Tool is starting...");
+
             // Add available pages and set page
             PageViewModels.Add(new ConnectionViewModel());
             PageViewModels.Add(new LoadTagsConfigurationViewModel());
@@ -156,6 +146,8 @@ namespace ViewModels
             Mediator.Instance.Subscribe("GoToConnectionScreen", OnGoConnectionScreen);
             Mediator.Instance.Subscribe("GoToLoadTagConfigurationScreen", OnGoLoadTagConfigurationScreen);
             Mediator.Instance.Subscribe("GoToPushTagConfigurationScreen", OnGoPushTagConfigurationScreen);
+
+            Logger.Info("PI Replication Tool interface is loaded.");
         }
     }
 }

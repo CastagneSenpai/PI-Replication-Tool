@@ -72,6 +72,7 @@ namespace Models
         // -------------------
          public async Task<bool> ConnectToPIServerAsync(string p_PIServerName)
         {
+            Logger.Info($"Call method PIConnectionManager.ConnectToPIServerAsync for {p_PIServerName}.");
             bool v_IsSuccess = false;
             await Task.Run(() =>
             {
@@ -99,6 +100,7 @@ namespace Models
                     v_IsSuccess = false;
                 }
             });
+            Logger.Info($"End method PIConnectionManager.ConnectToPIServerAsync for {p_PIServerName}.");
             return v_IsSuccess;
         }
 
@@ -116,7 +118,8 @@ namespace Models
 
         public void RefreshAllConnections()
         {
-            foreach(var PIServ in _connectedPIServersList)
+            Logger.Info($"Call method PIConnectionManager.RefreshAllConnections.");
+            foreach (var PIServ in _connectedPIServersList)
             {
                 if(!PIServ.ConnectionInfo.IsConnected)
                 {
@@ -137,6 +140,7 @@ namespace Models
                     }
                 }
             }
+            Logger.Info($"End method PIConnectionManager.RefreshAllConnections.");
         }
     }
 }
