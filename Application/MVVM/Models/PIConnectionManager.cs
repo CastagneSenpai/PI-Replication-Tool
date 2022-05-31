@@ -12,7 +12,7 @@ namespace Models
         // PROPERTIES OF CLASS
         // -------------------
 
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         // Servers lists
         private PIServers _localPIServerList = PIServers.GetPIServers();

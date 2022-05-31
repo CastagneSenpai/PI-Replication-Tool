@@ -12,7 +12,7 @@ namespace ViewModels
     public class MainWindowViewModel : BaseViewModel, IPageViewModel
     {
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private IPageViewModel _currentPageViewModel;
         private List<IPageViewModel> _pageViewModels;

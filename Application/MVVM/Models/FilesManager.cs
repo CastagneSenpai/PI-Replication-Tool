@@ -9,7 +9,7 @@ namespace Models
 {
     public static class FilesManager
     {
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         //TextFieldParser 
         public static void ParseInputFileToTagsList(ref List<string> p_TagsList)
@@ -23,7 +23,7 @@ namespace Models
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
-                    Logger.Debug($"Tag {line} ({counter}) was taken into account by PI Replication Tool");
+                    Logger.Info($"Tag {line} ({counter}) was taken into account by PI Replication Tool");
                 }
             }
             catch (Exception e)

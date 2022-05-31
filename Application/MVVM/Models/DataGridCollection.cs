@@ -8,7 +8,7 @@ namespace Models
 {
     public class DataGridCollection
     {
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         #region Fields
         internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();

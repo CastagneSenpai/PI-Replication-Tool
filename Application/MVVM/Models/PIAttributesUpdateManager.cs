@@ -14,7 +14,7 @@ namespace Models
     public sealed class PIAttributesUpdateManager
     {
         #region Properties
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
         public ICollection<PIPointSource> PointSources_Digital { get; set; } = new Collection<PIPointSource>();
         public ICollection<PIPointSource> PointSources_Numerical { get; set; } = new Collection<PIPointSource>();

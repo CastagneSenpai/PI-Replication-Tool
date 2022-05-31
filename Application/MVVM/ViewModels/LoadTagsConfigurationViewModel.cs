@@ -15,7 +15,7 @@ namespace ViewModels
     public class LoadTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
         #region Fields
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
         private PIPointGridFormat _pipointgridformat = null;

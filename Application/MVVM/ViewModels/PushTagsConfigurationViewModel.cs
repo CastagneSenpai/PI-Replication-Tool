@@ -12,7 +12,7 @@ namespace ViewModels
     public class PushTagsConfigurationViewModel : BaseViewModel, IPageViewModel
     {
         #region Fields
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
 
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;

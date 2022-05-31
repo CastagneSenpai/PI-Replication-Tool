@@ -11,7 +11,7 @@ namespace ViewModels
         
 
         #region Fields
-        static readonly Logger Logger = LogManager.GetLogger("PIReplicationToolLogger");
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
 
         private string _selectedSourceServer;
