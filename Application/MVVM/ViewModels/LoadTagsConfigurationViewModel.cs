@@ -20,10 +20,11 @@ namespace ViewModels
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
         private PIPointGridFormat _pipointgridformat = null;
         private string _sourceServer;
-
         private double _currentProgress = 0;
         private double _tagProgress = 0;
         private double _totalProgress = 0;
+        private bool _taskBarVisibility = false;
+        private bool _isLoadTagButtonAvailable = true;
         #endregion
 
         #region Properties
@@ -54,19 +55,15 @@ namespace ViewModels
                 OnPropertyChanged(nameof(TotalProgress));
             }
         }
-
-        //public ICollectionView Attributes
-        //{
-        //    get
-        //    {
-        //        if (_collectionViewSource.View != null)
-        //        {
-        //            _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
-        //            return _collectionViewSource?.View;
-        //        }
-        //        return null;
-        //    }
-        //}
+        public bool TaskBarVisibility
+        {
+            get => _taskBarVisibility;
+            set
+            {
+                if (_taskBarVisibility != value)
+                    _taskBarVisibility = value;
+            }
+        }
         public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
@@ -100,6 +97,16 @@ namespace ViewModels
         public bool OptionInputFile { get; set; } = true;
         public bool OptionMissingSiteToBase { get; set; }
         public string OptionLocalInputFileContent { get; set; } = "Tags from local input file (" + ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"] + ")";
+        public bool IsLoadTagButtonAvailable 
+        {
+            get => _isLoadTagButtonAvailable;
+            set
+            {
+                SetProperty(ref _isLoadTagButtonAvailable, value);
+                OnPropertyChanged(nameof(IsLoadTagButtonAvailable));
+            }
+
+        } 
         #endregion
 
         #region RelayCommands
@@ -111,7 +118,7 @@ namespace ViewModels
         public LoadTagsConfigurationViewModel()
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
-            _buttonLoadTags = new AsyncCommand(LoadAttributesAsync);
+            _buttonLoadTags = new AsyncCommand(LoadAttributesAsync, IsSourceServerSelected);
         }
         #endregion
 
@@ -119,6 +126,9 @@ namespace ViewModels
         public async Task LoadAttributesAsync()
         {
             Logger.Info("Call method LoadTagsConfigurationViewModel.LoadAttributesAsync");
+
+            // Disable load button during loading process
+            this.IsLoadTagButtonAvailable = false;
 
             _collectionTags.Clear();
             List<string> v_TagsNameList = new List<string>();
@@ -143,6 +153,8 @@ namespace ViewModels
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
                 Logger.Info("Option \"Missing tags from site to base\" selected");
+
+                TaskBarVisibility = true; // Display task bar
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
 
@@ -160,6 +172,9 @@ namespace ViewModels
 
             // Creation of source backup file
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+
+            // Re-enable load button
+            this.IsLoadTagButtonAvailable = true;
 
             Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }
@@ -204,6 +219,11 @@ namespace ViewModels
                     }
                 }
             });
+        }
+
+        private bool IsSourceServerSelected()
+        {
+            return !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PISourceServerName);
         }
         #endregion
     }
