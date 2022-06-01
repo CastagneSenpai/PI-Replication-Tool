@@ -78,19 +78,15 @@ namespace Models
         }
         internal void PopulateGrid()
         {
-            Logger.Debug($"Call method DataGridCollection.PopulateGrid.");
             foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 AddToCollection(v_PIPoint);
             }
-            Logger.Debug($"End method DataGridCollection.PopulateGrid.");
         }
 
         internal void PopulateGridLineByLine(IDictionary<string, object> p_Dictionary)
         {
-            Logger.Debug($"Call method DataGridCollection.PopulateGridLineByLine.");
             AddToCollection(p_Dictionary);
-            Logger.Debug($"End method DataGridCollection.PopulateGridLineByLine.");
         }
 
         internal void UpdateGrid()

@@ -153,14 +153,14 @@ namespace ViewModels
                     CurrentProgress = (double)v_currentPercent / TotalProgress * 100;
                 });
 
-                await Load(AllPIPointsWithNoEmptyInstrumentTag, v_ResultPIPoint, v_FilteredPIPointList, progress);
+                await LoadTagsMissingSiteToBase(AllPIPointsWithNoEmptyInstrumentTag, v_ResultPIPoint, v_FilteredPIPointList, progress);
             }
 
             // Creation of source backup file
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
         }
 
-        async Task Load(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
+        async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
         {
             await Task.Run(() =>
             {
@@ -175,10 +175,12 @@ namespace ViewModels
                             IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
                             if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                             {
-                                // NLOG
+                                Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
+                                // TODO : Special treatment for Digital State replication
                             }
                             else
                             {
+                                Logger.Debug($"{v_PIPoint.Name} - Numerical point taken into account.");
                                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
                                 Application.Current.Dispatcher.Invoke((Action)delegate
                                 {
