@@ -125,6 +125,7 @@ namespace ViewModels
 
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
+                Logger.Info("Option \"Input File\" selected");
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
@@ -141,6 +142,7 @@ namespace ViewModels
             }
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
+                Logger.Info("Option \"Missing tags from site to base\" selected");
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
 
@@ -158,6 +160,8 @@ namespace ViewModels
 
             // Creation of source backup file
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
+
+            Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }
 
         async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
@@ -176,7 +180,11 @@ namespace ViewModels
                             if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                             {
                                 Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
+
                                 // TODO : Special treatment for Digital State replication
+
+
+
                             }
                             else
                             {
@@ -189,9 +197,9 @@ namespace ViewModels
                                 });
                             }
                         }
-                        catch (System.Exception)
+                        catch (Exception exc)
                         {
-                            // NLOG
+                            Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account. {exc.Message}");
                         }
                     }
                 }
