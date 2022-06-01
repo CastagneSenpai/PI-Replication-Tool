@@ -43,11 +43,13 @@ namespace Models
                     var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
                     if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
                     {
-                        // NLOG
-                        MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name}");
+                        v_PIPointList.Add(v_PIPoint);
+                        Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
+                        //MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name}");
                     }
                     else // Numerical tag
                     {
+                        Logger.Debug($"{v_PIPoint.Name} - Numerical point taken into account.");
                         v_PIPointList.Add(v_PIPoint);
                     }
                 }

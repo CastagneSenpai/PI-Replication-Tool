@@ -23,6 +23,8 @@ namespace Models
         internal void AddToCollection(IDictionary<string, object> p_Tag, Constants.TagStatus? status = null, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null)
         {
             Logger.Debug($"Call method DataGridCollection.AddToCollection.");
+            
+            // Update grid for push mode
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
             {
                 CollectionTags.Add(new PIPointGridFormat(
@@ -30,9 +32,10 @@ namespace Models
                 p_CurrentTimestamp.ToString(),
                 p_CurrentValue.ToString(),
                 p_Tag["instrumenttag"] as string,
-                p_Tag["pointtype"] as string,
                 p_Tag["pointsource"] as string,
                 int.Parse(p_Tag["location1"].ToString()),
+                p_Tag["pointtype"] as string,
+                p_Tag["digitalset"] as string,
                 float.Parse(p_Tag["zero"].ToString()),
                 float.Parse(p_Tag["typicalvalue"].ToString()),
                 float.Parse(p_Tag["span"].ToString()),
@@ -50,14 +53,16 @@ namespace Models
                 status.Value
             ));
             }
+            // Update grid for load mode
             else
             {
                 this.CollectionTags.Add(new PIPointGridFormat(
                         p_Tag["tag"] as string,
                         p_Tag["instrumenttag"] as string,
-                        p_Tag["pointtype"] as string,
                         p_Tag["pointsource"] as string,
                         int.Parse(p_Tag["location1"].ToString()),
+                        p_Tag["pointtype"] as string,
+                        p_Tag["digitalset"] as string,
                         float.Parse(p_Tag["zero"].ToString()),
                         float.Parse(p_Tag["typicalvalue"].ToString()),
                         float.Parse(p_Tag["span"].ToString()),

@@ -5,9 +5,10 @@
         #region Properties
         public string Name { get; set; }
         public string InstrumentTag { get; set; }
-        public string PointType { get; set; }
         public string PointSource { get; set; }
         public int Location1 { get; set; }
+        public string PointType { get; set; }
+        public string DigitalSet { get; set; }
         public float Zero { get; set; }
         public float TypicalValue { get; set; }
         public float Span { get; set; }
@@ -27,13 +28,14 @@
         #endregion Properties
 
         #region Constructors
-        public PIPointGridFormat(string name, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
+        public PIPointGridFormat(string name, string instrumentTag, string pointSource, int location1, string pointType, string digitalSet, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity)
         {
             Name = name;
             InstrumentTag = instrumentTag;
-            PointType = pointType;
             PointSource = pointSource;
             Location1 = location1;
+            PointType = pointType;
+            DigitalSet = digitalSet;
             Zero = zero;
             TypicalValue = typicalValue;
             Span = span;
@@ -50,15 +52,16 @@
             Status = null;
         }
 
-        public PIPointGridFormat(string name, string currentTimestamp, string currentValue, string instrumentTag, string pointType, string pointSource, int location1, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity, Constants.TagStatus status)
+        public PIPointGridFormat(string name, string currentTimestamp, string currentValue, string instrumentTag, string pointSource, int location1, string pointType, string digitalSet, float zero, float typicalValue, float span, int compressing, float compDev, float compDevPercent, float compMin, float excDev, float excMin, float excMax, float excDevPercent, float v, string dataSecurity, string ptSecurity, Constants.TagStatus status)
         {
             Name = name;
             CurrentTimestamp = currentTimestamp;
             CurrentValue = currentValue;
             InstrumentTag = instrumentTag;
-            PointType = pointType;
             PointSource = pointSource;
             Location1 = location1;
+            PointType = pointType;
+            DigitalSet = digitalSet;
             Zero = zero;
             TypicalValue = typicalValue;
             Span = span;

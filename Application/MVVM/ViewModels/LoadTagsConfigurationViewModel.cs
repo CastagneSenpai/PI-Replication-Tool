@@ -179,6 +179,7 @@ namespace ViewModels
             Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }
 
+        // TODO Déplacer dans la classe SiteBaseManager
         async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
         {
             await Task.Run(() =>
@@ -195,22 +196,18 @@ namespace ViewModels
                             if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                             {
                                 Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
-
-                                // TODO : Special treatment for Digital State replication
-
-
-
                             }
                             else
                             {
                                 Logger.Debug($"{v_PIPoint.Name} - Numerical point taken into account.");
-                                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
-                                Application.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
-                                    p_progress.Report(TagProgress);
-                                });
                             }
+
+                            PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Add(v_TagAttributes);
+                            Application.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_TagAttributes);
+                                p_progress.Report(TagProgress);
+                            });
                         }
                         catch (Exception exc)
                         {

@@ -225,9 +225,10 @@
                     <DataGridTextColumn Header="Current Timestamp" Binding="{Binding CurrentTimestamp}" />
                     <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue}" />
                     <DataGridTextColumn Header="InstrumentTag" Binding="{Binding InstrumentTag}" />
-                    <DataGridTextColumn Header="PointType" Binding="{Binding PointType}" />
                     <DataGridTextColumn Header="PointSource" Binding="{Binding PointSource}" />
                     <DataGridTextColumn Header="Location1" Binding="{Binding Location1}" />
+                    <DataGridTextColumn Header="PointType" Binding="{Binding PointType}" />
+                    <DataGridTextColumn Header="Digital Set" Binding="{Binding DigitalSet}" />
                     <DataGridTextColumn Header="Zero" Binding="{Binding Zero}" />
                     <DataGridTextColumn Header="TypicalValue" Binding="{Binding TypicalValue}" />
                     <DataGridTextColumn Header="Span" Binding="{Binding Span}" />
