@@ -28,8 +28,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -115,7 +115,7 @@
                    Margin="20,0,0,0"/>
         </Border>
 
-        <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
+        <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,25,0" Source="../../Resources/Assets/TotalEnergies.png"/>
 
         <!-- Menu Left Panel -->
         <Grid Background="#dfe6e9"  Grid.Row="2" Grid.RowSpan="3" Margin="0,0,0,0">
@@ -129,20 +129,20 @@
             <Button Grid.Row="0" 
                    Content="Connection"
                    HorizontalContentAlignment="Center"
-                   VerticalAlignment="Center"
+                   VerticalAlignment="Top"
                    FontWeight="Medium"
                    Foreground="white"
                    Background="#2e86de"
                    FontSize="12px"
-                   Margin="0,-20,0,0"
+                   Margin="0,0,0,0"
                    Height="25"
                    Command="{Binding ConnectionMenuButton}"/>
-           
+
 
             <Button Grid.Row="1" 
                    Content="Load Tags Attributes"
                    HorizontalContentAlignment="Center"
-                   VerticalAlignment="Center"
+                   VerticalAlignment="Top"
                    FontWeight="Medium"
                    Foreground="white"
                    Background="#2e86de"
@@ -151,15 +151,11 @@
                    Height="25"
                    IsEnabled="{Binding IsLoadingMenuEnabled}"
                    Command="{Binding LoadTagsAttributesMenuButton}"/>
-            <!--<ListBox Grid.Row="1"
-                      ItemsSource="{Binding LoadTagsAttributesMenuButton}" 
-                      Background="Transparent"
-                      BorderThickness="0"/>-->
 
             <Button Grid.Row="2"
                     Content="Push Tags Attributes"
                     HorizontalContentAlignment="Center"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     FontWeight="Medium"
                     Foreground="white"
                     Background="#2e86de"
