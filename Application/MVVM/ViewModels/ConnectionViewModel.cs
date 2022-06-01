@@ -136,12 +136,10 @@ namespace ViewModels
                 this.SourceKOStatus = "Visible";
             Logger.Info("End method ConnectionViewModel.ConnectPISourceServerAsync");
         }
-
         private bool CanConnectOnSourceServer()
         {
             return !string.IsNullOrEmpty(SelectedSourceServer);
         }
-
         private async Task ConnectPITargetServerAsync()
         {
             Logger.Info("Call method ConnectionViewModel.ConnectPITargetServerAsync");
@@ -160,7 +158,6 @@ namespace ViewModels
 
             Logger.Info("End method ConnectionViewModel.ConnectPITargetServerAsync");
         }
-
         private bool CanConnectOnTargetServer()
         {
             return !string.IsNullOrEmpty(SelectedTargetServer);

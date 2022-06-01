@@ -195,7 +195,6 @@ namespace ViewModels
             MenuNameDisplayed = "Connection to PI source and target servers for the replication";
             VisibilityButtonNext = Visibility.Visible;
             VisibilityButtonExit = Visibility.Hidden;
-
         }
         private void OnGoLoadTagConfigurationScreen(object obj)
         {
