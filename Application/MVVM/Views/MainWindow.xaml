@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
@@ -108,18 +108,17 @@
 
             <Label HorizontalAlignment="Left"
                    VerticalAlignment="Center"
-                       Content="PI Data Archive Connection"
-                       Foreground="#2d3436"
-                       FontWeight="Light"
-                       FontSize="15px"
-                       Margin="20,0,0,0"
-                   Visibility="Hidden"/>
+                   Content="{Binding MenuNameDisplayed}"
+                   Foreground="#2e86de"
+                   FontWeight="Normal"
+                   FontSize="14px"
+                   Margin="20,0,0,0"/>
         </Border>
 
         <Image Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0" Source="/Assets/TotalEnergies.png"/>
 
         <!-- Menu Left Panel -->
-        <Grid Background="#dfe6e9"  Grid.Row="1" Grid.RowSpan="3" Margin="0,20,0,-50">
+        <Grid Background="#dfe6e9"  Grid.Row="2" Grid.RowSpan="3" Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70" />
                 <RowDefinition Height="70" />
@@ -138,11 +137,7 @@
                    Margin="0,-20,0,0"
                    Height="25"
                    Command="{Binding ConnectionMenuButton}"/>
-            <!--<ListBox Grid.Row="0"
-                      ItemsSource="{Binding ConnectionMenuButton}" 
-                      Background="Transparent"
-                      BorderThickness="0"
-                      ItemContainerStyle="{StaticResource ConnectionCard}"/>-->
+           
 
             <Button Grid.Row="1" 
                    Content="Load Tags Attributes"
@@ -154,6 +149,7 @@
                    FontSize="12px"
                    Margin="0,0,0,0"
                    Height="25"
+                   IsEnabled="{Binding IsLoadingMenuEnabled}"
                    Command="{Binding LoadTagsAttributesMenuButton}"/>
             <!--<ListBox Grid.Row="1"
                       ItemsSource="{Binding LoadTagsAttributesMenuButton}" 
@@ -169,11 +165,8 @@
                     Background="#2e86de"
                     Height="25"
                     FontSize="12px"
+                    IsEnabled="{Binding IsPushMenuEnabled}"
                     Command="{Binding PushTagsAttributesMenuButton}"/>
-            <!--<ListBox ItemsSource="{Binding PushTagsAttributes}" 
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Grid.Row="2"/>-->
         </Grid>
 
         <!-- Bottom Bar -->

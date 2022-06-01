@@ -106,7 +106,7 @@ namespace ViewModels
                 OnPropertyChanged(nameof(IsLoadTagButtonAvailable));
             }
 
-        } 
+        }
         #endregion
 
         #region RelayCommands

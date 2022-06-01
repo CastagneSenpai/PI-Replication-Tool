@@ -29,7 +29,7 @@ namespace ViewModels
                {
                    if (PIReplicationManager.PIConnectionManager.PISourceServer != null && PIReplicationManager.PIConnectionManager.PITargetServer != null)
                        return PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected;
-                    return false;
+                   return false;
                }
                 ));
             }
@@ -92,6 +92,37 @@ namespace ViewModels
                 OnPropertyChanged("CurrentPageViewModel");
             }
         }
+        private bool _isLoadingMenuEnabled = false;
+        public bool IsLoadingMenuEnabled
+        {
+            get => _isLoadingMenuEnabled;
+            set
+            {
+                SetProperty(ref _isLoadingMenuEnabled, value);
+                OnPropertyChanged(nameof(IsLoadingMenuEnabled));
+            }
+        }
+        private bool _isPushMenuEnabled = false;
+        public bool IsPushMenuEnabled
+        {
+            get => _isPushMenuEnabled;
+            set
+            {
+                SetProperty(ref _isPushMenuEnabled, value);
+                OnPropertyChanged(nameof(IsPushMenuEnabled));
+            }
+        }
+        private string _menuNameDisplayed = "Connection to PI source and target servers for the replication";
+        public string MenuNameDisplayed
+        {
+            get => _menuNameDisplayed;
+            set
+            {
+                SetProperty(ref _menuNameDisplayed, value);
+                OnPropertyChanged(nameof(MenuNameDisplayed));
+            }
+        }
+    
         private void ChangeViewModel(IPageViewModel viewModel)
         {
             if (!PageViewModels.Contains(viewModel))
@@ -123,10 +154,14 @@ namespace ViewModels
         private void OnGoLoadTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[1]);
+            IsLoadingMenuEnabled = true;
+            MenuNameDisplayed = "Load the tags from the PI source server using an input mode";
         }
         private void OnGoPushTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[2]);
+            IsPushMenuEnabled = true;
+            MenuNameDisplayed = "Update and push the tag configuration to the target PI Server";
         }
         public void LogTextUpdate()
         {
@@ -149,5 +184,7 @@ namespace ViewModels
 
             Logger.Info("PI Replication Tool interface is loaded.");
         }
+
+
     }
 }

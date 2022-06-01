@@ -186,6 +186,7 @@
                 Margin="0,37,0,0"
                 Foreground="#FFFFFF"
                 Background="#2e86de"
+                IsEnabled="{Binding IsPushButtonEnabled}"
                 Command="{Binding ButtonPushTags}">
                 </Button>
             </StackPanel>
@@ -212,6 +213,7 @@
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2e86de"
+                IsEnabled="{Binding IsRefreshButtonEnabled}"
                 Command="{Binding ButtonRefresh}">
                 </Button>
             </StackPanel>

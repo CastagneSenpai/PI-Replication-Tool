@@ -14,11 +14,11 @@ namespace ViewModels
         #region Fields
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
-
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private PIPointGridFormat _pipointgridformat = null;
-
         private string _destinationServer;
+        private bool _isPushButtonEnabled = false;
+        private bool _isRefreshButtonEnabled = false;
         #endregion
 
         #region Properties
@@ -34,7 +34,6 @@ namespace ViewModels
                 OnPropertyChanged(nameof(Attributes));
             }
         }
-
         public PIPointGridFormat PIPointGridFormat
         {
             get => this._pipointgridformat;
@@ -44,7 +43,6 @@ namespace ViewModels
                 OnPropertyChanged(nameof(PIPointGridFormat));
             }
         }
-
         public string DestinationServer
         {
             get
@@ -60,6 +58,25 @@ namespace ViewModels
         public bool OptionCreateOnly { get; set; } = true;
         public bool OptionUpdateOnly { get; set; }
         public bool OptionCreateOrUpdate { get; set; }
+        public bool IsPushButtonEnabled
+        {
+            get => _isPushButtonEnabled;
+            set
+            {
+                SetProperty(ref _isPushButtonEnabled, value);
+                OnPropertyChanged(nameof(IsPushButtonEnabled));
+            }
+        }
+        public bool IsRefreshButtonEnabled
+        {
+            get => _isRefreshButtonEnabled;
+            set
+            {
+                SetProperty(ref _isRefreshButtonEnabled, value);
+                OnPropertyChanged(nameof(IsRefreshButtonEnabled));
+            }
+
+        }
         #endregion
 
         #region RelayCommands
@@ -77,7 +94,8 @@ namespace ViewModels
             DestinationServer = ReplicationManager.PIConnectionManager.PITargetServerName;
 
             _buttonUpdateTags = new RelayCommand(
-                o => UpdateTagsAttributes());
+                o => UpdateTagsAttributes(),
+                o => CanUpdateTagConfiguration());
 
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
@@ -100,18 +118,23 @@ namespace ViewModels
 
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
                     OnPropertyChanged(nameof(Attributes));
+
+                // Button IsPushButtonEnabled is now enabled for step 2
+                IsPushButtonEnabled = true;
             }
             catch (Exception exc)
             {
                 string p_ErrorMsg = $"Error with method PushTagsConfigurationViewModel.UpdateTagsAttributes. {exc.Message}";
+                MessageBox.Show(exc.Message);
                 Logger.Error(p_ErrorMsg);
-                throw new Exception(p_ErrorMsg);
-            }
+            }            
+
             Logger.Info("End method PushTagsConfigurationViewModel.UpdateTagsAttributes");
         }
 
         public void PushTagsAttributes()
         {
+            Logger.Info("Call method PushTagsConfigurationViewModel.PushTagsAttributes");
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
 
             if (OptionCreateOnly)
@@ -129,6 +152,11 @@ namespace ViewModels
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateOrUpdateAndPushTags(
                     PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
             }
+
+            // Refresh button is available for step 3 
+            IsRefreshButtonEnabled = true;
+
+            Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
         }
 
         public void UpdateRowsUsingCurrentValues()
@@ -140,6 +168,14 @@ namespace ViewModels
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_AttributesTags);
                 OnPropertyChanged(nameof(Attributes));
             });
+        }
+
+        private bool CanUpdateTagConfiguration()
+        {
+            return !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PISourceServerName)
+                    && !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PITargetServerName)
+                    && ReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Count > 0;
+
         }
         #endregion
     }
