@@ -173,14 +173,28 @@
                 Content="Next"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Center"
+                Margin="0,0,-90,0"
+                Height="30"
+                Width="90"
+                FontFamily="Arial"
+                Foreground="#FFFFFF"
+                Background="#2e86de"
+                Visibility="{Binding VisibilityButtonNext}"
+                Command="{Binding ButtonNextView}"/>
+
+                <Button Grid.Row="3" Grid.Column="2"
+                Content="Exit"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Center"
                 Margin="0,0,30,0"
                 Height="30"
                 Width="90"
                 FontFamily="Arial"
                 Foreground="#FFFFFF"
                 Background="#2e86de"
-                Command="{Binding ButtonNextView}">
-                </Button>
+                Visibility="{Binding VisibilityButtonExit}"
+                Command="{Binding ButtonExit}"/>
+
 
                 <!--<RichTextBox x:Name="logwindow" Width="782" />-->
             </StackPanel>
