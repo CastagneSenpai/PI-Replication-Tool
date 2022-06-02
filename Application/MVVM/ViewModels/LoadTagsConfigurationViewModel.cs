@@ -143,7 +143,6 @@ namespace ViewModels
             {
                 Logger.Info("Option \"Input File\" selected");
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
-                ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Clear();
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
                 await Task.Run(() =>
