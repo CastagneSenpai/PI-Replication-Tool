@@ -157,6 +157,9 @@ namespace ViewModels
             IsRefreshButtonEnabled = true;
 
             Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
+
+            UpdateRowsUsingCurrentValues();
+            Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
         }
 
         public void UpdateRowsUsingCurrentValues()

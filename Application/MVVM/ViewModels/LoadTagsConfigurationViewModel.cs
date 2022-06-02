@@ -136,12 +136,14 @@ namespace ViewModels
             this.IsLoadTagButtonAvailable = false;
 
             _collectionTags.Clear();
+            ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Clear();
             List<string> v_TagsNameList = new List<string>();
 
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
                 Logger.Info("Option \"Input File\" selected");
                 FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+                ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Clear();
                 ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
                 await Task.Run(() =>
@@ -209,6 +211,7 @@ namespace ViewModels
                             IDictionary<string, object> v_TagAttributes = v_PIPoint.GetAttributes();
                             if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                             {
+                                ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Add(v_PIPoint.GetStateSet());
                                 Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
                             }
                             else
