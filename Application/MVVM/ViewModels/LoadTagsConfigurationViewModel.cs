@@ -23,7 +23,8 @@ namespace ViewModels
         private double _currentProgress = 0;
         private double _tagProgress = 0;
         private double _totalProgress = 0;
-        private bool _taskBarVisibility = false;
+        private Visibility _taskBarVisibility = Visibility.Hidden;
+        private Visibility _percentTaskBarVisibility = Visibility.Hidden;
         private bool _isLoadTagButtonAvailable = true;
         #endregion
 
@@ -55,15 +56,16 @@ namespace ViewModels
                 OnPropertyChanged(nameof(TotalProgress));
             }
         }
-        public bool TaskBarVisibility
+        public Visibility TaskBarVisibility
         {
             get => _taskBarVisibility;
             set
             {
-                if (_taskBarVisibility != value)
-                    _taskBarVisibility = value;
+                SetProperty(ref _taskBarVisibility, value);
+                OnPropertyChanged(nameof(TaskBarVisibility));
             }
         }
+        public Visibility PercentTaskBarVisibility { get => _percentTaskBarVisibility; set => SetProperty(ref _percentTaskBarVisibility, value); }
         public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
@@ -154,7 +156,8 @@ namespace ViewModels
             {
                 Logger.Info("Option \"Missing tags from site to base\" selected");
 
-                TaskBarVisibility = true; // Display task bar
+                TaskBarVisibility = Visibility.Visible; // Display task bar
+                PercentTaskBarVisibility = Visibility.Visible;
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
 
@@ -222,6 +225,7 @@ namespace ViewModels
         {
             return !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PISourceServerName);
         }
+
         #endregion
     }
 }

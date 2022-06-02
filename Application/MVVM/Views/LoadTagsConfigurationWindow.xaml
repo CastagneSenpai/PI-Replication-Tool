@@ -169,7 +169,7 @@
                          Maximum="100" 
                          Visibility="{Binding TaskBarVisibility}" 
                          Value="{Binding CurrentProgress, Mode=OneWay}" />
-            <TextBlock Text="{Binding ElementName=ProgressBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding ElementName=ProgressBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding PercentTaskBarVisibility}"/>
         </Grid>
         
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
