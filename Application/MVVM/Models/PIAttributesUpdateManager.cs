@@ -486,7 +486,7 @@ namespace Models
             }
             else
             {
-                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No tag found", OSIsoft.AF.Time.AFTime.Now);
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No tag found", OSIsoft.AF.Time.AFTime.MinValue);
             }
             Logger.Info($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
         }
