@@ -99,7 +99,7 @@ namespace ViewModels
                     ReplicationManager.PIConnectionManager.PITargetServer);
 
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
-                    OnPropertyChanged(nameof(Attributes));
+                OnPropertyChanged(nameof(Attributes));
             }
             catch (Exception exc)
             {
@@ -112,6 +112,7 @@ namespace ViewModels
 
         public void PushTagsAttributes()
         {
+            Logger.Info("Call method PushTagsConfigurationViewModel.PushTagsAttributes");
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
 
             if (OptionCreateOnly)
@@ -129,6 +130,9 @@ namespace ViewModels
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateOrUpdateAndPushTags(
                     PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
             }
+
+            UpdateRowsUsingCurrentValues();
+            Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
         }
 
         public void UpdateRowsUsingCurrentValues()

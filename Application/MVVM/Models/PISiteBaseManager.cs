@@ -22,8 +22,6 @@ namespace Models
 
         public bool FilterExistingTags(PIPoint p_PIPoint, ref PIPoint p_ResultPIPoint, ref PIPointList p_PIPointList)
         {
-            //PIPoint v_ResultPIPoint = null;
-            //return niketamere(v_ResultPIPoint, p_PIPointList);
             if (PIPoint.TryFindPIPoint(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, p_PIPoint.Name, out p_ResultPIPoint))
             {
                 Logger.Debug($"Tag {p_PIPoint.Name} exist in both {PIReplicationManager.ReplicationManager.PIConnectionManager.PISourceServer} and {PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer} : it has NOT been added to the replication tag list");

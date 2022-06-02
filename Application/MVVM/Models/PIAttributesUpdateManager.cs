@@ -16,6 +16,7 @@ namespace Models
         #region Properties
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public List<IDictionary<string, object>> AttributesTagsList { get; set; } = new List<IDictionary<string, object>>();
+        public HashSet<AFEnumerationSet> DigitalSetList { get; set; } = new HashSet<AFEnumerationSet>();
         public ICollection<PIPointSource> PointSources_Digital { get; set; } = new Collection<PIPointSource>();
         public ICollection<PIPointSource> PointSources_Numerical { get; set; } = new Collection<PIPointSource>();
         Dictionary<string, long> NumericalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
@@ -40,12 +41,14 @@ namespace Models
                 {
                     // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
                     // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
+                    // TODO: TryFindPIPoint pour éviter de lever une exception si le tag n'existe pas
                     var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
-                    if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
+                    //if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
+                    if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                     {
                         v_PIPointList.Add(v_PIPoint);
+                        DigitalSetList.Add(v_PIPoint.GetStateSet());
                         Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
-                        //MessageBox.Show($"Un tag digital a été capturé et ne sera pas traité (pour le moment)\nNom du tag : {v_PIPoint.Name}");
                     }
                     else // Numerical tag
                     {
@@ -90,7 +93,7 @@ namespace Models
                 this.UpdatePointSourceAttributes(ref p_TagAttributes);
                 this.UpdateSecurityAttributes(ref p_TagAttributes);
                 this.UpdateTagNameAndInstrumentTag(ref p_TagAttributes, p_PISourceServer);
-                
+
                 // Actions on Numerical tags only
                 if (!(p_TagAttributes["pointtype"].ToString() == "Digital" || p_TagAttributes["pointtype"].ToString() == "String"))
                 {
@@ -317,54 +320,91 @@ namespace Models
             this.Trigram = "";
             Logger.Debug("End method PIAttributeUpdateManager.Clear.");
         }
-        public void CreateAndPushTags(PIServer targetServer)
+
+        void PrepareDigitalSetOnTargetServer(PIServer p_TargetPIServer)
         {
-            Logger.Info($"Call method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}.");
-            IDictionary<string, IDictionary<string, object>> listeDeTags = new Dictionary<string, IDictionary<string, object>>();
+            var v_ListDigitalSetTarget = p_TargetPIServer.StateSets;
+
+            foreach (var v_DigitalSet in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.DigitalSetList)
+            {
+                if (v_ListDigitalSetTarget.Contains(v_DigitalSet.Name))
+                {
+                    Logger.Debug($"Digital Set ({v_DigitalSet.Name}) already exists on target server {p_TargetPIServer.Name}.");
+                }
+                else
+                {
+                    Logger.Info($"Creating Digital Set ({v_DigitalSet.Name}) on target server {p_TargetPIServer.Name}.");
+                    p_TargetPIServer.StateSets.Add(v_DigitalSet);
+                    v_DigitalSet.CheckIn();
+                    v_DigitalSet.ApplyChanges();
+                }
+            }
+        }
+
+        public void CreateAndPushTags(PIServer p_targetServer)
+        {
+            Logger.Info($"Call method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}.");
+            IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();
+
+            PrepareDigitalSetOnTargetServer(p_targetServer);
             AttributesTagsList.ForEach(p_tag =>
             {
-                listeDeTags.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
+                {
+                    v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag,true));
+                }
+                else
+                {
+                    v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                }
             });
 
             try
             {
-                AFListResults<string, PIPoint> retour = targetServer.CreatePIPoints(listeDeTags);
+                AFListResults<string, PIPoint> v_ReturnListTagsCreated = p_targetServer.CreatePIPoints(v_tagsListToBeCreated);
+                if (v_ReturnListTagsCreated.HasErrors)
+                {
+                    foreach (var v_Error in v_ReturnListTagsCreated.Errors)
+                    {
+                        Logger.Warn($"Error while creating tag {v_Error.Key} - {v_Error.Value}");
+                    }
+                }
             }
             catch (AggregateException e)
             {
-                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}. {e.Message}");
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
             catch (PIException e)
             {
-                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}. {e.Message}");
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
 
-            Logger.Info($"End method PIAttributeUpdateManager.CreateAndPushTags for {targetServer.Name}.");
+            Logger.Info($"End method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}.");
         }
-        public void UpdateAndPushTags(PIServer targetServer)
+        public void UpdateAndPushTags(PIServer p_targetServer)
         {
-            Logger.Info($"Call method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}.");
+            Logger.Info($"Call method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
             AttributesTagsList.ForEach(p_tag =>
             {
                 try
                 {
-                    PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(targetServer, GetTagname(p_tag));
+                    PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(p_targetServer, GetTagname(p_tag));
                     v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
                     v_CurrentPIPoint.SaveAttributes();
                 }
                 catch (AggregateException e)
                 {
-                    Logger.Error($"Error in method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}. {e.Message}");
+                    Logger.Error($"Error in method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}. {e.Message}");
                     throw new Exception();
                 }
                 catch (PIException e)
                 {
-                    Logger.Warn($"Tag {GetTagname(p_tag)} not found in {targetServer.Name} : It cannot be updated because UpdateOnly Mode was check. {e.Message}");
+                    Logger.Warn($"Tag {GetTagname(p_tag)} not found in {p_targetServer.Name} : It cannot be updated because UpdateOnly Mode was check. {e.Message}");
                 }
             });
-            Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {targetServer.Name}.");
+            Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
         }
         public void CreateOrUpdateAndPushTags(PIServer targetServer)
         {
@@ -409,13 +449,21 @@ namespace Models
         {
             return listeAttributs[PICommonPointAttributes.Tag].ToString();
         }
-        public IDictionary<string, object> GetCustomAttributes(IDictionary<string, object> p_Attributes)
+        public IDictionary<string, object> GetCustomAttributes(IDictionary<string, object> p_Attributes, bool p_IsDigital = false)
         {
-            Dictionary<string, object> p_Common_Attributes = p_Attributes
-                .Where(attributs => Constants.CommonAttribute.Any(commonAttributes => commonAttributes == attributs.Key))
+            Dictionary<string, object> p_CommonAttributes = p_Attributes
+                .Where(v_Attributes => Constants.CommonAttribute.Any(v_CommonAttributes => v_CommonAttributes == v_Attributes.Key))
                 .ToDictionary(k => k.Key, v => v.Value);
 
-            return p_Common_Attributes;
+            if (p_IsDigital)
+            {
+                p_CommonAttributes.Add(PICommonPointAttributes.DigitalSetName, p_Attributes[PICommonPointAttributes.DigitalSetName]);
+                p_CommonAttributes.Remove(PICommonPointAttributes.Zero);
+                p_CommonAttributes.Remove(PICommonPointAttributes.Span);
+                p_CommonAttributes.Remove(PICommonPointAttributes.TypicalValue);
+            }
+
+            return p_CommonAttributes;
         }
         public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
         {
