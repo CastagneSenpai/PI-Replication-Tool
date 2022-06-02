@@ -36,7 +36,7 @@ namespace ViewModels
                    else if (CurrentPageViewModel.ToString().Equals("ViewModels.LoadTagsConfigurationViewModel"))
                    {
                        if (PIReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Count > 0)
-                           return true;
+                           return PIReplicationManager.PIAttributesUpdateManager.IsLoadingTimeOver;
                    }
                    return false;
                }

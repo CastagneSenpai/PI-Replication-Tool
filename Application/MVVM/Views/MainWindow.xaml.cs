@@ -10,6 +10,7 @@ namespace Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +32,7 @@ namespace Views
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Info("PI Replication Tool is closing.");
             Application.Current.Shutdown();
         }
 
@@ -41,19 +43,5 @@ namespace Views
             else
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
         }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-        //private void LogText(string message)
-        //{
-        //    this.Dispatcher.Invoke((Action)delegate () {
-        //        this.MessageView.AppendText(message + "\n");
-        //        this.MessageView.ScrollToEnd();
-        //    });
-        //}
     }
 }

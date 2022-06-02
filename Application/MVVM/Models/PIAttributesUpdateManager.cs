@@ -21,6 +21,7 @@ namespace Models
         Dictionary<string, long> NumericalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
         Dictionary<string, long> DigitalPSAndRemainingSpace { get; set; } = new Dictionary<string, long>();
         public string Trigram { get; set; } = "";
+        public bool IsLoadingTimeOver { get; set; } = false;
         #endregion
 
         #region Constructor

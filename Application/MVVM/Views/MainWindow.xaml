@@ -48,19 +48,7 @@
                        VerticalAlignment="Center"/>
 
                 <StackPanel HorizontalAlignment="Left"
-                            Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
-
-                    <Button Width="50" Height="40" 
-                        Content="&lt;"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="#FFFFFF"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontWeight="Bold"
-                        FontSize="15"
-                        Click="BackButton_Click"/>
-                </StackPanel>
+                            Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0"/>
 
                 <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,10,0">
