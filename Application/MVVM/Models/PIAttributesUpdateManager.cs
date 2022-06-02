@@ -114,7 +114,7 @@ namespace Models
             try
             {
                 p_TagAttributes["location1"] = 0;
-                if (p_TagAttributes["pointtype"].ToString() == "digital" || p_TagAttributes["pointtype"].ToString() == "string")
+                if (p_TagAttributes[PICommonPointAttributes.PointType].Equals(PIPointType.Digital) || p_TagAttributes[PICommonPointAttributes.PointType].Equals(PIPointType.String))
                 {
                     // Get the PointSource and available space pair
                     var v_PointSource = GetPointSourceForCurrentTag(this.DigitalPSAndRemainingSpace);
