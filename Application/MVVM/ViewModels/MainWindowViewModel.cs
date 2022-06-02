@@ -5,6 +5,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ViewModels
@@ -27,9 +28,17 @@ namespace ViewModels
                 },
                o =>
                {
-                   if (PIReplicationManager.PIConnectionManager.PISourceServer != null && PIReplicationManager.PIConnectionManager.PITargetServer != null)
-                       return PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected;
-                    return false;
+                   if (CurrentPageViewModel.ToString().Equals("ViewModels.ConnectionViewModel"))
+                   {
+                       if (PIReplicationManager.PIConnectionManager.PISourceServer != null && PIReplicationManager.PIConnectionManager.PITargetServer != null)
+                           return PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected;
+                   }
+                   else if (CurrentPageViewModel.ToString().Equals("ViewModels.LoadTagsConfigurationViewModel"))
+                   {
+                       if (PIReplicationManager.PIAttributesUpdateManager.AttributesTagsList.Count > 0)
+                           return PIReplicationManager.PIAttributesUpdateManager.IsLoadingTimeOver;
+                   }
+                   return false;
                }
                 ));
             }
@@ -92,12 +101,76 @@ namespace ViewModels
                 OnPropertyChanged("CurrentPageViewModel");
             }
         }
+        private bool _isLoadingMenuEnabled;
+        public bool IsLoadingMenuEnabled
+        {
+            get => _isLoadingMenuEnabled;
+            set
+            {
+                SetProperty(ref _isLoadingMenuEnabled, value);
+                OnPropertyChanged(nameof(IsLoadingMenuEnabled));
+            }
+        }
+        private bool _isPushMenuEnabled;
+        public bool IsPushMenuEnabled
+        {
+            get => _isPushMenuEnabled;
+            set
+            {
+                SetProperty(ref _isPushMenuEnabled, value);
+                OnPropertyChanged(nameof(IsPushMenuEnabled));
+            }
+        }
+        private string _menuNameDisplayed;
+        public string MenuNameDisplayed
+        {
+            get => _menuNameDisplayed;
+            set
+            {
+                SetProperty(ref _menuNameDisplayed, value);
+                OnPropertyChanged(nameof(MenuNameDisplayed));
+            }
+        }
+        private Visibility _visibilityButtonNext;
+        public Visibility VisibilityButtonNext
+        {
+            get => _visibilityButtonNext;
+            set
+            {
+                SetProperty(ref _visibilityButtonNext, value);
+                OnPropertyChanged(nameof(VisibilityButtonNext));
+            }
+        }
+        private Visibility _visibilityButtonExit;
+        public Visibility VisibilityButtonExit { get => _visibilityButtonExit; set => SetProperty(ref _visibilityButtonExit, value); }
+        private RelayCommand buttonExit;
+        public ICommand ButtonExit
+        {
+            get
+            {
+                if (buttonExit == null)
+                {
+                    buttonExit = new RelayCommand(PerformButtonExit);
+                }
+
+                return buttonExit;
+            }
+        }
+        private void PerformButtonExit(object commandParameter)
+        {
+            Logger.Info("PI Replication Tool is closing.");
+            Application.Current.Shutdown();
+        }
         private void ChangeViewModel(IPageViewModel viewModel)
         {
             if (!PageViewModels.Contains(viewModel))
                 PageViewModels.Add(viewModel);
 
             CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
+        }
+        private string GetFirstViewModel()
+        {
+            return "GoToConnectionScreen";
         }
         private string GetNextViewModel()
         {
@@ -109,8 +182,6 @@ namespace ViewModels
                     return "GoToLoadTagConfigurationScreen";
                 case "ViewModels.LoadTagsConfigurationViewModel":
                     return "GoToPushTagConfigurationScreen";
-                case "ViewModels.PushTagsConfigurationViewModel":
-                    return "GoToPushTagConfigurationScreen";
                 default:
                     // Go to main page in case of errors
                     return "GoToConnectionScreen";
@@ -119,14 +190,30 @@ namespace ViewModels
         private void OnGoConnectionScreen(object obj)
         {
             ChangeViewModel(PageViewModels[0]);
+            IsLoadingMenuEnabled = false;
+            IsPushMenuEnabled = false;
+            MenuNameDisplayed = "Connection to PI source and target servers for the replication";
+            VisibilityButtonNext = Visibility.Visible;
+            VisibilityButtonExit = Visibility.Hidden;
         }
         private void OnGoLoadTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[1]);
+            IsLoadingMenuEnabled = true;
+            IsPushMenuEnabled = false;
+            MenuNameDisplayed = "Load the tags from the PI source server using an input mode";
+            VisibilityButtonNext = Visibility.Visible;
+            VisibilityButtonExit = Visibility.Hidden;
+
         }
         private void OnGoPushTagConfigurationScreen(object obj)
         {
             ChangeViewModel(PageViewModels[2]);
+            IsLoadingMenuEnabled = true;
+            IsPushMenuEnabled = true;
+            MenuNameDisplayed = "Update and push the tag configuration to the target PI Server";
+            VisibilityButtonNext = Visibility.Hidden;
+            VisibilityButtonExit = Visibility.Visible;
         }
         public void LogTextUpdate()
         {
@@ -141,13 +228,17 @@ namespace ViewModels
             PageViewModels.Add(new LoadTagsConfigurationViewModel());
             PageViewModels.Add(new PushTagsConfigurationViewModel());
 
-            CurrentPageViewModel = PageViewModels[0];
+            //CurrentPageViewModel = PageViewModels[0];
 
             Mediator.Instance.Subscribe("GoToConnectionScreen", OnGoConnectionScreen);
             Mediator.Instance.Subscribe("GoToLoadTagConfigurationScreen", OnGoLoadTagConfigurationScreen);
             Mediator.Instance.Subscribe("GoToPushTagConfigurationScreen", OnGoPushTagConfigurationScreen);
 
+            Mediator.Instance.Notify(GetFirstViewModel());
+
             Logger.Info("PI Replication Tool interface is loaded.");
         }
+
+
     }
 }

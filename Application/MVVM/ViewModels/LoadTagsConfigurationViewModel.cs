@@ -20,10 +20,12 @@ namespace ViewModels
         private readonly ObservableCollection<PIPointGridFormat> _collectionTags = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags;
         private PIPointGridFormat _pipointgridformat = null;
         private string _sourceServer;
-
         private double _currentProgress = 0;
         private double _tagProgress = 0;
         private double _totalProgress = 0;
+        private Visibility _taskBarVisibility = Visibility.Hidden;
+        private Visibility _percentTaskBarVisibility = Visibility.Hidden;
+        private bool _isLoadTagButtonAvailable = true;
         #endregion
 
         #region Properties
@@ -54,19 +56,16 @@ namespace ViewModels
                 OnPropertyChanged(nameof(TotalProgress));
             }
         }
-
-        //public ICollectionView Attributes
-        //{
-        //    get
-        //    {
-        //        if (_collectionViewSource.View != null)
-        //        {
-        //            _collectionViewSource.View.CurrentChanged += (sender, e) => PIPointGridFormat = _collectionViewSource.View.CurrentItem as PIPointGridFormat;
-        //            return _collectionViewSource?.View;
-        //        }
-        //        return null;
-        //    }
-        //}
+        public Visibility TaskBarVisibility
+        {
+            get => _taskBarVisibility;
+            set
+            {
+                SetProperty(ref _taskBarVisibility, value);
+                OnPropertyChanged(nameof(TaskBarVisibility));
+            }
+        }
+        public Visibility PercentTaskBarVisibility { get => _percentTaskBarVisibility; set => SetProperty(ref _percentTaskBarVisibility, value); }
         public ObservableCollection<PIPointGridFormat> Attributes
         {
             get
@@ -100,6 +99,16 @@ namespace ViewModels
         public bool OptionInputFile { get; set; } = true;
         public bool OptionMissingSiteToBase { get; set; }
         public string OptionLocalInputFileContent { get; set; } = "Tags from local input file (" + ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"] + ")";
+        public bool IsLoadTagButtonAvailable 
+        {
+            get => _isLoadTagButtonAvailable;
+            set
+            {
+                SetProperty(ref _isLoadTagButtonAvailable, value);
+                OnPropertyChanged(nameof(IsLoadTagButtonAvailable));
+            }
+
+        }
         #endregion
 
         #region RelayCommands
@@ -111,7 +120,7 @@ namespace ViewModels
         public LoadTagsConfigurationViewModel()
         {
             SourceServer = ReplicationManager.PIConnectionManager.PISourceServerName;
-            _buttonLoadTags = new AsyncCommand(LoadAttributesAsync);
+            _buttonLoadTags = new AsyncCommand(LoadAttributesAsync, IsSourceServerSelected);
         }
         #endregion
 
@@ -119,6 +128,12 @@ namespace ViewModels
         public async Task LoadAttributesAsync()
         {
             Logger.Info("Call method LoadTagsConfigurationViewModel.LoadAttributesAsync");
+
+            // Lock the NEXT button to go to push view
+            ReplicationManager.PIAttributesUpdateManager.IsLoadingTimeOver = false;
+
+            // Disable load button during loading process
+            this.IsLoadTagButtonAvailable = false;
 
             _collectionTags.Clear();
             ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Clear();
@@ -145,36 +160,50 @@ namespace ViewModels
             else if (!OptionInputFile & OptionMissingSiteToBase)
             {
                 Logger.Info("Option \"Missing tags from site to base\" selected");
+
+                // Display the process task bar components
+                TaskBarVisibility = Visibility.Visible;
+                PercentTaskBarVisibility = Visibility.Visible;
+
+                // Load all tags with Instrumenttag not null
+                Logger.Info($"Loading tags with InstrumentTag not null in {ReplicationManager.PIConnectionManager.PISourceServerName}");
                 IEnumerable<PIPoint> AllPIPointsWithNoEmptyInstrumentTag = await PIReplicationManager.ReplicationManager.PISiteBaseManager.LoadDeltaTagsAttributesAsync();
+
+                // Update task bar percentage
                 PIPointList v_FilteredPIPointList = new PIPointList(AllPIPointsWithNoEmptyInstrumentTag);
-
-                // TODO gerer le cas list null
-                PIPoint v_ResultPIPoint = null;
-
                 TotalProgress = v_FilteredPIPointList.Count;
                 var progress = new Progress<double>(v_currentPercent =>
                 {
                     CurrentProgress = (double)v_currentPercent / TotalProgress * 100;
                 });
 
-                await LoadTagsMissingSiteToBase(AllPIPointsWithNoEmptyInstrumentTag, v_ResultPIPoint, v_FilteredPIPointList, progress);
+                // Use full list of source tags and remove them if already exist
+                await LoadTagsMissingSiteToBase(AllPIPointsWithNoEmptyInstrumentTag, v_FilteredPIPointList, progress);
             }
 
             // Creation of source backup file
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.SourceServerBackup);
 
+            // Re-enable load button
+            this.IsLoadTagButtonAvailable = true;
+
+            // Delock the NEXT button to go to push view
+            ReplicationManager.PIAttributesUpdateManager.IsLoadingTimeOver = true;
+
             Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }
 
         // TODO Déplacer dans la classe SiteBaseManager
-        async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPoint p_ResultPIPoint, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
+        async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
         {
+            Logger.Info($"Call method LoadTagConfigurationViewModel.LoadTagsMissingSiteToBase");
             await Task.Run(() =>
             {
                 foreach (var v_PIPoint in p_AllPIPointsWithNoEmptyInstrumentTag)
                 {
+                    PIPoint v_ResultPIPoint = null ;
                     TagProgress++;
-                    bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref p_ResultPIPoint, ref p_FilteredPIPointList);
+                    bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_ResultPIPoint, ref p_FilteredPIPointList);
                     if (!v_Found)
                     {
                         try
@@ -203,8 +232,15 @@ namespace ViewModels
                         }
                     }
                 }
+            Logger.Info($"End method LoadTagConfigurationViewModel.LoadTagsMissingSiteToBase");
             });
         }
+
+        private bool IsSourceServerSelected()
+        {
+            return !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PISourceServerName);
+        }
+
         #endregion
     }
 }
