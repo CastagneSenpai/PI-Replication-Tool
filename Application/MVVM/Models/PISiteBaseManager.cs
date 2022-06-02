@@ -16,6 +16,7 @@ namespace Models
 
         public async Task<IEnumerable<PIPoint>> LoadAllPIPointsWithNoEmptyInstrumentTagAsync()
         {
+            // request all PI tags in PI server when instrumenttag is not null
             string query = "Name:=* AND instrumenttag:<>''";
             return await PIPoint.FindPIPointsAsync(PIReplicationManager.ReplicationManager.PIConnectionManager.PISourceServer, query, false);
         }
