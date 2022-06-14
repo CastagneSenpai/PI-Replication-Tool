@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Models.DataGridCollection">
+    <Position X="14.5" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAKAAAAAAAAQAAAAAgAAAAAAAAAAABABABA=</HashCode>
+      <FileName>MVVM\Models\DataGridCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.FilesManager">
+    <Position X="22.25" Y="5.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAACAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>MVVM\Models\FilesManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.PIAttributesUpdateManager">
+    <Position X="26.25" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>BAAQAgCEBAICAAAghAAAAAkDBgACQEAAgAAQAIhAEBA=</HashCode>
+      <FileName>MVVM\Models\PIAttributesUpdateManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.PIConnectionManager">
+    <Position X="22.25" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>CCAAAAAAAEIAIIAEACCAAEAgAAAAAAAAgAAAAAACAAg=</HashCode>
+      <FileName>MVVM\Models\PIConnectionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.PIPointGridFormat">
+    <Position X="17.25" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>cAAAMIAEAACAAAAAAIIAAAQAAQDgAAAAAECAAQYBAAA=</HashCode>
+      <FileName>MVVM\Models\PIPointGridFormat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.PIReplicationManager">
+    <Position X="26.25" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgACAIAAgAAAAABAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>MVVM\Models\PIReplicationManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Models.PISiteBaseManager">
+    <Position X="22.25" Y="7.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAABAAAAAAAAAACAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>MVVM\Models\PISiteBaseManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModels.BaseViewModel">
+    <Position X="4" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAQAAgAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MVVM\ViewModels\BaseViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ViewModels.ConnectionViewModel">
+    <Position X="3.5" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QAAAIAgCKRMgIAgACAEABBBABIAEAgACAAEBACCAAAA=</HashCode>
+      <FileName>MVVM\ViewModels\ConnectionViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ViewModels.LoadTagsConfigurationViewModel">
+    <Position X="6.75" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>A0IMAQAAAQKAAIAABAAAAAAQABAAEVAAAMoCgIABgIA=</HashCode>
+      <FileName>MVVM\ViewModels\LoadTagsConfigurationViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ViewModels.MainWindowViewModel">
+    <Position X="10" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>MSAAAgQAAQYEkAAAMABIQCoQAAKAgABAAQCBERIAIAA=</HashCode>
+      <FileName>MVVM\ViewModels\MainWindowViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ViewModels.PushTagsConfigurationViewModel">
+    <Position X="0.5" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EQCAAAQAAgIAAAADAAAgAEAQQAQAYEQhAAoAAACAAoA=</HashCode>
+      <FileName>MVVM\ViewModels\PushTagsConfigurationViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Views.ConnectionWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2" Y="16.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MVVM\Views\ConnectionWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Views.LoadTagsConfigurationWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MVVM\Views\LoadTagsConfigurationWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Views.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="4" Y="13.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAKAAAAAAAAAAAAAAAAAAAAAAAIABAAAAAA=</HashCode>
+      <FileName>MVVM\Views\MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Views.PushTagsConfigurationWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MVVM\Views\PushTagsConfigurationWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Commands.AsyncCommand" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="2.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQEADAAAAAESAAAAAAAAAAAAAAAAAAAEAAEA=</HashCode>
+      <FileName>Resources\Commands\AsyncCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Core.EventArgs&lt;T&gt;">
+    <Position X="14.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Resources\Core\EventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.EventRaiser">
+    <Position X="17.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Core\EventRaiser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Mediator">
+    <Position X="17.25" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABCAABAYAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Core\Mediator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
