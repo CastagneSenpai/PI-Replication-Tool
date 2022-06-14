@@ -431,6 +431,7 @@ namespace Models
 
             try
             {
+                Logger.Debug($"Creating tags which are not updated et in {targetServer.Name}");
                 AFListResults<string, PIPoint> p_Retour = targetServer.CreatePIPoints(v_TagsToCreate);
             }
             catch (AggregateException e)
