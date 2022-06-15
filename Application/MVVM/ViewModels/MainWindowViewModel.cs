@@ -30,8 +30,12 @@ namespace ViewModels
                {
                    if (CurrentPageViewModel.ToString().Equals("ViewModels.ConnectionViewModel"))
                    {
-                       if (PIReplicationManager.PIConnectionManager.PISourceServer != null && PIReplicationManager.PIConnectionManager.PITargetServer != null)
-                           return PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected;
+                       if (PIReplicationManager.PIConnectionManager.PISourceServer != null 
+                        && PIReplicationManager.PIConnectionManager.PITargetServer != null
+                        && PIReplicationManager.PIConnectionManager.PISourceServer.ConnectionInfo.IsConnected
+                        && PIReplicationManager.PIConnectionManager.PITargetServer.ConnectionInfo.IsConnected)
+                           return true;
+
                    }
                    else if (CurrentPageViewModel.ToString().Equals("ViewModels.LoadTagsConfigurationViewModel"))
                    {

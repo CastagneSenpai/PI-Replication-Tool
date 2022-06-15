@@ -8,8 +8,6 @@ namespace ViewModels
 {
     public class ConnectionViewModel : BaseViewModel, IPageViewModel
     {
-        
-
         #region Fields
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager PIReplicationManager = PIReplicationManager.ReplicationManager;
@@ -54,7 +52,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _sourceKOStatus, value);
-                //OnPropertyChanged(nameof(SourceKOStatus));
+                OnPropertyChanged(nameof(SourceKOStatus));
             }
             get => _sourceKOStatus;
         }
@@ -63,7 +61,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _sourceOKStatus, value);
-                //OnPropertyChanged(nameof(SourceOKStatus));
+                OnPropertyChanged(nameof(SourceOKStatus));
             }
             get => _sourceOKStatus;
         }
@@ -72,7 +70,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _sourceSpinnerStatus, value);
-                //OnPropertyChanged(nameof(SourceSpinnerStatus));
+                OnPropertyChanged(nameof(SourceSpinnerStatus));
             }
             get => _sourceSpinnerStatus;
         }
@@ -81,7 +79,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _targetKOStatus, value);
-                //OnPropertyChanged(nameof(SourceKOStatus));
+                OnPropertyChanged(nameof(SourceKOStatus));
             }
             get => _targetKOStatus;
         }
@@ -90,7 +88,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _targetOKStatus, value);
-                //OnPropertyChanged(nameof(SourceOKStatus));
+                OnPropertyChanged(nameof(SourceOKStatus));
             }
             get => _targetOKStatus;
         }
@@ -99,7 +97,7 @@ namespace ViewModels
             set
             {
                 SetProperty(ref _targetSpinnerStatus, value);
-                //OnPropertyChanged(nameof(SourceSpinnerStatus));
+                OnPropertyChanged(nameof(SourceSpinnerStatus));
             }
             get => _targetSpinnerStatus;
         }
