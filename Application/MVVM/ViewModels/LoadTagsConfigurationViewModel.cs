@@ -99,7 +99,7 @@ namespace ViewModels
         public bool OptionInputFile { get; set; } = true;
         public bool OptionMissingSiteToBase { get; set; }
         public string OptionLocalInputFileContent { get; set; } = "Tags from local input file (" + ConfigurationManager.AppSettings["InputPath"] + ConfigurationManager.AppSettings["InputFileName"] + ")";
-        public bool IsLoadTagButtonAvailable 
+        public bool IsLoadTagButtonAvailable
         {
             get => _isLoadTagButtonAvailable;
             set
@@ -142,11 +142,11 @@ namespace ViewModels
             if (OptionInputFile & !OptionMissingSiteToBase)
             {
                 Logger.Info("Option \"Input File\" selected");
-                FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
-                ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
 
                 await Task.Run(() =>
                 {
+                    FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
+                    ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
                     foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
                     {
                         Application.Current.Dispatcher.Invoke((Action)delegate
@@ -200,7 +200,7 @@ namespace ViewModels
             {
                 foreach (var v_PIPoint in p_AllPIPointsWithNoEmptyInstrumentTag)
                 {
-                    PIPoint v_ResultPIPoint = null ;
+                    PIPoint v_ResultPIPoint = null;
                     TagProgress++;
                     bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_ResultPIPoint, ref p_FilteredPIPointList);
                     if (!v_Found)
@@ -231,7 +231,7 @@ namespace ViewModels
                         }
                     }
                 }
-            Logger.Info($"End method LoadTagConfigurationViewModel.LoadTagsMissingSiteToBase");
+                Logger.Info($"End method LoadTagConfigurationViewModel.LoadTagsMissingSiteToBase");
             });
         }
 
