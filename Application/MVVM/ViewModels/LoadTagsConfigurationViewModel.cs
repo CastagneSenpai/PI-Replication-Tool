@@ -139,14 +139,25 @@ namespace ViewModels
             ReplicationManager.PIAttributesUpdateManager.DigitalSetList.Clear();
             List<string> v_TagsNameList = new List<string>();
 
-            if (OptionInputFile & !OptionMissingSiteToBase)
+            // Display the process task bar components
+            TaskBarVisibility = Visibility.Visible;
+            PercentTaskBarVisibility = Visibility.Visible;
+
+            if (OptionInputFile)
             {
                 Logger.Info("Option \"Input File\" selected");
 
                 await Task.Run(() =>
                 {
                     FilesManager.ParseInputFileToTagsList(ref v_TagsNameList);
-                    ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList);
+
+                    TotalProgress = v_TagsNameList.Count;
+                    IProgress<double> progress = new Progress<double>(v_currentPercent =>
+                    {
+                        CurrentProgress = (double)v_currentPercent / TotalProgress * 100;
+                    });
+
+                    ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList, ref progress);
                     foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
                     {
                         Application.Current.Dispatcher.Invoke((Action)delegate
@@ -156,13 +167,9 @@ namespace ViewModels
                     }
                 });
             }
-            else if (!OptionInputFile & OptionMissingSiteToBase)
+            else if (OptionMissingSiteToBase)
             {
                 Logger.Info("Option \"Missing tags from site to base\" selected");
-
-                // Display the process task bar components
-                TaskBarVisibility = Visibility.Visible;
-                PercentTaskBarVisibility = Visibility.Visible;
 
                 // Load all tags with Instrumenttag not null
                 Logger.Info($"Loading tags with InstrumentTag not null in {ReplicationManager.PIConnectionManager.PISourceServerName}");
@@ -196,12 +203,16 @@ namespace ViewModels
         async Task LoadTagsMissingSiteToBase(IEnumerable<PIPoint> p_AllPIPointsWithNoEmptyInstrumentTag, PIPointList p_FilteredPIPointList, IProgress<double> p_progress)
         {
             Logger.Info($"Call method LoadTagConfigurationViewModel.LoadTagsMissingSiteToBase");
+
+            // reset tagprogress counter
+            this.TagProgress = 0;
+
             await Task.Run(() =>
             {
                 foreach (var v_PIPoint in p_AllPIPointsWithNoEmptyInstrumentTag)
                 {
                     PIPoint v_ResultPIPoint = null;
-                    TagProgress++;
+                    this.TagProgress++;
                     bool v_Found = PIReplicationManager.ReplicationManager.PISiteBaseManager.FilterExistingTags(v_PIPoint, ref v_ResultPIPoint, ref p_FilteredPIPointList);
                     if (!v_Found)
                     {

@@ -30,11 +30,13 @@ namespace Models
         #endregion
 
         #region Methods
-        public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames)
+        public void LoadTagsAttributes(PIServer p_PIServer, List<string> p_PITagNames, ref IProgress<double> p_progress)
         {
             Logger.Info("Call method PIAttributeUpdateManager.LoadTagsAttributes");
             this.Clear();
             List<PIPoint> v_PIPointList = new List<PIPoint>();
+            
+            int v_TagProgress = 0;
 
             foreach (string piTagNames in p_PITagNames)
             {
@@ -65,7 +67,10 @@ namespace Models
 
             foreach (var v_PIPoint in v_PIPointList)
             {
+                v_TagProgress++;
                 AttributesTagsList.Add(v_PIPoint.GetAttributes());
+                p_progress.Report(v_TagProgress);
+
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
@@ -426,13 +431,19 @@ namespace Models
                     // Tag does not exist : Add it to the list of creation tags.
                     v_TagsToCreate.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
                 }
-
             });
 
             try
             {
                 Logger.Debug($"Creating tags which are not updated et in {targetServer.Name}");
-                AFListResults<string, PIPoint> p_Retour = targetServer.CreatePIPoints(v_TagsToCreate);
+                AFListResults<string, PIPoint> v_ReturnListTagsCreated = targetServer.CreatePIPoints(v_TagsToCreate);
+                if (v_ReturnListTagsCreated.HasErrors)
+                {
+                    foreach (var v_Error in v_ReturnListTagsCreated.Errors)
+                    {
+                        Logger.Warn($"Error while creating tag {v_Error.Key} - {v_Error.Value}");
+                    }
+                }
             }
             catch (AggregateException e)
             {

@@ -22,7 +22,7 @@ namespace Models
         #region Methods
         internal void AddToCollection(IDictionary<string, object> p_Tag, Constants.TagStatus? status = null, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null)
         {
-            Logger.Debug($"Call method DataGridCollection.AddToCollection.");
+            // Logger.Debug($"Call method DataGridCollection.AddToCollection.");
             
             // Update grid for push mode
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
@@ -79,7 +79,7 @@ namespace Models
                         p_Tag["ptsecurity"].ToString()
                         ));
             }
-            Logger.Debug($"End method DataGridCollection.AddToCollection.");
+            //Logger.Debug($"End method DataGridCollection.AddToCollection.");
         }
         internal void PopulateGrid()
         {
@@ -96,20 +96,20 @@ namespace Models
 
         internal void UpdateGrid()
         {
-            Logger.Debug($"Call method DataGridCollection.UpdateGrid.");
+            //Logger.Debug($"Call method DataGridCollection.UpdateGrid.");
             CollectionTags.Clear();
             foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
             {
                 AddToCollection(pipoint);
             }
-            Logger.Debug($"End method DataGridCollection.UpdateGrid.");
+            //Logger.Debug($"End method DataGridCollection.UpdateGrid.");
         }
 
         internal void UpdateGridStatus(IDictionary<string, object> pipoint, Constants.TagStatus status, object p_CurrentValue, AFTime p_CurrentTimestamp)
         {
-            Logger.Debug($"Call method DataGridCollection.UpdateGridStatus.");
+            //Logger.Debug($"Call method DataGridCollection.UpdateGridStatus.");
             AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
-            Logger.Debug($"End method DataGridCollection.UpdateGridStatus.");
+            //Logger.Debug($"End method DataGridCollection.UpdateGridStatus.");
         }
         #endregion
     }
