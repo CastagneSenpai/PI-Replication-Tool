@@ -38,47 +38,37 @@ namespace Models
 
             int v_TagProgress = 0;
 
+            // Load tags attributes from tag input list (string)
             foreach (string piTagNames in p_PITagNames)
             {
-                try
+
+                v_TagProgress++;
+
+                // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
+                // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
+                // TODO: TryFindPIPoint pour éviter de lever une exception si le tag n'existe pas
+
+                PIPoint v_PIPoint = null;
+                bool v_DoPIPointExist = PIPoint.TryFindPIPoint(p_PIServer, piTagNames, out v_PIPoint);
+
+                if (v_DoPIPointExist)
                 {
-                    // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
-                    // https://docs.osisoft.com/bundle/af-sdk/page/html/T_OSIsoft_AF_PI_PIPoint.htm
-                    // TODO: TryFindPIPoint pour éviter de lever une exception si le tag n'existe pas
-                    var v_PIPoint = PIPoint.FindPIPoint(p_PIServer, piTagNames);
-                    //if (v_PIPoint.PointType.Equals(PIPointType.Digital) || v_PIPoint.PointType.Equals(PIPointType.String))
+                    Logger.Debug($"{v_PIPoint.Name} - Point taken into account.");
+                    //v_PIPointList.Add(v_PIPoint);
                     if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                     {
-                        v_PIPointList.Add(v_PIPoint);
                         DigitalSetList.Add(v_PIPoint.GetStateSet());
-                        Logger.Debug($"{v_PIPoint.Name} - Digital point taken into account.");
                     }
-                    else // Numerical tag
+                    var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
+                    AttributesTagsList.Add(v_CurrentTagAttributes);
+                    p_progress.Report(v_TagProgress);
+                    // Display tags attributes in the data grid
+                    Application.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        Logger.Debug($"{v_PIPoint.Name} - Numerical point taken into account.");
-                        v_PIPointList.Add(v_PIPoint);
-                    }
-
+                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
+                    });
                 }
-                catch
-                {
-                    Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
-                }
-            }
-
-            // Display tags attributes in the data grid
-            foreach (var v_PIPoint in v_PIPointList)
-            {
-                v_TagProgress++;
-                var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
-                AttributesTagsList.Add(v_CurrentTagAttributes);
-                p_progress.Report(v_TagProgress);
-
-                Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
-                });
-
+                Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
