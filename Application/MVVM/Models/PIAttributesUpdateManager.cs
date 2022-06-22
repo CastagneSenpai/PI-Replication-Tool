@@ -35,7 +35,7 @@ namespace Models
             Logger.Info("Call method PIAttributeUpdateManager.LoadTagsAttributes");
             this.Clear();
             List<PIPoint> v_PIPointList = new List<PIPoint>();
-            
+
             int v_TagProgress = 0;
 
             foreach (string piTagNames in p_PITagNames)
@@ -58,6 +58,7 @@ namespace Models
                         Logger.Debug($"{v_PIPoint.Name} - Numerical point taken into account.");
                         v_PIPointList.Add(v_PIPoint);
                     }
+
                 }
                 catch
                 {
@@ -65,11 +66,18 @@ namespace Models
                 }
             }
 
+            // Display tags attributes in the data grid
             foreach (var v_PIPoint in v_PIPointList)
             {
                 v_TagProgress++;
-                AttributesTagsList.Add(v_PIPoint.GetAttributes());
+                var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
+                AttributesTagsList.Add(v_CurrentTagAttributes);
                 p_progress.Report(v_TagProgress);
+
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
+                });
 
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
@@ -357,11 +365,25 @@ namespace Models
             {
                 if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
                 {
-                    v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag, true));
+                    try
+                    {
+                        v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag, true));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                    }
                 }
                 else
                 {
-                    v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    try
+                    {
+                        v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                    }
                 }
             });
 
@@ -415,7 +437,7 @@ namespace Models
         public void CreateOrUpdateAndPushTags(PIServer targetServer)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}.");
-            IDictionary<string, IDictionary<string, object>> v_TagsToCreate = new Dictionary<string, IDictionary<string, object>>();
+            IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();
             AttributesTagsList.ForEach(p_tag =>
             {
 
@@ -429,14 +451,35 @@ namespace Models
                 else
                 {
                     // Tag does not exist : Add it to the list of creation tags.
-                    v_TagsToCreate.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
+                    {
+                        try
+                        {
+                            v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag, true));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                        }
+                    }
                 }
             });
 
             try
             {
                 Logger.Debug($"Creating tags which are not updated et in {targetServer.Name}");
-                AFListResults<string, PIPoint> v_ReturnListTagsCreated = targetServer.CreatePIPoints(v_TagsToCreate);
+                AFListResults<string, PIPoint> v_ReturnListTagsCreated = targetServer.CreatePIPoints(v_tagsListToBeCreated);
                 if (v_ReturnListTagsCreated.HasErrors)
                 {
                     foreach (var v_Error in v_ReturnListTagsCreated.Errors)

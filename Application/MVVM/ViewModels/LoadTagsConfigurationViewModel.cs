@@ -157,14 +157,9 @@ namespace ViewModels
                         CurrentProgress = (double)v_currentPercent / TotalProgress * 100;
                     });
 
+
                     ReplicationManager.PIAttributesUpdateManager.LoadTagsAttributes(ReplicationManager.PIConnectionManager.PISourceServer, v_TagsNameList, ref progress);
-                    foreach (var v_PIPoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
-                    {
-                        Application.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_PIPoint);
-                        });
-                    }
+                    
                 });
             }
             else if (OptionMissingSiteToBase)
