@@ -7,11 +7,6 @@ namespace Models
         private static PIReplicationManager _replicationManager = null;
         private static readonly object padlock = new object();
 
-        public PIReplicationManager()
-        {
-
-        }
-
         public static PIReplicationManager ReplicationManager
         {
             get
