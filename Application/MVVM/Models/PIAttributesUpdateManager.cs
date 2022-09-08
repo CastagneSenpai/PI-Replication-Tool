@@ -62,13 +62,17 @@ namespace Models
                     var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
                     AttributesTagsList.Add(v_CurrentTagAttributes);
                     p_progress.Report(v_TagProgress);
+
                     // Display tags attributes in the data grid
                     Application.Current.Dispatcher.Invoke((Action)delegate
                     {
                         PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
                     });
                 }
-                Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
+                else
+                {
+                    Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
+                }
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
@@ -512,7 +516,7 @@ namespace Models
         }
         public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
         {
-            Logger.Info($"Call method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
+            Logger.Debug($"Call method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
             string v_Tagname = GetTagname(p_TagAttributes);
             var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
 
@@ -532,7 +536,7 @@ namespace Models
             {
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No tag found", OSIsoft.AF.Time.AFTime.MinValue);
             }
-            Logger.Info($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
+            Logger.Debug($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
         }
     }
     #endregion Methods
