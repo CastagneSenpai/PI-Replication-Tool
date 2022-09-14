@@ -4,13 +4,14 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 Clear-Host
 
 # VARIABLES
-$BuildPackage = $true
+$BuildPackage = $false
 $DeployPackage = $true
 $ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
 $PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
 $DirectoriesToCreate = "Application", "Input", "Output", "Log"
 $MSBuildPath = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\"
 $CSProjPath = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.csproj.user"
+$BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat"
 [System.Collections.ArrayList]$UNCPathList= @(
 	"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
     "\\OPEPPA-WRPIAR01\PI-Replication-Tool",
@@ -30,15 +31,18 @@ if($BuildPackage)
 {
 	Write-Host "Starting packaging of PI Replication Tool using directory : $SourcePathToCopy"
     
+    #Delete Old package
     Write-Host "Removing old $PackageDir ..." -ForegroundColor Gray
     if(Test-Path -Path $PackageDir) { Remove-Item $PackageDir -recurse}
     Write-Host "Removing old $PackageDir OK" -ForegroundColor Green
 
+    #Building new package with MSBuild
     Write-Host "Building new package using MSBuild ..." -ForegroundColor Gray
     cd $MSBuildPath
     .\MSBuild "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.sln" /property:Configuration=Release | Out-Null
     Write-Host "Building new package using MSBuild OK" -ForegroundColor Green
-
+    
+    #Create folders in the package
     Write-Host "Creating folders in the package (Application, Input, Output, Log) ..." -ForegroundColor Gray
 	$Package = Get-ChildItem -Path $ReleaseDir
     New-Item -Path $ReleaseDir -Name "PI-Replication-Tool" -ItemType "directory" | Out-Null
@@ -48,22 +52,39 @@ if($BuildPackage)
 	}
     Write-Host "Creating folders in the package (Application, Input, Output, Log) OK" -ForegroundColor Green
 
+    #Move files from release to package
     Write-Host "Moving Files from the release to the package ..." -ForegroundColor Gray
-	Copy-Item "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat" -Destination $PackageDir 
+	Copy-Item $BatFile -Destination $PackageDir 
     New-Item (Join-Path $PackageDir "Input\Input.txt") | Out-Null
 	Foreach ($p in $Package)
     {
 		Move-Item (Join-Path $ReleaseDir $p.Name) -Destination (Join-Path $PackageDir "Application")
 	}
     Write-Host "Moving Files from the release to the package OK" -ForegroundColor Green
+
+    #Provide Everyone access to the package
+    Write-Host "Configuring security access in the package ..." -ForegroundColor Gray
+    $fileSystemAccessRuleArgumentList = "Everyone", "FullControl" , "Allow"
+    $fileSystemAccessRule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $fileSystemAccessRuleArgumentList
+
+    $Files = Get-ChildItem -Path $PackageDir -Recurse
+    foreach($File in $Files) 
+    { 
+        $NewAcl = Get-Acl -Path $File.FullName
+        $NewAcl.SetAccessRule($fileSystemAccessRule)
+        Set-Acl -Path $File.FullName -AclObject $NewAcl
+    }
+    Write-Host "Configuring security access in the package OK" -ForegroundColor Green
+
 }
 if($DeployPackage)
 {
     Write-Host "`nStarting Deployement of PI Replication Tool"
     foreach($UNCpath in $UNCPathList)
     {
+        #Robocopy the package to servers
         Write-Host "Processing Robocopy for" $UNCpath -ForegroundColor DarkGray  
-        Robocopy $PackageDir $UNCpath /MIR /Z /MT | OUT-Null
+        Robocopy $PackageDir $UNCpath  | OUT-Null
         Write-Host "Processing Robocopy for" $UNCpath "OK" -ForegroundColor Green  
     }
 }
