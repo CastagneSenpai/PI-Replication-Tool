@@ -1,0 +1,71 @@
+﻿# One-liner from https://stackoverflow.com/questions/7690994/running-a-command-as-administrator-using-powershell
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
+
+Clear-Host
+
+# VARIABLES
+$BuildPackage = $true
+$DeployPackage = $true
+$ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
+$PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
+$DirectoriesToCreate = "Application", "Input", "Output", "Log"
+$MSBuildPath = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\"
+$CSProjPath = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.csproj.user"
+[System.Collections.ArrayList]$UNCPathList= @(
+	"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
+    "\\OPEPPA-WRPIAR01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIBR01\PI-Replication-Tool",
+	"\\OPEPPA-WRPICG01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIDK01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIGB01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIIT01\PI-Replication-Tool",
+	"\\OPEPPA-WRPING01\PI-Replication-Tool",
+	"\\OPEPPA-WRPING02\PI-Replication-Tool",
+	"\\OPEPPA-WRPINL01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
+)
+
+# TREATMENT
+if($BuildPackage)
+{
+	Write-Host "Starting packaging of PI Replication Tool using directory : $SourcePathToCopy"
+    
+    Write-Host "Removing old $PackageDir ..." -ForegroundColor Gray
+    if(Test-Path -Path $PackageDir) { Remove-Item $PackageDir -recurse}
+    Write-Host "Removing old $PackageDir OK" -ForegroundColor Green
+
+    Write-Host "Building new package using MSBuild ..." -ForegroundColor Gray
+    cd $MSBuildPath
+    .\MSBuild "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.sln" /property:Configuration=Release | Out-Null
+    Write-Host "Building new package using MSBuild OK" -ForegroundColor Green
+
+    Write-Host "Creating folders in the package (Application, Input, Output, Log) ..." -ForegroundColor Gray
+	$Package = Get-ChildItem -Path $ReleaseDir
+    New-Item -Path $ReleaseDir -Name "PI-Replication-Tool" -ItemType "directory" | Out-Null
+	Foreach ($CurrentDir in $DirectoriesToCreate)
+	{
+		New-Item -Path $PackageDir -Name $CurrentDir -ItemType "directory"| Out-Null
+	}
+    Write-Host "Creating folders in the package (Application, Input, Output, Log) OK" -ForegroundColor Green
+
+    Write-Host "Moving Files from the release to the package ..." -ForegroundColor Gray
+	Copy-Item "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat" -Destination $PackageDir 
+    New-Item (Join-Path $PackageDir "Input\Input.txt") | Out-Null
+	Foreach ($p in $Package)
+    {
+		Move-Item (Join-Path $ReleaseDir $p.Name) -Destination (Join-Path $PackageDir "Application")
+	}
+    Write-Host "Moving Files from the release to the package OK" -ForegroundColor Green
+}
+if($DeployPackage)
+{
+    Write-Host "`nStarting Deployement of PI Replication Tool"
+    foreach($UNCpath in $UNCPathList)
+    {
+        Write-Host "Processing Robocopy for" $UNCpath -ForegroundColor DarkGray  
+        Robocopy $PackageDir $UNCpath /MIR /Z /MT | OUT-Null
+        Write-Host "Processing Robocopy for" $UNCpath "OK" -ForegroundColor Green  
+    }
+}
+
+Read-Host 'End of script. Press Enter to end.'
