@@ -5,10 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PI-Replication-Tool", "PI-Replication-Tool.csproj", "{0D7F8424-129F-41E3-B207-AF36356F9B4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PI-Replication-Tool.Tests", "..\PI-Replication-Tool.Tests\PI-Replication-Tool.Tests.csproj", "{26CBF615-5D12-4653-A608-04872FD7FD9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPIReplicationTool", "..\TestPIReplicationTool\TestPIReplicationTool.csproj", "{B81CEADE-EEEE-412E-8D38-5C64858249FD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
