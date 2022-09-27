@@ -23,7 +23,7 @@ namespace Models
                 {
                     p_TagsList.Add(line.ToString());
                     counter++;
-                    Logger.Info($"Tag {line} ({counter}) was taken into account by PI Replication Tool");
+                    Logger.Debug($"Tag {line} ({counter}) read from input file.");
                 }
             }
             catch (Exception e)

@@ -41,7 +41,7 @@ namespace Models
             // Load tags attributes from tag input list (string)
             foreach (string piTagNames in p_PITagNames)
             {
-
+                
                 v_TagProgress++;
 
                 // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
@@ -50,29 +50,38 @@ namespace Models
 
                 PIPoint v_PIPoint = null;
                 bool v_DoPIPointExist = PIPoint.TryFindPIPoint(p_PIServer, piTagNames, out v_PIPoint);
+                Logger.Debug($"Start processing {piTagNames}");
 
                 if (v_DoPIPointExist)
                 {
-                    Logger.Debug($"{v_PIPoint.Name} - Point taken into account.");
+                    Logger.Debug($"{v_PIPoint.Name} - Point exist on {p_PIServer.Name}.");
                     //v_PIPointList.Add(v_PIPoint);
                     if (v_PIPoint.PointType.Equals(PIPointType.Digital))
                     {
+                        Logger.Debug($"{v_PIPoint.Name} - Point is digital.");
                         DigitalSetList.Add(v_PIPoint.GetStateSet());
                     }
+
+                    Logger.Debug($"{v_PIPoint.Name} - Getting Point Attributes.");
                     var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
                     AttributesTagsList.Add(v_CurrentTagAttributes);
                     p_progress.Report(v_TagProgress);
 
                     // Display tags attributes in the data grid
+                    Logger.Debug($"{v_PIPoint.Name} - Populate Grid with this tag attributes.");
                     Application.Current.Dispatcher.Invoke((Action)delegate
                     {
                         PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
                     });
+
+                    Logger.Debug($"{v_PIPoint.Name} - Tag well displayed in the data grid");
                 }
                 else
                 {
                     Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
                 }
+
+                Logger.Debug($"Stop processing {v_PIPoint.Name}");
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
@@ -87,7 +96,7 @@ namespace Models
             }
             else
             {
-                string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue";
+                string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue.";
                 Console.WriteLine(v_Message);
                 throw new Exception(v_Message);
             }

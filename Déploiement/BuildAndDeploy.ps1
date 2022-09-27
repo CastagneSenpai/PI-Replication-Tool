@@ -4,7 +4,7 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 Clear-Host
 
 # VARIABLES
-$BuildPackage = $false
+$BuildPackage = $true
 $DeployPackage = $true
 $ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
 $PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
@@ -13,17 +13,18 @@ $MSBuildPath = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\
 $CSProjPath = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.csproj.user"
 $BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat"
 [System.Collections.ArrayList]$UNCPathList= @(
-	"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
-    "\\OPEPPA-WRPIAR01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIBR01\PI-Replication-Tool",
-	"\\OPEPPA-WRPICG01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIDK01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIGB01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIIT01\PI-Replication-Tool",
-	"\\OPEPPA-WRPING01\PI-Replication-Tool",
-	"\\OPEPPA-WRPING02\PI-Replication-Tool",
-	"\\OPEPPA-WRPINL01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
+    "\\OPEPPA-WPPIHQ05\PI-Replication-Tool"
+	#"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
+    #"\\OPEPPA-WRPIAR01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPIBR01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPICG01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPIDK01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPIGB01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPIIT01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPING01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPING02\PI-Replication-Tool",
+	#"\\OPEPPA-WRPINL01\PI-Replication-Tool",
+	#"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
 )
 
 # TREATMENT
@@ -83,8 +84,7 @@ if($DeployPackage)
     foreach($UNCpath in $UNCPathList)
     {
         #Robocopy the package to servers
-        Write-Host "Processing Robocopy for" $UNCpath -ForegroundColor DarkGray  
-        Robocopy $PackageDir $UNCpath  | OUT-Null
+        Robocopy $PackageDir $UNCpath /MIR /Z /MT /COPYALL | OUT-Null
         Write-Host "Processing Robocopy for" $UNCpath "OK" -ForegroundColor Green  
     }
 }
