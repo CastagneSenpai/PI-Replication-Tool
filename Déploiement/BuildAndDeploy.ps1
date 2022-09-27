@@ -13,18 +13,18 @@ $MSBuildPath = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\
 $CSProjPath = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.csproj.user"
 $BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat"
 [System.Collections.ArrayList]$UNCPathList= @(
-    "\\OPEPPA-WPPIHQ05\PI-Replication-Tool"
-	#"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
-    #"\\OPEPPA-WRPIAR01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPIBR01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPICG01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPIDK01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPIGB01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPIIT01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPING01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPING02\PI-Replication-Tool",
-	#"\\OPEPPA-WRPINL01\PI-Replication-Tool",
-	#"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
+    "\\OPEPPA-WPPIHQ05\PI-Replication-Tool",
+	"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
+    "\\OPEPPA-WRPIAR01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIBR01\PI-Replication-Tool",
+	"\\OPEPPA-WRPICG01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIDK01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIGB01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIIT01\PI-Replication-Tool",
+	"\\OPEPPA-WRPING01\PI-Replication-Tool",
+	"\\OPEPPA-WRPING02\PI-Replication-Tool",
+	"\\OPEPPA-WRPINL01\PI-Replication-Tool",
+	"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
 )
 
 # TREATMENT

@@ -41,7 +41,7 @@ namespace Models
             // Load tags attributes from tag input list (string)
             foreach (string piTagNames in p_PITagNames)
             {
-                
+
                 v_TagProgress++;
 
                 // TODO: Changer FindPIPoint par FindPIPoints pour améliorer les perf 
@@ -64,16 +64,23 @@ namespace Models
 
                     Logger.Debug($"{v_PIPoint.Name} - Getting Point Attributes.");
                     var v_CurrentTagAttributes = v_PIPoint.GetAttributes();
-                    AttributesTagsList.Add(v_CurrentTagAttributes);
-                    p_progress.Report(v_TagProgress);
 
                     // Display tags attributes in the data grid
                     Logger.Debug($"{v_PIPoint.Name} - Populate Grid with this tag attributes.");
-                    Application.Current.Dispatcher.Invoke((Action)delegate
+                    if (v_CurrentTagAttributes["ptclassname"].ToString() != "classic")
                     {
-                        PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
-                    });
+                        Logger.Warn($"{v_PIPoint.Name} - This tag is not a classic tag and cannot be replicated");
+                    }
+                    else
+                    {
+                        AttributesTagsList.Add(v_CurrentTagAttributes);
+                        Application.Current.Dispatcher.Invoke((Action)delegate
+                        {
 
+                            PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
+                        });
+                    }
+                    p_progress.Report(v_TagProgress);
                     Logger.Debug($"{v_PIPoint.Name} - Tag well displayed in the data grid");
                 }
                 else
