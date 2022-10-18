@@ -76,7 +76,6 @@ namespace Models
                         AttributesTagsList.Add(v_CurrentTagAttributes);
                         Application.Current.Dispatcher.Invoke((Action)delegate
                         {
-
                             PIReplicationManager.ReplicationManager.DataGridCollection.PopulateGridLineByLine(v_CurrentTagAttributes);
                         });
                     }
@@ -87,7 +86,6 @@ namespace Models
                 {
                     Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
                 }
-
                 Logger.Debug($"Stop processing {v_PIPoint.Name}");
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
@@ -344,7 +342,6 @@ namespace Models
             this.Trigram = "";
             Logger.Debug("End method PIAttributeUpdateManager.Clear.");
         }
-
         void PrepareDigitalSetOnTargetServer(PIServer p_TargetPIServer)
         {
             var v_ListDigitalSetTarget = p_TargetPIServer.StateSets;
@@ -364,7 +361,6 @@ namespace Models
                 }
             }
         }
-
         public void CreateAndPushTags(PIServer p_targetServer)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}.");
