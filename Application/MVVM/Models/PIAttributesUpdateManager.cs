@@ -247,6 +247,11 @@ namespace Models
                     p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
                     p_TagAttributes["tag"] = "POG_" + p_TagAttributes["tag"]; // GB : Prefixe POG_
                 }
+                else if (this.Trigram == "EBJ")
+                {
+                    p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
+                    p_TagAttributes["tag"] = "EBJ_" + p_TagAttributes["tag"]; // DK : Prefixe EBJ_
+                }
             }
             catch (Exception e)
             {
