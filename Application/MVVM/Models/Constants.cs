@@ -23,7 +23,18 @@ namespace Models
             PICommonPointAttributes.ExceptionMaximum,
             PICommonPointAttributes.ExceptionPercentage,
             PICommonPointAttributes.DataSecurity,
-            PICommonPointAttributes.PointSecurity
+            PICommonPointAttributes.PointSecurity,
+            PICommonPointAttributes.Descriptor,
+            PICommonPointAttributes.DisplayDigits,
+            PICommonPointAttributes.EngineeringUnits,
+            PICommonPointAttributes.ExtendedDescriptor,
+            PICommonPointAttributes.Location2,
+            PICommonPointAttributes.Location3,
+            PICommonPointAttributes.Location4,
+            PICommonPointAttributes.Location5,
+            PICommonPointAttributes.Scan,
+            PICommonPointAttributes.Shutdown,
+            PICommonPointAttributes.Step
         };
 
         public enum TagStatus
