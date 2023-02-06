@@ -15,7 +15,9 @@
       TextElement.FontSize="14"
       FontFamily="{materialDesign:MaterialDesignFont}"
       WindowStyle="None"
-      ResizeMode="CanResizeWithGrip" AllowsTransparency="True">
+      ResizeMode="CanResizeWithGrip" AllowsTransparency="True"
+      Icon="/Resources/Assets/AVEVA.ico">
+
 
     <Window.DataContext>
         <viewmodels:MainWindowViewModel/>

@@ -262,6 +262,7 @@
     <Resource Include="Resources\Assets\check.png" />
     <Resource Include="Resources\Assets\cross.png" />
     <Resource Include="Helper\README_NLog_WpfRichTextBox.txt" />
+    <Resource Include="Resources\Assets\AVEVA.ico" />
     <Content Include="Resources\Assets\Spinner.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -429,8 +429,14 @@ namespace Models
             {
                 try
                 {
+                    Logger.Debug($"Update tag {GetTagname(p_tag)} in {p_targetServer}");
                     PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(p_targetServer, GetTagname(p_tag));
-                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                    var v_Attributes = GetCustomAttributes(p_tag);
+                    foreach(var Attrib in v_Attributes)
+                    {
+                        v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
+                    }
+                    //v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
                     v_CurrentPIPoint.SaveAttributes();
                 }
                 catch (AggregateException e)
@@ -445,19 +451,22 @@ namespace Models
             });
             Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
         }
-        public void CreateOrUpdateAndPushTags(PIServer targetServer)
+        public void CreateOrUpdateAndPushTags(PIServer p_targetServer)
         {
-            Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}.");
+            Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();
             AttributesTagsList.ForEach(p_tag =>
             {
 
-                if (PIPoint.TryFindPIPoint(targetServer, GetTagname(p_tag), out PIPoint v_CurrentPIPoint))
+                if (PIPoint.TryFindPIPoint(p_targetServer, GetTagname(p_tag), out PIPoint v_CurrentPIPoint))
                 {
                     // Tag exist on target server : Update it with new configuration
-                    Logger.Debug($"Update tag {GetTagname(p_tag)} in {targetServer}");
-                    v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
-                    v_CurrentPIPoint.SaveAttributes();
+                    Logger.Debug($"Update tag {GetTagname(p_tag)} in {p_targetServer}");
+                    var v_Attributes = GetCustomAttributes(p_tag);
+                    foreach (var Attrib in v_Attributes)
+                    {
+                        v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
+                    }
                 }
                 else
                 {
@@ -489,8 +498,8 @@ namespace Models
 
             try
             {
-                Logger.Debug($"Creating tags which are not updated et in {targetServer.Name}");
-                AFListResults<string, PIPoint> v_ReturnListTagsCreated = targetServer.CreatePIPoints(v_tagsListToBeCreated);
+                Logger.Debug($"Creating tags which are not updated et in {p_targetServer.Name}");
+                AFListResults<string, PIPoint> v_ReturnListTagsCreated = p_targetServer.CreatePIPoints(v_tagsListToBeCreated);
                 if (v_ReturnListTagsCreated.HasErrors)
                 {
                     foreach (var v_Error in v_ReturnListTagsCreated.Errors)
@@ -501,15 +510,15 @@ namespace Models
             }
             catch (AggregateException e)
             {
-                Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}. {e.Message}");
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
             catch (PIException e)
             {
-                Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}. {e.Message}");
+                Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
-            Logger.Info($"End method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {targetServer.Name}.");
+            Logger.Info($"End method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}.");
         }
         public string GetTagname(IDictionary<string, object> listeAttributs)
         {
