@@ -330,7 +330,7 @@ namespace Models
         {
             Logger.Debug("Call method PIAttributeUpdateManager.GetTrigrammeFromPIServer.");
             this.Trigram = ConfigurationManager.AppSettings["Trigram_" + p_PIServer.Name];
-            if (this.Trigram == "Trigram_")
+            if (this.Trigram == null)
             {
                 throw new Exception("PI server name does not exist is configuration file.");
             }
@@ -564,6 +564,6 @@ namespace Models
             }
             Logger.Debug($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
         }
+        #endregion Methods
     }
-    #endregion Methods
 }

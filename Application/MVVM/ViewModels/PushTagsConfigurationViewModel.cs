@@ -124,8 +124,8 @@ namespace ViewModels
             }
             catch (Exception exc)
             {
-                string p_ErrorMsg = $"Error with method PushTagsConfigurationViewModel.UpdateTagsAttributes. {exc.Message}";
-                MessageBox.Show(exc.Message);
+                string p_ErrorMsg = $"Error with method PushTagsConfigurationViewModel.UpdateTagsAttributes. {exc.Message + "," + exc.StackTrace}";
+                MessageBox.Show(p_ErrorMsg);
                 Logger.Error(p_ErrorMsg);
             }            
 

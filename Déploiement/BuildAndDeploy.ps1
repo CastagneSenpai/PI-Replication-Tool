@@ -5,7 +5,7 @@ Clear-Host
 
 # VARIABLES
 $BuildPackage = $true
-$DeployPackage = $false
+$DeployPackage = $true
 $ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
 $PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
 $DirectoriesToCreate = "Application", "Input", "Output", "Log"
