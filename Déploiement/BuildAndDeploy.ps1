@@ -24,7 +24,13 @@ $BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Repli
 	"\\OPEPPA-WRPING01\PI-Replication-Tool",
 	"\\OPEPPA-WRPING02\PI-Replication-Tool",
 	"\\OPEPPA-WRPINL01\PI-Replication-Tool",
-	"\\OPEPPA-WRPIQA01\PI-Replication-Tool"
+	"\\OPEPPA-WRPIQA01\PI-Replication-Tool",
+	#"\\GBEPABZ-APMIS03\PI-Replication-Tool"  #Identity "PIPerfmon" n'existe pas sur le serveur : déploiement manuel pour ne pas casser la réplication.
+	"\\AOEPTTA-APPIL01\PI-Replication-Tool",
+	"\\AREPBUE-APPI01\PI-Replication-Tool",
+	"\\NGEPLOS-APPIS01\PI-Replication-Tool",
+	"\\NGEPPHC-APPI01\PI-Replication-Tool",
+	"\\BREPRIO-APPI01\PI-Replication-Tool"
 )
 
 # TREATMENT
