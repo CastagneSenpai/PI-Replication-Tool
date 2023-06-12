@@ -431,13 +431,27 @@ namespace Models
                 {
                     Logger.Debug($"Update tag {GetTagname(p_tag)} in {p_targetServer}");
                     PIPoint v_CurrentPIPoint = PIPoint.FindPIPoint(p_targetServer, GetTagname(p_tag));
-                    var v_Attributes = GetCustomAttributes(p_tag);
-                    foreach(var Attrib in v_Attributes)
+                    Logger.Debug($"v_CurrentPIPoint =  { v_CurrentPIPoint}");
+
+                    IDictionary<string, object> v_Attributes = new Dictionary<string, object>();
+
+                    if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
+                        v_Attributes = GetCustomAttributes(p_tag, true);
+                    else
+                        v_Attributes = GetCustomAttributes(p_tag);
+
+                    foreach (var Attrib in v_Attributes)
                     {
                         v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
                     }
                     //v_CurrentPIPoint.SetAttribute(GetTagname(p_tag), GetCustomAttributes(p_tag));
-                    v_CurrentPIPoint.SaveAttributes();
+                    AFErrors<string> error = v_CurrentPIPoint.SaveAttributes();
+                    if (error != null)
+                    {
+                        foreach (var err in error.Errors)
+                            Logger.Debug($"Error = {err}");
+                    }
+                    
                 }
                 catch (AggregateException e)
                 {
@@ -462,10 +476,24 @@ namespace Models
                 {
                     // Tag exist on target server : Update it with new configuration
                     Logger.Debug($"Update tag {GetTagname(p_tag)} in {p_targetServer}");
-                    var v_Attributes = GetCustomAttributes(p_tag);
+                    IDictionary<string, object> v_Attributes = new Dictionary<string, object>();
+
+                    if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
+                        v_Attributes = GetCustomAttributes(p_tag, true);
+                    else
+                        v_Attributes = GetCustomAttributes(p_tag);
+
                     foreach (var Attrib in v_Attributes)
                     {
                         v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
+                        Logger.Debug($"{ Attrib.Key} = {Attrib.Value}");
+                    }
+
+                    AFErrors<string> error = v_CurrentPIPoint.SaveAttributes();
+                    if (error != null)
+                    {
+                        foreach (var err in error.Errors)
+                            Logger.Debug($"Error = {err}");
                     }
                 }
                 else
@@ -498,7 +526,7 @@ namespace Models
 
             try
             {
-                Logger.Debug($"Creating tags which are not updated et in {p_targetServer.Name}");
+                Logger.Debug($"Creating tags which are not updated in {p_targetServer.Name}");
                 AFListResults<string, PIPoint> v_ReturnListTagsCreated = p_targetServer.CreatePIPoints(v_tagsListToBeCreated);
                 if (v_ReturnListTagsCreated.HasErrors)
                 {

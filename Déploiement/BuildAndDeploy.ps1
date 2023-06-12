@@ -37,7 +37,7 @@ $BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Repli
 if($BuildPackage)
 {
 	Write-Host "Starting packaging of PI Replication Tool using directory : $SourcePathToCopy"
-    
+     
     #Delete Old package
     Write-Host "Removing old $PackageDir ..." -ForegroundColor Gray
     if(Test-Path -Path $PackageDir) { Remove-Item $PackageDir -recurse}
@@ -95,4 +95,5 @@ if($DeployPackage)
     }
 }
 
+Set-Location -path $PSScriptRoot
 Read-Host 'End of script. Press Enter to end.'
