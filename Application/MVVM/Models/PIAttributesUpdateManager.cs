@@ -39,7 +39,7 @@ namespace Models
             int v_TagProgress = 0;
 
             // Load tags attributes from tag input list (string)
-            foreach (string piTagNames in p_PITagNames)
+            foreach (string piTagName in p_PITagNames)
             {
 
                 v_TagProgress++;
@@ -49,8 +49,8 @@ namespace Models
                 // TODO: TryFindPIPoint pour éviter de lever une exception si le tag n'existe pas
 
                 PIPoint v_PIPoint = null;
-                bool v_DoPIPointExist = PIPoint.TryFindPIPoint(p_PIServer, piTagNames, out v_PIPoint);
-                Logger.Debug($"Start processing {piTagNames}");
+                bool v_DoPIPointExist = PIPoint.TryFindPIPoint(p_PIServer, piTagName, out v_PIPoint);
+                Logger.Debug($"Start processing {piTagName}");
 
                 if (v_DoPIPointExist)
                 {
@@ -81,12 +81,12 @@ namespace Models
                     }
                     p_progress.Report(v_TagProgress);
                     Logger.Debug($"{v_PIPoint.Name} - Tag well displayed in the data grid");
+                    Logger.Debug($"Stop processing {v_PIPoint.Name}");
                 }
                 else
                 {
-                    Logger.Warn($"The PI Point {piTagNames} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
+                    Logger.Warn($"The PI Point {piTagName} does not exist in PI server {p_PIServer}. It will be skipped from the replication.");
                 }
-                Logger.Debug($"Stop processing {v_PIPoint.Name}");
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
