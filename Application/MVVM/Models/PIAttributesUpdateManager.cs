@@ -231,7 +231,7 @@ namespace Models
             try
             {
                 // TODO : externaliser dans le fichier config
-                // Update TagName if source server is TEPNL, TEPUK or TEPGB
+                // Update TagName if source server is TEPNL, TEPUK, TEPGB, TEPDK
                 if (this.Trigram == "NLD")
                 {
                     p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
@@ -239,8 +239,12 @@ namespace Models
                 }
                 else if (this.Trigram == "ABZ")
                 {
+                    // UK : Remove "GB_" if tags start with this prefixe, and add "UK_" 
                     p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
-                    p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"]; // UK : Prefixe UK_
+                    if (p_TagAttributes["tag"].ToString().Substring(0, 3) == "GB_")
+                        p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"].ToString().Substring(3, p_TagAttributes["tag"].ToString().Length); // Replace GB_ to UK_
+                    else
+                        p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"]; // Add UK, no GB to delete
                 }
                 else if (this.Trigram == "POG")
                 {
