@@ -242,7 +242,7 @@ namespace Models
                     // UK : Remove "GB_" if tags start with this prefixe, and add "UK_" 
                     p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
                     if (p_TagAttributes["tag"].ToString().Substring(0, 3) == "GB_")
-                        p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"].ToString().Substring(3, p_TagAttributes["tag"].ToString().Length); // Replace GB_ to UK_
+                        p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"].ToString().Substring(3); // Replace GB_ to UK_
                     else
                         p_TagAttributes["tag"] = "UK_" + p_TagAttributes["tag"]; // Add UK, no GB to delete
                 }
