@@ -256,6 +256,26 @@ namespace Models
                     p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
                     p_TagAttributes["tag"] = "EBJ_" + p_TagAttributes["tag"]; // DK : Prefixe EBJ_
                 }
+                else if (this.Trigram == "AGU")
+                {
+                    p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
+                    p_TagAttributes["tag"] = "AGU_" + p_TagAttributes["tag"]; // AUSTRAL AGU : Prefixe AGU_
+                }
+                else if (this.Trigram == "CAL")
+                {
+                    p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
+                    p_TagAttributes["tag"] = "CAL_" + p_TagAttributes["tag"]; // AUSTRAL CAL : Prefixe CAL_
+                }
+                else if (this.Trigram == "LLY")
+                {
+                    p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
+                    p_TagAttributes["tag"] = "LLY_" + p_TagAttributes["tag"]; // AUSTRAL LLY : Prefixe LLY_
+                }
+                else if (this.Trigram == "RCU")
+                {
+                    p_TagAttributes["instrumenttag"] = p_TagAttributes["tag"];
+                    p_TagAttributes["tag"] = "RCU_" + p_TagAttributes["tag"]; // AUSTRAL RCU : Prefixe RCU_
+                }
             }
             catch (Exception e)
             {
