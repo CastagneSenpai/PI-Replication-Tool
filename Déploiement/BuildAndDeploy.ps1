@@ -8,10 +8,11 @@ $BuildPackage = $true
 $DeployPackage = $true
 $ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
 $PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
-$DirectoriesToCreate = "Application", "Input", "Output", "Log"
+$DirectoriesToCreate = "Application", "Input", "Output", "Log", "Documentation"
 $MSBuildPath = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\"
 $CSProjPath = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\PI-Replication-Tool.csproj.user"
 $BatFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Déploiement\PI Replication Tool.bat"
+$DocFile = "D:\Romain_dev\Applications\PI-Replication-Tool\Documentation\EP_PI-ReplicationTool_User-Manual.pdf"
 [System.Collections.ArrayList]$UNCPathList= @(
     "\\OPEPPA-WPPIHQ05\PI-Replication-Tool",
 	"\\OPEPPA-WRPIAO01\PI-Replication-Tool",
@@ -67,6 +68,7 @@ if($BuildPackage)
     {
 		Move-Item (Join-Path $ReleaseDir $p.Name) -Destination (Join-Path $PackageDir "Application")
 	}
+	Copy-Item $DocFile -Destination (Join-Path $PackageDir "Documentation") 
     Write-Host "Moving Files from the release to the package OK" -ForegroundColor Green
 
     #Provide Everyone access to the package
