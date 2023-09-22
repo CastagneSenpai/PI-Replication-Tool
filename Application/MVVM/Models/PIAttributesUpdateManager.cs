@@ -530,66 +530,67 @@ namespace Models
             }
             Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
         }
-
         public void CreateOrUpdateAndPushTags(PIServer p_targetServer, bool[] p_selectedColumnStatus)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();
-            AttributesTagsList.ForEach(p_tag =>
+            for (int i = 0; i < p_selectedColumnStatus.Length; i++)
             {
-
-                if (PIPoint.TryFindPIPoint(p_targetServer, GetTagname(p_tag), out PIPoint v_CurrentPIPoint))
+                // Vérifiez si la condition est vraie pour l'élément actuel
+                if (p_selectedColumnStatus[i])
                 {
-                    // Tag exist on target server : Update it with new configuration
-                    Logger.Debug($"Update tag {GetTagname(p_tag)} in {p_targetServer}");
-                    IDictionary<string, object> v_Attributes = new Dictionary<string, object>();
-
-                    if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
-                        v_Attributes = GetCustomAttributes(p_tag, true);
-                    else
-                        v_Attributes = GetCustomAttributes(p_tag);
-
-                    foreach (var Attrib in v_Attributes)
+                    if (PIPoint.TryFindPIPoint(p_targetServer, GetTagname(AttributesTagsList[i]), out PIPoint v_CurrentPIPoint))
                     {
-                        v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
-                        Logger.Debug($"{ Attrib.Key} = {Attrib.Value}");
-                    }
+                        // Tag exist on target server : Update it with new configuration
+                        Logger.Debug($"Update tag {GetTagname(AttributesTagsList[i])} in {p_targetServer}");
+                        IDictionary<string, object> v_Attributes = new Dictionary<string, object>();
 
-                    AFErrors<string> error = v_CurrentPIPoint.SaveAttributes();
-                    if (error != null)
-                    {
-                        foreach (var err in error.Errors)
-                            Logger.Debug($"Error = {err}");
-                    }
-                }
-                else
-                {
-                    // Tag does not exist : Add it to the list of creation tags.
-                    if (p_tag[PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
-                    {
-                        try
+                        if (AttributesTagsList[i][PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
+                            v_Attributes = GetCustomAttributes(AttributesTagsList[i], true);
+                        else
+                            v_Attributes = GetCustomAttributes(AttributesTagsList[i]);
+
+                        foreach (var Attrib in v_Attributes)
                         {
-                            v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag, true));
+                            v_CurrentPIPoint.SetAttribute(Attrib.Key, Attrib.Value);
+                            Logger.Debug($"{ Attrib.Key} = {Attrib.Value}");
                         }
-                        catch (Exception ex)
+
+                        AFErrors<string> error = v_CurrentPIPoint.SaveAttributes();
+                        if (error != null)
                         {
-                            Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                            foreach (var err in error.Errors)
+                                Logger.Debug($"Error = {err}");
                         }
                     }
                     else
                     {
-                        try
+                        // Tag does not exist : Add it to the list of creation tags.
+                        if (AttributesTagsList[i][PICommonPointAttributes.PointType].Equals(PIPointType.Digital))
                         {
-                            v_tagsListToBeCreated.Add(GetTagname(p_tag), GetCustomAttributes(p_tag));
+                            try
+                            {
+                                v_tagsListToBeCreated.Add(GetTagname(AttributesTagsList[i]), GetCustomAttributes(AttributesTagsList[i], true));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error($"Cannot add {GetTagname(AttributesTagsList[i])} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                            }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Logger.Error($"Cannot add {GetTagname(p_tag)} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                            try
+                            {
+                                v_tagsListToBeCreated.Add(GetTagname(AttributesTagsList[i]), GetCustomAttributes(AttributesTagsList[i]));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Error($"Cannot add {GetTagname(AttributesTagsList[i])} to the replication list. Please check that the tag isn't duplicated in your input tag list. {ex.Message}.");
+                            }
                         }
                     }
                 }
-            });
-
+            }
             try
             {
                 Logger.Debug($"Creating tags which are not updated in {p_targetServer.Name}");
@@ -602,6 +603,7 @@ namespace Models
                     }
                 }
             }
+            
             catch (AggregateException e)
             {
                 Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}. {e.Message}");
