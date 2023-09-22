@@ -17,6 +17,7 @@ namespace ViewModels
         private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private PIPointGridFormat _pipointgridformat = null;
         private string _destinationServer;
+        private bool _isUpdateButtonEnabled = true;
         private bool _isPushButtonEnabled = false;
         private bool _isRefreshButtonEnabled = false;
         #endregion
@@ -58,6 +59,16 @@ namespace ViewModels
         public bool OptionCreateOnly { get; set; } = true;
         public bool OptionUpdateOnly { get; set; }
         public bool OptionCreateOrUpdate { get; set; }
+        public bool IsUpdateButtonEnabled
+        {
+            get => _isUpdateButtonEnabled;
+            set
+            {
+                SetProperty(ref _isUpdateButtonEnabled, value);
+                OnPropertyChanged(nameof(IsUpdateButtonEnabled));
+            }
+        }
+    
         public bool IsPushButtonEnabled
         {
             get => _isPushButtonEnabled;
@@ -167,7 +178,9 @@ namespace ViewModels
             // Refresh button is available for step 3 
             IsRefreshButtonEnabled = true;
 
-            Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
+            // Update & create buttons locked
+            IsUpdateButtonEnabled = false;
+            IsPushButtonEnabled = false;
 
             UpdateRowsUsingCurrentValues();
             Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
@@ -175,13 +188,20 @@ namespace ViewModels
 
         public void UpdateRowsUsingCurrentValues()
         {
+            // Get a tab with the current status of selected tags in the datagrid
+            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
+
             PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags.Clear();
             var v_tagList = PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList;
-            v_tagList.ForEach(v_AttributesTags =>
+
+            for (int i = 0; i < SelectedColumnStatus.Length; i++)
             {
-                PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_AttributesTags);
-                OnPropertyChanged(nameof(Attributes));
-            });
+                if (SelectedColumnStatus[i])
+                {
+                    ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_tagList[i]);
+                    OnPropertyChanged(nameof(Attributes));
+                }
+            }
         }
 
         private bool CanUpdateTagConfiguration()
