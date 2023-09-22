@@ -90,23 +90,54 @@ namespace Models
             }
             Logger.Info("End method PIAttributeUpdateManager.LoadTagsAttributes");
         }
-        public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer)
+        //public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, bool[] p_selectedColumnStatus)
+        //{
+        //    Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
+        //    this.GetTrigrammeFromPIServer(p_PISourceServer);
+        //    if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
+        //    {
+        //        // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
+        //        AttributesTagsList.ForEach(TagAttributes => UpdateTagAttributes(p_PISourceServer, TagAttributes));
+        //    }
+        //    else
+        //    {
+        //        string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue.";
+        //        Console.WriteLine(v_Message);
+        //        throw new Exception(v_Message);
+        //    }
+        //    Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
+        //}
+        public void UpdateTagsAttributes(PIServer p_PISourceServer, PIServer p_PITargetServer, bool[] p_selectedColumnStatus)
         {
             Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
             this.GetTrigrammeFromPIServer(p_PISourceServer);
             if (this.IsThereEnoughtPointSourcesAvailable(p_PITargetServer))
             {
-                // Apply update for each tag using List<T>.ForEach() method (most efficient way to proceed)
-                AttributesTagsList.ForEach(TagAttributes => UpdateTagAttributes(p_PISourceServer, TagAttributes));
+                if (p_selectedColumnStatus.Length != AttributesTagsList.Count)
+                {
+                    string v_Message = "Length mismatch between p_selectedColumnStatus and AttributesTagsList.";
+                    Console.WriteLine(v_Message);
+                    throw new Exception(v_Message);
+                }
+
+                for (int i = 0; i < AttributesTagsList.Count; i++)
+                {
+                    // Vérifiez si la condition est vraie pour l'élément actuel
+                    if (p_selectedColumnStatus[i])
+                    {
+                        UpdateTagAttributes(p_PISourceServer, AttributesTagsList[i]);
+                    }
+                }
             }
             else
             {
-                string v_Message = "Not enought PointSources available for this replication, please create more PItoPI interfaces before continue.";
+                string v_Message = "Not enough PointSources available for this replication, please create more PItoPI interfaces before continuing.";
                 Console.WriteLine(v_Message);
                 throw new Exception(v_Message);
             }
-            Logger.Info("Call method PIAttributeUpdateManager.UpdateTagsAttributes");
+            Logger.Info("End method PIAttributeUpdateManager.UpdateTagsAttributes");
         }
+
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
             Logger.Debug("Call method PIAttributeUpdateManager.UpdateTagAttributes for tag " + p_TagAttributes["tag"]);
@@ -390,7 +421,7 @@ namespace Models
                 }
             }
         }
-        public void CreateAndPushTags(PIServer p_targetServer)
+        public void CreateAndPushTags(PIServer p_targetServer, bool[] SelectedColumnStatus)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();
@@ -446,7 +477,7 @@ namespace Models
 
             Logger.Info($"End method PIAttributeUpdateManager.CreateAndPushTags for {p_targetServer.Name}.");
         }
-        public void UpdateAndPushTags(PIServer p_targetServer)
+        public void UpdateAndPushTags(PIServer p_targetServer, bool[] SelectedColumnStatus)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
             AttributesTagsList.ForEach(p_tag =>
@@ -489,7 +520,7 @@ namespace Models
             });
             Logger.Info($"End method PIAttributeUpdateManager.UpdateAndPushTags for {p_targetServer.Name}.");
         }
-        public void CreateOrUpdateAndPushTags(PIServer p_targetServer)
+        public void CreateOrUpdateAndPushTags(PIServer p_targetServer, bool[] SelectedColumnStatus)
         {
             Logger.Info($"Call method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}.");
             IDictionary<string, IDictionary<string, object>> v_tagsListToBeCreated = new Dictionary<string, IDictionary<string, object>>();

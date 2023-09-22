@@ -112,9 +112,13 @@ namespace ViewModels
             Logger.Info("Call method PushTagsConfigurationViewModel.UpdateTagsAttributes");
             try
             {
+                // Get a tab with the current status of selected tags in the datagrid
+                bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
+
                 ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
                     ReplicationManager.PIConnectionManager.PISourceServer,
-                    ReplicationManager.PIConnectionManager.PITargetServer);
+                    ReplicationManager.PIConnectionManager.PITargetServer,
+                    SelectedColumnStatus);
 
                 PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGrid();
                     OnPropertyChanged(nameof(Attributes));
@@ -136,21 +140,28 @@ namespace ViewModels
         {
             Logger.Info("Call method PushTagsConfigurationViewModel.PushTagsAttributes");
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
+            
+            // Get a tab with the current status of selected tags in the datagrid
+            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
 
             if (OptionCreateOnly)
             {
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateAndPushTags(
-                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer,
+                    SelectedColumnStatus);
             }
             else if (OptionUpdateOnly)
             {
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.UpdateAndPushTags(
-                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer,
+                    SelectedColumnStatus);
+                    
             }
             else if (OptionCreateOrUpdate)
             {
                 PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.CreateOrUpdateAndPushTags(
-                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer);
+                    PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer,
+                    SelectedColumnStatus);
             }
 
             // Refresh button is available for step 3 

@@ -3,6 +3,7 @@ using OSIsoft.AF.Time;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
+using System.Linq;
 
 namespace Models
 {
@@ -20,7 +21,7 @@ namespace Models
         #endregion
 
         #region Methods
-        internal void AddToCollection(IDictionary<string, object> p_Tag, Constants.TagStatus? status = null, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null)
+        internal void AddToCollection(IDictionary<string, object> p_Tag, Constants.TagStatus? status = null, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null, bool p_selectedTag = true)
         {
             // Logger.Debug($"Call method DataGridCollection.AddToCollection.");
             
@@ -28,8 +29,8 @@ namespace Models
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
             {
                 CollectionTags.Add(new PIPointGridFormat(
-                    
-                true, // Tag selected by default
+
+                p_selectedTag, // Tag selected by default
                 p_Tag["tag"] as string,
                 p_CurrentTimestamp.ToString(),
                 p_CurrentValue.ToString(),
@@ -53,13 +54,13 @@ namespace Models
                 p_Tag["datasecurity"].ToString(),
                 p_Tag["ptsecurity"].ToString(),
                 status.Value
-            )); ;
+            ));
             }
             // Update grid for load mode
             else
             {
                 this.CollectionTags.Add(new PIPointGridFormat(
-                        true, // Tag selected by default,
+                        p_selectedTag, // Tag selected by default
                         p_Tag["tag"] as string,
                         p_Tag["instrumenttag"] as string,
                         p_Tag["pointsource"] as string,
@@ -100,11 +101,18 @@ namespace Models
         internal void UpdateGrid()
         {
             //Logger.Debug($"Call method DataGridCollection.UpdateGrid.");
+            bool[] SelectedTags = this.GetSelectedValues();
             CollectionTags.Clear();
-            foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+
+            for(int i = 0; i < SelectedTags.Length; i++)
             {
-                AddToCollection(pipoint);
+                 AddToCollection(PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList[i], null, null, null, SelectedTags[i]);
             }
+
+            //foreach (var pipoint in PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList)
+            //{
+            //    AddToCollection(pipoint, null, null, null, SelectedTags);
+            //}
             //Logger.Debug($"End method DataGridCollection.UpdateGrid.");
         }
 
@@ -113,6 +121,18 @@ namespace Models
             //Logger.Debug($"Call method DataGridCollection.UpdateGridStatus.");
             AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
             //Logger.Debug($"End method DataGridCollection.UpdateGridStatus.");
+        }
+
+        // Fonction pour connaitre les tags qui sont selectionné pour la réplication (méthodes d'update et de push)
+        public bool[] GetSelectedValues()
+        {
+            // Convertis la ObservableCollection en une liste
+            List<PIPointGridFormat> collectionList = CollectionTags.ToList();
+
+            // Utilise LINQ pour extraire les valeurs de la colonne "Selected"
+            bool[] selectedValues = collectionList.Select(item => item.Selected).ToArray();
+
+            return selectedValues;
         }
         #endregion
     }
