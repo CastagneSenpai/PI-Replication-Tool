@@ -220,9 +220,10 @@
         </Border>
 
         <Grid Margin="10,20,20,20" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6">
-            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="True" 
+            <DataGrid AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" VerticalAlignment="Stretch" IsReadOnly="False" 
                       ItemsSource="{Binding Attributes}">
                 <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Select" Binding="{Binding Selected}"  />
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                     <DataGridTextColumn Header="Current Timestamp" Binding="{Binding CurrentTimestamp}" />
                     <DataGridTextColumn Header="Current Value" Binding="{Binding CurrentValue}" />

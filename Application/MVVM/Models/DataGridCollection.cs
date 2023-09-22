@@ -28,6 +28,8 @@ namespace Models
             if (status.HasValue && p_CurrentValue != null && p_CurrentTimestamp.HasValue)
             {
                 CollectionTags.Add(new PIPointGridFormat(
+                    
+                true, // Tag selected by default
                 p_Tag["tag"] as string,
                 p_CurrentTimestamp.ToString(),
                 p_CurrentValue.ToString(),
@@ -51,12 +53,13 @@ namespace Models
                 p_Tag["datasecurity"].ToString(),
                 p_Tag["ptsecurity"].ToString(),
                 status.Value
-            ));
+            )); ;
             }
             // Update grid for load mode
             else
             {
                 this.CollectionTags.Add(new PIPointGridFormat(
+                        true, // Tag selected by default,
                         p_Tag["tag"] as string,
                         p_Tag["instrumenttag"] as string,
                         p_Tag["pointsource"] as string,
