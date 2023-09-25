@@ -188,8 +188,15 @@ namespace ViewModels
             // Re-enable load button
             this.IsLoadTagButtonAvailable = true;
 
+            // Reset selected box to true for all tags if loading after using the push view
+            for (int i = 0; i < ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize.Length; i++)
+            {
+                ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize[i] = true;
+            }
+
             // Delock the NEXT button to go to push view
             ReplicationManager.PIAttributesUpdateManager.IsLoadingTimeOver = true;
+              
 
             Logger.Info("End method LoadTagsConfigurationViewModel.LoadAttributesAsync");
         }

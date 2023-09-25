@@ -11,6 +11,21 @@ namespace Models
     {
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        #region Variables
+        private bool[] _selectedValues_FullTagsTabSize;
+        public bool[] SelectedValues_FullTagsTabSize {
+            get
+            {
+                if (_selectedValues_FullTagsTabSize == null)
+                {
+                    _selectedValues_FullTagsTabSize = GetSelectedValues();
+                }
+                return _selectedValues_FullTagsTabSize; // Renvoie la valeur d'origine
+            }
+            set { _selectedValues_FullTagsTabSize = value; }
+        }
+        #endregion
+
         #region Fields
         internal readonly CollectionViewSource CollectionViewSource = new CollectionViewSource();
         internal ObservableCollection<PIPointGridFormat> CollectionTags = new ObservableCollection<PIPointGridFormat>();
@@ -92,12 +107,10 @@ namespace Models
                 AddToCollection(v_PIPoint);
             }
         }
-
         internal void PopulateGridLineByLine(IDictionary<string, object> p_Dictionary)
         {
             AddToCollection(p_Dictionary);
         }
-
         internal void UpdateGrid()
         {
             //Logger.Debug($"Call method DataGridCollection.UpdateGrid.");
@@ -115,14 +128,13 @@ namespace Models
             //}
             //Logger.Debug($"End method DataGridCollection.UpdateGrid.");
         }
-
-        internal void UpdateGridStatus(IDictionary<string, object> pipoint, Constants.TagStatus status, object p_CurrentValue, AFTime p_CurrentTimestamp)
+        internal void UpdateGridStatus(IDictionary<string, object> pipoint, Constants.TagStatus status, object p_CurrentValue = null, AFTime? p_CurrentTimestamp = null)
         {
-            //Logger.Debug($"Call method DataGridCollection.UpdateGridStatus.");
-            AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
-            //Logger.Debug($"End method DataGridCollection.UpdateGridStatus.");
+            if(status == Constants.TagStatus.Undefined)
+                AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp, false); // keep Selected box unchecked
+            else
+                AddToCollection(pipoint, status, p_CurrentValue, p_CurrentTimestamp);
         }
-
         // Fonction pour connaitre les tags qui sont selectionné pour la réplication (méthodes d'update et de push)
         public bool[] GetSelectedValues()
         {

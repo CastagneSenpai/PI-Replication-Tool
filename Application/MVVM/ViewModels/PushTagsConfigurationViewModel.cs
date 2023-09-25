@@ -14,7 +14,6 @@ namespace ViewModels
         #region Fields
         static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public PIReplicationManager ReplicationManager = PIReplicationManager.ReplicationManager;
-        private readonly CollectionViewSource _collectionViewSource = PIReplicationManager.ReplicationManager.DataGridCollection.CollectionViewSource;
         private PIPointGridFormat _pipointgridformat = null;
         private string _destinationServer;
         private bool _isUpdateButtonEnabled = true;
@@ -68,7 +67,6 @@ namespace ViewModels
                 OnPropertyChanged(nameof(IsUpdateButtonEnabled));
             }
         }
-    
         public bool IsPushButtonEnabled
         {
             get => _isPushButtonEnabled;
@@ -111,7 +109,6 @@ namespace ViewModels
             _buttonPushTags = new RelayCommand(
                 o => PushTagsAttributes());
 
-            // TODO: Vérifier qu'on ait bien cliquer sur le bouton update d'abord (?)
             _buttonRefresh = new RelayCommand(
                 o => UpdateRowsUsingCurrentValues());
         }
@@ -124,7 +121,8 @@ namespace ViewModels
             try
             {
                 // Get a tab with the current status of selected tags in the datagrid
-                bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
+                ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize = ReplicationManager.DataGridCollection.GetSelectedValues();
+                bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize;
 
                 ReplicationManager.PIAttributesUpdateManager.UpdateTagsAttributes(
                     ReplicationManager.PIConnectionManager.PISourceServer,
@@ -146,14 +144,13 @@ namespace ViewModels
 
             Logger.Info("End method PushTagsConfigurationViewModel.UpdateTagsAttributes");
         }
-
         public void PushTagsAttributes()
         {
             Logger.Info("Call method PushTagsConfigurationViewModel.PushTagsAttributes");
             FilesManager.CreateTagsOutputFile(ReplicationManager.PIAttributesUpdateManager.AttributesTagsList, BackupType.TargetServerBackup);
             
             // Get a tab with the current status of selected tags in the datagrid
-            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
+            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize;
 
             if (OptionCreateOnly)
             {
@@ -185,25 +182,21 @@ namespace ViewModels
             UpdateRowsUsingCurrentValues();
             Logger.Info("End method PushTagsConfigurationViewModel.PushTagsAttributes");
         }
-
         public void UpdateRowsUsingCurrentValues()
         {
             // Get a tab with the current status of selected tags in the datagrid
-            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.GetSelectedValues();
+            bool[] SelectedColumnStatus = ReplicationManager.DataGridCollection.SelectedValues_FullTagsTabSize;
 
             PIReplicationManager.ReplicationManager.DataGridCollection.CollectionTags.Clear();
             var v_tagList = PIReplicationManager.ReplicationManager.PIAttributesUpdateManager.AttributesTagsList;
 
             for (int i = 0; i < SelectedColumnStatus.Length; i++)
             {
-                if (SelectedColumnStatus[i])
-                {
-                    ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_tagList[i]);
-                    OnPropertyChanged(nameof(Attributes));
-                }
+                // Display the row with current value and color status if selected
+                ReplicationManager.PIAttributesUpdateManager.GetCurrentValues(PIReplicationManager.ReplicationManager.PIConnectionManager.PITargetServer, v_tagList[i], SelectedColumnStatus[i]);
+                OnPropertyChanged(nameof(Attributes));
             }
         }
-
         private bool CanUpdateTagConfiguration()
         {
             return !string.IsNullOrEmpty(ReplicationManager.PIConnectionManager.PISourceServerName)

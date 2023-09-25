@@ -137,7 +137,6 @@ namespace Models
             }
             Logger.Info("End method PIAttributeUpdateManager.UpdateTagsAttributes");
         }
-
         private void UpdateTagAttributes(PIServer p_PISourceServer, IDictionary<string, object> p_TagAttributes)
         {
             Logger.Debug("Call method PIAttributeUpdateManager.UpdateTagAttributes for tag " + p_TagAttributes["tag"]);
@@ -429,7 +428,7 @@ namespace Models
             // Create missing Digital States before pushing tags
             PrepareDigitalSetOnTargetServer(p_targetServer);
 
-            for(int i = 0; i < p_selectedColumnStatus.Length; i++)
+            for (int i = 0; i < p_selectedColumnStatus.Length; i++)
             {
                 // Vérifiez si la condition est vraie pour l'élément actuel
                 if (p_selectedColumnStatus[i])
@@ -458,7 +457,6 @@ namespace Models
                     }
                 }
             }
-
             try
             {
                 AFListResults<string, PIPoint> v_ReturnListTagsCreated = p_targetServer.CreatePIPoints(v_tagsListToBeCreated);
@@ -614,6 +612,7 @@ namespace Models
                 Logger.Error($"Error in method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}. {e.Message}");
                 throw new Exception();
             }
+
             Logger.Info($"End method PIAttributeUpdateManager.CreateOrUpdateAndPushTags for {p_targetServer.Name}.");
         }
         public string GetTagname(IDictionary<string, object> listeAttributs)
@@ -636,28 +635,39 @@ namespace Models
 
             return p_CommonAttributes;
         }
-        public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes)
+        public void GetCurrentValues(PIServer p_targetServer, IDictionary<string, object> p_TagAttributes, bool p_SelectedValue)
         {
             Logger.Debug($"Call method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
-            string v_Tagname = GetTagname(p_TagAttributes);
-            var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
 
-            if (v_TagFound)
+
+            if (!p_SelectedValue)
             {
-                AFValue v_PIvalue = v_Tag.CurrentValue();
-                if (v_PIvalue.IsGood)
+                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Undefined);
+            }
+            else 
+            {
+                string v_Tagname = GetTagname(p_TagAttributes);
+                var v_TagFound = PIPoint.TryFindPIPoint(p_targetServer, v_Tagname, out PIPoint v_Tag);
+
+                if (v_TagFound)
                 {
-                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                    AFValue v_PIvalue = v_Tag.CurrentValue();
+                    if (v_PIvalue.IsGood)
+                    {
+                        PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Replicated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                    }
+                    else
+                    {
+                        PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.PtCreated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                    }
                 }
                 else
                 {
-                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.PtCreated, v_PIvalue.Value, v_PIvalue.Timestamp);
+                    PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No tag found", OSIsoft.AF.Time.AFTime.MinValue);
                 }
             }
-            else
-            {
-                PIReplicationManager.ReplicationManager.DataGridCollection.UpdateGridStatus(p_TagAttributes, Constants.TagStatus.Error, "No tag found", OSIsoft.AF.Time.AFTime.MinValue);
-            }
+
+            
             Logger.Debug($"End method PIAttributeUpdateManager.GetCurrentValues for {p_targetServer.Name}.");
         }
         #endregion Methods

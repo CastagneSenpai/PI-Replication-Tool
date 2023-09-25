@@ -6,6 +6,7 @@ Clear-Host
 # VARIABLES
 $BuildPackage = $true
 $DeployPackage = $true
+$DeployPackageInHQOnly = $false
 $ReleaseDir = "D:\Romain_dev\Applications\PI-Replication-Tool\Application\bin\Release"
 $PackageDir = Join-Path $ReleaseDir "PI-Replication-Tool"
 $DirectoriesToCreate = "Application", "Input", "Output", "Log", "Documentation"
@@ -86,7 +87,15 @@ if($BuildPackage)
     Write-Host "Configuring security access in the package OK" -ForegroundColor Green
 
 }
-if($DeployPackage)
+
+if($DeployPackageInHQOnly)
+{
+	#Robocopy the package to HQ
+	Write-Host "`nStarting Deployement of PI Replication Tool in HQ"
+    Robocopy $PackageDir "\\OPEPPA-WPPIHQ05\PI-Replication-Tool" /MIR /Z /MT /COPYALL | OUT-Null
+    Write-Host "Processing Robocopy for" $UNCpath "OK" -ForegroundColor Green  
+}
+elseif($DeployPackage)
 {
     Write-Host "`nStarting Deployement of PI Replication Tool"
     foreach($UNCpath in $UNCPathList)

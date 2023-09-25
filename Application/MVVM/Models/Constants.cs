@@ -41,7 +41,8 @@ namespace Models
         {
             PtCreated,
             Error,
-            Replicated
+            Replicated,
+            Undefined,
         }
 
         private Constants() { }
