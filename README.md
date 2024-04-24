@@ -36,5 +36,5 @@ Cette application codée en C# est conçue pour faciliter la réplication de tag
 
 ## Contributeurs
 
-- Romain CASTAGNÉ
+- Romain CASTAGNÉ - https://github.com/CastagneSenpai
 - Sameh EL AWADI
