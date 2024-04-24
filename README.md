@@ -1,6 +1,40 @@
-# PI-Replication-Tool
-The real-time infrastructure at TOTAL EP is based on the OSIsoft PI System. This system has been deployed on TOTAL EP sites. 
+# Description de PI Replication Tool
 
-Within a context of deployment and increasing use of the PI System at TOTAL EP, an application called “PI Replication Tool” has been created to facilitate the replication of PI tags between sites to bases and bases to PI-CENTER-HQ (Pau). 
+---
 
-This repository contain PI Application Tool code.
+## Description
+
+Cette application codée en C# est conçue pour faciliter la réplication de tags entre deux serveurs PI (OSIsoft) en utilisant la librairie AFSDK. Elle est basée sur le modèle MVVM (Modèle-Vue-VueModèle) pour assurer une séparation claire des préoccupations et une maintenabilité accrue. L'application prend en charge plusieurs fonctionnalités essentielles, telles que la lecture et la mise à jour des points sources, l'application de la sécurité standard, la gestion des paramètres de compression, la vérification des valeurs typiques et d'autres vérifications mineures.
+
+---
+
+## Features
+
+- Lecture et mise à jour des points sources PI.
+- Application de la sécurité standard pour garantir l'intégrité des données.
+- Gestion des paramètres de compression pour optimiser les performances.
+- Vérification des valeurs typiques pour assurer la qualité des données.
+- Implémentation du modèle MVVM pour une architecture bien organisée et maintenable.
+
+---
+
+## Prérequis
+
+- .NET Framework 4.5 ou version ultérieure.
+- Bibliothèque AFSDK de PI installée sur le système.
+
+---
+
+## Utilisation
+
+1. Clonez le référentiel sur votre machine locale.
+2. Ouvrez le projet dans Visual Studio ou un autre environnement de développement compatible avec .NET Framework.
+3. Compilez et exécutez l'application.
+4. Utilisez le script de Déploiement pour générer proprement un package d'utilisation (vérifier les paths dans le fichier powershell)
+
+---
+
+## Contributeurs
+
+- Romain CASTAGNÉ
+- Sameh EL AWADI
