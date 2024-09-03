@@ -6,7 +6,7 @@ obj/
 bin/
 ConsoleApp/
 
-package
+Application/package
 /TestConsole
 /publish
 /Application/publish
